@@ -121,7 +121,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
                 },
               ),
               title: Text(
-                'Tambah Produk',
+                'Tambah Lelang',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Mulish',
@@ -292,7 +292,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
                 },
               ),
               title: Text(
-                'Tambah Produk',
+                'Tambah Lelang',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Mulish',

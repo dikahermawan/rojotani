@@ -117,6 +117,27 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                                       color: Color(0xFF53B175), width: 2.w)),
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 14.w, vertical: 14.h),
+                              hintText: 'Masukkan Alamat',
+                              hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontFamily: 'Mulish',
+                                  fontWeight: FontWeight.w400)),
+                        ),
+                        SizedBox(
+                          height: 19.h,
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(10.r),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(10.r),
+                                  borderSide: BorderSide(
+                                      color: Color(0xFF53B175), width: 2.w)),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 14.w, vertical: 14.h),
                               hintText: 'Masukkan E-mail',
                               hintStyle: TextStyle(
                                   color: Colors.grey,
