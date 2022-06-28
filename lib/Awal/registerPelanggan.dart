@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/loginPelanggan.dart';
 import 'package:rojotani/Awal/registerAs.dart';
 import 'package:rojotani/Awal/dataDiri.dart';
+import 'package:http/http.dart' as http;
 
 class registerPelangganPage extends StatefulWidget {
   @override
@@ -12,6 +15,36 @@ class registerPelangganPage extends StatefulWidget {
 class _registerPelangganPageState extends State<registerPelangganPage> {
   bool isHiddenPassword1 = true;
   bool isHiddenPassword2 = true;
+  String nama, alamat, email, password;
+  final _key = new GlobalKey<FormState>();
+
+  check() {
+    final form = _key.currentState;
+    if (form.validate()) {
+      form.save();
+      save();
+    }
+  }
+
+  save() async {
+    final response = await http.post("http:/10.0.2.2:8000/api/reg", body: {
+      'nama': nama,
+      'alamat': alamat,
+      'email': email,
+      'password': password,
+      //'password_confirmation': password
+    });
+    final data = jsonDecode(response.body);
+    int value = data['value'];
+    String pesan = data['pesan'];
+    if (value == 1) {
+      setState(() {
+        Navigator.pop(context);
+      });
+    } else {
+      print(pesan);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,218 +82,254 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
           ),
           centerTitle: true,
         ),
-        body: SafeArea(
-            child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 36.w),
-                child: SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 60.h,
-                        ),
-                        Image.asset(
-                          'asset/gambar/logo.png',
-                        ),
-                        SizedBox(
-                          height: 26.h,
-                        ),
-                        Text(
-                          'Cari produk berkualitas dengan harga terjangkau cuma di Rojotani !!',
-                          style: TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w400),
-                        ),
-                        SizedBox(
-                          height: 47.h,
-                        ),
-                        Text(
-                          'Daftar Akun',
-                          style: TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        SizedBox(
-                          height: 19.h,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: new BorderRadius.circular(10.r),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(10.r),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF53B175), width: 2.w)),
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 14.w, vertical: 14.h),
-                              hintText: 'Masukkan Ussername',
-                              hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontFamily: 'Mulish',
-                                  fontWeight: FontWeight.w400)),
-                        ),
-                        SizedBox(
-                          height: 19.h,
-                        ),
-                        TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: new BorderRadius.circular(10.r),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(10.r),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF53B175), width: 2.w)),
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 14.w, vertical: 14.h),
-                              hintText: 'Masukkan Alamat',
-                              hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontFamily: 'Mulish',
-                                  fontWeight: FontWeight.w400)),
-                        ),
-                        SizedBox(
-                          height: 19.h,
-                        ),
-                        TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: new BorderRadius.circular(10.r),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(10.r),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF53B175), width: 2.w)),
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 14.w, vertical: 14.h),
-                              hintText: 'Masukkan E-mail',
-                              hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontFamily: 'Mulish',
-                                  fontWeight: FontWeight.w400)),
-                        ),
-                        SizedBox(
-                          height: 19.h,
-                        ),
-                        TextFormField(
-                          obscureText: isHiddenPassword1,
-                          decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                                icon: Icon(Icons.remove_red_eye),
-                                onPressed: _togglePasswordView1,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: new BorderRadius.circular(10.r),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(10.r),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF53B175), width: 2.w)),
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 14.w, vertical: 14.h),
-                              hintText: 'Masukkan Katasandi',
-                              hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontFamily: 'Mulish',
-                                  fontWeight: FontWeight.w400)),
-                        ),
-                        SizedBox(
-                          height: 19.h,
-                        ),
-                        TextFormField(
-                          obscureText: isHiddenPassword2,
-                          decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                                icon: Icon(Icons.remove_red_eye),
-                                onPressed: _togglePasswordView2,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: new BorderRadius.circular(10.r),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(10.r),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF53B175), width: 2.w)),
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 14.w, vertical: 14.h),
-                              hintText: 'Ulangi Katasandi',
-                              hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontFamily: 'Mulish',
-                                  fontWeight: FontWeight.w400)),
-                        ),
-                        SizedBox(
-                          height: 12.h,
-                        ),
-                        SizedBox(
-                          height: 33.h,
-                        ),
-                        new Container(
-                          width: 317.w,
-                          height: 51.h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.r),
-                            color: Color(0xFF53B175),
+        body: Form(
+          key: _key,
+          child: SafeArea(
+              child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 36.w),
+                  child: SingleChildScrollView(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 60.h,
                           ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {
-                                Route route = MaterialPageRoute(
-                                    builder: (context) => dataDiriPage());
-                                Navigator.push(context, route);
-                              },
-                              child: Center(
-                                child: Text(
-                                  'Daftar',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18.sp,
-                                      fontFamily: 'Mulish',
-                                      fontWeight: FontWeight.w700),
+                          Image.asset(
+                            'asset/gambar/logo.png',
+                          ),
+                          SizedBox(
+                            height: 26.h,
+                          ),
+                          Text(
+                            'Cari produk berkualitas dengan harga terjangkau cuma di Rojotani !!',
+                            style: TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          SizedBox(
+                            height: 47.h,
+                          ),
+                          Text(
+                            'Daftar Akun',
+                            style: TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          SizedBox(
+                            height: 19.h,
+                          ),
+                          TextFormField(
+                            validator: (e) {
+                              if (e.isEmpty) {
+                                return 'masukkan username';
+                              }
+                            },
+                            onSaved: (e) => nama = e,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(10.r),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(10.r),
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF53B175), width: 2.w)),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 14.w, vertical: 14.h),
+                                hintText: 'Masukkan Ussername',
+                                hintStyle: TextStyle(
+                                    color: Colors.grey,
+                                    fontFamily: 'Mulish',
+                                    fontWeight: FontWeight.w400)),
+                          ),
+                          SizedBox(
+                            height: 19.h,
+                          ),
+                          TextFormField(
+                            validator: (e) {
+                              if (e.isEmpty) {
+                                return 'masukkan alamat';
+                              }
+                            },
+                            onSaved: (e) => alamat = e,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(10.r),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(10.r),
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF53B175), width: 2.w)),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 14.w, vertical: 14.h),
+                                hintText: 'Masukkan Alamat',
+                                hintStyle: TextStyle(
+                                    color: Colors.grey,
+                                    fontFamily: 'Mulish',
+                                    fontWeight: FontWeight.w400)),
+                          ),
+                          SizedBox(
+                            height: 19.h,
+                          ),
+                          TextFormField(
+                            validator: (e) {
+                              if (e.isEmpty) {
+                                return 'masukkan email';
+                              }
+                            },
+                            onSaved: (e) => email = e,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(10.r),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(10.r),
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF53B175), width: 2.w)),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 14.w, vertical: 14.h),
+                                hintText: 'Masukkan E-mail',
+                                hintStyle: TextStyle(
+                                    color: Colors.grey,
+                                    fontFamily: 'Mulish',
+                                    fontWeight: FontWeight.w400)),
+                          ),
+                          SizedBox(
+                            height: 19.h,
+                          ),
+                          TextFormField(
+                            validator: (e) {
+                              if (e.isEmpty) {
+                                return 'masukkan password';
+                              }
+                            },
+                            onSaved: (e) => password = e,
+                            obscureText: isHiddenPassword1,
+                            decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                  icon: Icon(Icons.remove_red_eye),
+                                  onPressed: _togglePasswordView1,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(10.r),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(10.r),
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF53B175), width: 2.w)),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 14.w, vertical: 14.h),
+                                hintText: 'Masukkan Katasandi',
+                                hintStyle: TextStyle(
+                                    color: Colors.grey,
+                                    fontFamily: 'Mulish',
+                                    fontWeight: FontWeight.w400)),
+                          ),
+                          SizedBox(
+                            height: 19.h,
+                          ),
+                          // TextFormField(
+                          //   validator: (e) {
+                          //     if (e.isEmpty) {
+                          //       return 'Konfirmasi password';
+                          //     }
+                          //   },
+                          //   onSaved: (e) => password = e,
+                          //   obscureText: isHiddenPassword2,
+                          //   decoration: InputDecoration(
+                          //       suffixIcon: IconButton(
+                          //         icon: Icon(Icons.remove_red_eye),
+                          //         onPressed: _togglePasswordView2,
+                          //       ),
+                          //       border: OutlineInputBorder(
+                          //         borderRadius: new BorderRadius.circular(10.r),
+                          //       ),
+                          //       focusedBorder: OutlineInputBorder(
+                          //           borderRadius:
+                          //               new BorderRadius.circular(10.r),
+                          //           borderSide: BorderSide(
+                          //               color: Color(0xFF53B175), width: 2.w)),
+                          //       contentPadding: EdgeInsets.symmetric(
+                          //           horizontal: 14.w, vertical: 14.h),
+                          //       hintText: 'Ulangi Katasandi',
+                          //       hintStyle: TextStyle(
+                          //           color: Colors.grey,
+                          //           fontFamily: 'Mulish',
+                          //           fontWeight: FontWeight.w400)),
+                          // ),
+                          SizedBox(
+                            height: 12.h,
+                          ),
+                          SizedBox(
+                            height: 33.h,
+                          ),
+                          new Container(
+                            width: 317.w,
+                            height: 51.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.r),
+                              color: Color(0xFF53B175),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  check();
+                                },
+                                child: Center(
+                                  child: Text(
+                                    'Daftar',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18.sp,
+                                        fontFamily: 'Mulish',
+                                        fontWeight: FontWeight.w700),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 30.h,
-                        ),
-                        new Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                ' Telah Memiliki Akun? ',
-                                style: TextStyle(
-                                    fontSize: 18.sp,
-                                    color: Colors.black,
-                                    fontFamily: 'Mulish',
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Route route = MaterialPageRoute(
-                                      builder: (context) =>
-                                          loginPelangganPage());
-                                  Navigator.push(context, route);
-                                },
-                                child: Text(
-                                  'Masuk',
+                          SizedBox(
+                            height: 30.h,
+                          ),
+                          new Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  ' Telah Memiliki Akun? ',
                                   style: TextStyle(
                                       fontSize: 18.sp,
-                                      color: Color(0xFF53B175),
+                                      color: Colors.black,
                                       fontFamily: 'Mulish',
                                       fontWeight: FontWeight.w600),
                                 ),
-                              ),
-                            ]),
-                      ]),
-                ))));
+                                GestureDetector(
+                                  onTap: () {
+                                    Route route = MaterialPageRoute(
+                                        builder: (context) =>
+                                            loginPelangganPage());
+                                    Navigator.push(context, route);
+                                  },
+                                  child: Text(
+                                    'Masuk',
+                                    style: TextStyle(
+                                        fontSize: 18.sp,
+                                        color: Color(0xFF53B175),
+                                        fontFamily: 'Mulish',
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ]),
+                        ]),
+                  ))),
+        ));
   }
 
   void _togglePasswordView1() {

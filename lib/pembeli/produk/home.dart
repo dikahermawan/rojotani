@@ -8,11 +8,19 @@ import 'package:rojotani/pembeli/produk/product_card.dart';
 import 'package:rojotani/pembeli/produk/lelang_card.dart';
 
 class homePage extends StatefulWidget {
+  final VoidCallback signOut;
+  homePage(this.signOut);
   @override
   State<homePage> createState() => _homePageState();
 }
 
 class _homePageState extends State<homePage> {
+  signOut() {
+    setState(() {
+      widget.signOut();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(
@@ -72,13 +80,7 @@ class _homePageState extends State<homePage> {
                 Container(
                   margin: EdgeInsets.only(top: 100.h),
                   child: IconButton(
-                    icon: Icon(Icons.notifications),
-                    onPressed: () {
-                      // Route route =
-                      //     MaterialPageRoute(builder: (context) => ());
-                      // Navigator.push(context, route);
-                    },
-                  ),
+                      icon: Icon(Icons.notifications), onPressed: () {}),
                   width: MediaQuery.of(context).size.width * 0.060,
                   height: MediaQuery.of(context).size.height * 0.11,
                   decoration: BoxDecoration(
@@ -135,9 +137,7 @@ class _homePageState extends State<homePage> {
                   child: IconButton(
                     icon: Icon(Icons.notifications),
                     onPressed: () {
-                      // Route route =
-                      //     MaterialPageRoute(builder: (context) => ());
-                      // Navigator.push(context, route);
+                      signOut();
                     },
                   ),
                   width: MediaQuery.of(context).size.width * 0.12,

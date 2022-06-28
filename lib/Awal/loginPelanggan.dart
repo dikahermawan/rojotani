@@ -29,7 +29,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
   }
 
   login() async {
-    final response = await http.post("http://10.0.2.2:8000/api/log",
+    final response = await http.post("http:/10.0.2.2:8000/api/log",
         body: {'email': email, 'password': password});
     final data = jsonDecode(response.body);
     int value = data['success'];
@@ -62,28 +62,21 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     });
   }
 
+  signOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.setInt('value', null);
+      preferences.commit();
+      _loginStatus = LoginStatus.notSignIn;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getPref();
   }
-
-  // void _login() async {
-  //   final response = await http.post("http://192.168.1.103:8000/api/log",
-  //       body: {'email': email, 'password': password});
-
-  //   var body = json.decode(response.body);
-
-  //   if (body['success']) {
-  //     Navigator.pushReplacement(
-  //       context,
-  //       new MaterialPageRoute(builder: (context) => homePage()),
-  //     );
-  //   } else {
-  //     print("tes");
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -293,15 +286,16 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        Route route = MaterialPageRoute(
-                                            builder: (context) =>
-                                                registerPelangganPage());
-                                        Navigator.push(context, route);
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (cotext) =>
+                                                    registerPelangganPage()));
                                       },
                                       child: Text(
                                         'Daftar',
                                         style: TextStyle(
                                             fontSize: 18.sp,
+                                            color: Color(0xFF53B175),
                                             fontWeight: FontWeight.w600),
                                       ),
                                     ),
@@ -311,7 +305,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
             ));
         break;
       case LoginStatus.SignIn:
-        return homePage();
+        return homePage(signOut);
     }
   }
 

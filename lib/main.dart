@@ -20,11 +20,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      title: 'RojoTani', 
+      title: 'RojoTani',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: registerPelangganPage(),
+      home: loginPelangganPage(),
       //homePage()
     );
   }
