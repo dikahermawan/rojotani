@@ -1,7 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/loginAs.dart';
-import 'package:rojotani/Awal/registerPetani.dart';
+import 'package:rojotani/Awal/registerPenjual.dart';
 import 'package:rojotani/Awal/registerPelanggan.dart';
 
 class registerAsPage extends StatefulWidget {
@@ -81,7 +81,7 @@ class _registerAsPageState extends State<registerAsPage> {
                 child: InkWell(
                   onTap: () {
                     Route route = MaterialPageRoute(
-                        builder: (context) => registerPetaniPage());
+                        builder: (context) => registerPenjualPage());
                     Navigator.push(context, route);
                   },
                   child: Center(
@@ -142,9 +142,9 @@ class _registerAsPageState extends State<registerAsPage> {
               ),
               GestureDetector(
                 onTap: () {
-                   Route route = MaterialPageRoute(
-                        builder: (context) => loginAsPage());
-                    Navigator.push(context, route);
+                  Route route =
+                      MaterialPageRoute(builder: (context) => loginAsPage());
+                  Navigator.push(context, route);
                 },
                 child: Text(
                   'Masuk',

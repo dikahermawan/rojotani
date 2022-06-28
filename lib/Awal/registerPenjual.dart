@@ -3,19 +3,20 @@ import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/loginPelanggan.dart';
+import 'package:rojotani/Awal/loginPenjual.dart';
 import 'package:rojotani/Awal/registerAs.dart';
 import 'package:rojotani/Awal/dataDiri.dart';
 import 'package:http/http.dart' as http;
 
-class registerPelangganPage extends StatefulWidget {
+class registerPenjualPage extends StatefulWidget {
   @override
-  State<registerPelangganPage> createState() => _registerPelangganPageState();
+  State<registerPenjualPage> createState() => _registerPenjualPageState();
 }
 
-class _registerPelangganPageState extends State<registerPelangganPage> {
+class _registerPenjualPageState extends State<registerPenjualPage> {
   bool isHiddenPassword1 = true;
   bool isHiddenPassword2 = true;
-  String nama, alamat, email, password;
+  String nama, alamat, email, password, no_rekening;
   final _key = new GlobalKey<FormState>();
 
   check() {
@@ -28,11 +29,12 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
 
   save() async {
     final response =
-        await http.post("http://192.168.43.135:8000/api/regpembeli", body: {
+        await http.post("http://192.168.43.135:8000/api/regpenjual", body: {
       'nama': nama,
       'alamat': alamat,
       'email': email,
       'password': password,
+      'no_rekening': no_rekening
       //'password_confirmation': password
     });
     final data = jsonDecode(response.body);
@@ -236,35 +238,31 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                           SizedBox(
                             height: 19.h,
                           ),
-                          // TextFormField(
-                          //   validator: (e) {
-                          //     if (e.isEmpty) {
-                          //       return 'Konfirmasi password';
-                          //     }
-                          //   },
-                          //   onSaved: (e) => password = e,
-                          //   obscureText: isHiddenPassword2,
-                          //   decoration: InputDecoration(
-                          //       suffixIcon: IconButton(
-                          //         icon: Icon(Icons.remove_red_eye),
-                          //         onPressed: _togglePasswordView2,
-                          //       ),
-                          //       border: OutlineInputBorder(
-                          //         borderRadius: new BorderRadius.circular(10.r),
-                          //       ),
-                          //       focusedBorder: OutlineInputBorder(
-                          //           borderRadius:
-                          //               new BorderRadius.circular(10.r),
-                          //           borderSide: BorderSide(
-                          //               color: Color(0xFF53B175), width: 2.w)),
-                          //       contentPadding: EdgeInsets.symmetric(
-                          //           horizontal: 14.w, vertical: 14.h),
-                          //       hintText: 'Ulangi Katasandi',
-                          //       hintStyle: TextStyle(
-                          //           color: Colors.grey,
-                          //           fontFamily: 'Mulish',
-                          //           fontWeight: FontWeight.w400)),
-                          // ),
+                          TextFormField(
+                            validator: (e) {
+                              if (e.isEmpty) {
+                                return 'Masukkan nomer rekening';
+                              }
+                            },
+                            onSaved: (e) => no_rekening = e,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(10.r),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(10.r),
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF53B175), width: 2.w)),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 14.w, vertical: 14.h),
+                                hintText: 'Masukkan nomer rekening',
+                                hintStyle: TextStyle(
+                                    color: Colors.grey,
+                                    fontFamily: 'Mulish',
+                                    fontWeight: FontWeight.w400)),
+                          ),
                           SizedBox(
                             height: 12.h,
                           ),
@@ -315,7 +313,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                                   onTap: () {
                                     Route route = MaterialPageRoute(
                                         builder: (context) =>
-                                            loginPelangganPage());
+                                            loginPenjualPage());
                                     Navigator.push(context, route);
                                   },
                                   child: Text(

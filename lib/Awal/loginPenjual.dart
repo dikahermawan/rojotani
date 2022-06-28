@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:rojotani/Awal/registerPenjual.dart';
 import 'package:rojotani/pembeli/produk/home.dart';
+import 'package:rojotani/petani/produk/katalog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,14 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/registerPelanggan.dart';
 import 'package:rojotani/Awal/loginAs.dart';
 
-class loginPelangganPage extends StatefulWidget {
+class loginPenjualPage extends StatefulWidget {
   @override
-  State<loginPelangganPage> createState() => _loginPelangganPageState();
+  State<loginPenjualPage> createState() => _loginPenjualPageState();
 }
 
 enum LoginStatus { notSignIn, SignIn }
 
-class _loginPelangganPageState extends State<loginPelangganPage> {
+class _loginPenjualPageState extends State<loginPenjualPage> {
   LoginStatus _loginStatus = LoginStatus.notSignIn;
   String email, password;
   bool isHiddenPassword = true;
@@ -30,7 +32,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
 
   login() async {
     final response = await http.post(
-        "http://192.168.43.135:8000/api/logpembeli",
+        "http://192.168.43.135:8000/api/logpenjual",
         body: {'email': email, 'password': password});
     final data = jsonDecode(response.body);
     int value = data['success'];
@@ -290,7 +292,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (cotext) =>
-                                                    registerPelangganPage()));
+                                                    registerPenjualPage()));
                                       },
                                       child: Text(
                                         'Daftar',
@@ -306,7 +308,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
             ));
         break;
       case LoginStatus.SignIn:
-        return homePage(signOut);
+        return katalogPage(signOut);
     }
   }
 

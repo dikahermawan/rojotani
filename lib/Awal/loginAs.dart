@@ -1,7 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/registerAs.dart';
-import 'package:rojotani/Awal/loginPetani.dart';
+import 'package:rojotani/Awal/loginPenjual.dart';
 import 'package:rojotani/Awal/loginPelanggan.dart';
 
 class loginAsPage extends StatefulWidget {
@@ -81,7 +81,7 @@ class _loginAsPageState extends State<loginAsPage> {
                 child: InkWell(
                   onTap: () {
                     Route route = MaterialPageRoute(
-                        builder: (context) => loginPetaniPage());
+                        builder: (context) => loginPenjualPage());
                     Navigator.push(context, route);
                   },
                   child: Center(
