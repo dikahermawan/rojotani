@@ -20,6 +20,14 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
   bool isHiddenPassword = true;
   final _key = new GlobalKey<FormState>();
 
+  errorSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Color.fromARGB(255, 184, 15, 3),
+      content: Text(text),
+      duration: const Duration(seconds: 3),
+    ));
+  }
+
   check() {
     final form = _key.currentState;
     if (form.validate()) {
@@ -42,7 +50,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
       });
       print(pesan);
     } else {
-      print(pesan);
+      errorSnackBar(context, 'Akun tidak Valid');
     }
   }
 
@@ -147,7 +155,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
                                 height: 47.h,
                               ),
                               Text(
-                                'Masukkan akun',
+                                'Masukkan Akun Pembeli',
                                 style: TextStyle(
                                     fontFamily: 'Mulish',
                                     fontSize: 20.sp,

@@ -20,7 +20,16 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
   LoginStatus _loginStatus = LoginStatus.notSignIn;
   String email, password;
   bool isHiddenPassword = true;
+  String pesan;
   final _key = new GlobalKey<FormState>();
+
+  errorSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Color.fromARGB(255, 184, 15, 3),
+      content: Text(text),
+      duration: const Duration(seconds: 3),
+    ));
+  }
 
   check() {
     final form = _key.currentState;
@@ -36,7 +45,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
         body: {'email': email, 'password': password});
     final data = jsonDecode(response.body);
     int value = data['success'];
-    String pesan = data['message'];
+    pesan = data['message'];
     if (value == 1) {
       setState(() {
         _loginStatus = LoginStatus.SignIn;
@@ -44,7 +53,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
       });
       print(pesan);
     } else {
-      print(pesan);
+      errorSnackBar(context, 'Akun tidak Valid');
     }
   }
 
@@ -149,7 +158,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
                                 height: 47.h,
                               ),
                               Text(
-                                'Masukkan akun',
+                                'Masukkan Akun Penjual',
                                 style: TextStyle(
                                     fontFamily: 'Mulish',
                                     fontSize: 20.sp,
@@ -188,6 +197,11 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
                                 height: 19.h,
                               ),
                               TextFormField(
+                                validator: (e) {
+                                  if (e.isEmpty) {
+                                    return 'masukkan password';
+                                  }
+                                },
                                 onSaved: (e) => password = e,
                                 obscureText: isHiddenPassword,
                                 decoration: InputDecoration(
@@ -236,7 +250,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
                               ),
                               // Center(
                               //   child: Text(
-                              //     pesan,
+
                               //     style: TextStyle(
                               //       color: Colors.red,
                               //       fontFamily: 'Mulish',

@@ -13,10 +13,17 @@ class registerPelangganPage extends StatefulWidget {
 }
 
 class _registerPelangganPageState extends State<registerPelangganPage> {
-  bool isHiddenPassword1 = true;
-  bool isHiddenPassword2 = true;
+  bool isHiddenPassword = true;
   String nama, alamat, email, password;
   final _key = new GlobalKey<FormState>();
+
+  errorSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Color.fromARGB(255, 184, 15, 3),
+      content: Text(text),
+      duration: const Duration(seconds: 3),
+    ));
+  }
 
   check() {
     final form = _key.currentState;
@@ -33,7 +40,6 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
       'alamat': alamat,
       'email': email,
       'password': password,
-      //'password_confirmation': password
     });
     final data = jsonDecode(response.body);
     int value = data['success'];
@@ -43,7 +49,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
         Navigator.pop(context);
       });
     } else {
-      print(pesan);
+      errorSnackBar(context, 'Email telah tersedia');
     }
   }
 
@@ -211,11 +217,11 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                               }
                             },
                             onSaved: (e) => password = e,
-                            obscureText: isHiddenPassword1,
+                            obscureText: isHiddenPassword,
                             decoration: InputDecoration(
                                 suffixIcon: IconButton(
                                   icon: Icon(Icons.remove_red_eye),
-                                  onPressed: _togglePasswordView1,
+                                  onPressed: _togglePasswordView,
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: new BorderRadius.circular(10.r),
@@ -333,20 +339,11 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
         ));
   }
 
-  void _togglePasswordView1() {
-    if (isHiddenPassword1 == true) {
-      isHiddenPassword1 = false;
+  void _togglePasswordView() {
+    if (isHiddenPassword == true) {
+      isHiddenPassword = false;
     } else {
-      isHiddenPassword1 = true;
-    }
-    setState(() {});
-  }
-
-  void _togglePasswordView2() {
-    if (isHiddenPassword2 == true) {
-      isHiddenPassword2 = false;
-    } else {
-      isHiddenPassword2 = true;
+      isHiddenPassword = true;
     }
     setState(() {});
   }

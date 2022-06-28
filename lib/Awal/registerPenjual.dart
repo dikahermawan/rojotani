@@ -19,6 +19,14 @@ class _registerPenjualPageState extends State<registerPenjualPage> {
   String nama, alamat, email, password, no_rekening;
   final _key = new GlobalKey<FormState>();
 
+  errorSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Color.fromARGB(255, 184, 15, 3),
+      content: Text(text),
+      duration: const Duration(seconds: 3),
+    ));
+  }
+
   check() {
     final form = _key.currentState;
     if (form.validate()) {
@@ -45,7 +53,7 @@ class _registerPenjualPageState extends State<registerPenjualPage> {
         Navigator.pop(context);
       });
     } else {
-      print(pesan);
+      errorSnackBar(context, 'Email telah tersedia');
     }
   }
 
@@ -114,7 +122,7 @@ class _registerPenjualPageState extends State<registerPenjualPage> {
                             height: 47.h,
                           ),
                           Text(
-                            'Daftar Akun',
+                            'Daftar Akun Penjual',
                             style: TextStyle(
                                 fontFamily: 'Mulish',
                                 fontSize: 20.sp,
