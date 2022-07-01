@@ -43,7 +43,6 @@ class _registerPenjualPageState extends State<registerPenjualPage> {
       'email': email,
       'password': password,
       'no_rekening': no_rekening
-      //'password_confirmation': password
     });
     final data = jsonDecode(response.body);
     int value = data['success'];
