@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:rojotani/Awal/registerPenjual.dart';
 import 'package:rojotani/pembeli/produk/home.dart';
+import 'package:rojotani/petani/produk/katalog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,17 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/registerPelanggan.dart';
 import 'package:rojotani/Awal/loginAs.dart';
 
-class loginPelangganPage extends StatefulWidget {
+class loginPenjualPage extends StatefulWidget {
   @override
-  State<loginPelangganPage> createState() => _loginPelangganPageState();
+  State<loginPenjualPage> createState() => _loginPenjualPageState();
 }
 
 enum LoginStatus { notSignIn, SignIn }
 
-class _loginPelangganPageState extends State<loginPelangganPage> {
+class _loginPenjualPageState extends State<loginPenjualPage> {
   LoginStatus _loginStatus = LoginStatus.notSignIn;
   String email, password;
   bool isHiddenPassword = true;
+  String pesan;
   final _key = new GlobalKey<FormState>();
 
   errorSnackBar(BuildContext context, String text) {
@@ -38,11 +41,11 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
 
   login() async {
     final response = await http.post(
-        "http://192.168.43.135:8000/api/logpembeli",
+        "http://192.168.43.135:8000/api/logpenjual",
         body: {'email': email, 'password': password});
     final data = jsonDecode(response.body);
     int value = data['success'];
-    String pesan = data['message'];
+    pesan = data['message'];
     if (value == 1) {
       setState(() {
         _loginStatus = LoginStatus.SignIn;
@@ -155,7 +158,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
                                 height: 47.h,
                               ),
                               Text(
-                                'Masukkan Akun Pembeli',
+                                'Masukkan Akun Penjual',
                                 style: TextStyle(
                                     fontFamily: 'Mulish',
                                     fontSize: 20.sp,
@@ -194,6 +197,11 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
                                 height: 19.h,
                               ),
                               TextFormField(
+                                validator: (e) {
+                                  if (e.isEmpty) {
+                                    return 'masukkan password';
+                                  }
+                                },
                                 onSaved: (e) => password = e,
                                 obscureText: isHiddenPassword,
                                 decoration: InputDecoration(
@@ -242,7 +250,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
                               ),
                               // Center(
                               //   child: Text(
-                              //     pesan,
+
                               //     style: TextStyle(
                               //       color: Colors.red,
                               //       fontFamily: 'Mulish',
@@ -298,7 +306,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (cotext) =>
-                                                    registerPelangganPage()));
+                                                    registerPenjualPage()));
                                       },
                                       child: Text(
                                         'Daftar',
@@ -314,7 +322,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
             ));
         break;
       case LoginStatus.SignIn:
-        return homePage(signOut);
+        return katalogPage(signOut);
     }
   }
 

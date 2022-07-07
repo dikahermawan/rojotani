@@ -12,10 +12,18 @@ import '../../petani/produk/lelang_card.dart';
 
 class katalogPage extends StatefulWidget {
   @override
+  final VoidCallback signOut;
+  katalogPage(this.signOut);
   State<katalogPage> createState() => _katalogPageState();
 }
 
 class _katalogPageState extends State<katalogPage> {
+  signOut() {
+    setState(() {
+      widget.signOut();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(
@@ -35,44 +43,14 @@ class _katalogPageState extends State<katalogPage> {
       return (isLandscape)
           ? Row(
               children: [
-                SizedBox(width: 15.w),
                 Container(
-                  margin: EdgeInsets.only(top: 100.h),
                   width: MediaQuery.of(context).size.width * 0.70,
                   height: MediaQuery.of(context).size.height * 0.10,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(15)),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      hintText: 'Cari produk',
-                      prefixIcon: Icon(Icons.search),
-                      // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
-                    ),
-                  ),
+                  child: Image.asset('asset/gambar/logo.png'),
                 ),
                 SizedBox(width: 9.w),
-                Container(
-                  margin: EdgeInsets.only(top: 100.h),
-                  child: IconButton(
-                    icon: Icon(Icons.shopping_cart_rounded),
-                    onPressed: () {
-                      // Route route =
-                      //     MaterialPageRoute(builder: (context) => ());
-                      // Navigator.push(context, route);
-                    },
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.060,
-                  height: MediaQuery.of(context).size.height * 0.11,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(25)),
-                ),
                 SizedBox(width: 6.w),
                 Container(
-                  margin: EdgeInsets.only(top: 100.h),
                   child: IconButton(
                     icon: Icon(Icons.notifications),
                     onPressed: () {
@@ -84,7 +62,7 @@ class _katalogPageState extends State<katalogPage> {
                   width: MediaQuery.of(context).size.width * 0.060,
                   height: MediaQuery.of(context).size.height * 0.11,
                   decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: Colors.grey,
                       borderRadius: BorderRadius.circular(25)),
                 ),
               ],
@@ -106,9 +84,7 @@ class _katalogPageState extends State<katalogPage> {
                     child: IconButton(
                       icon: Icon(Icons.notifications),
                       onPressed: () {
-                        // Route route =
-                        //     MaterialPageRoute(builder: (context) => ());
-                        // Navigator.push(context, route);
+                        signOut();
                       },
                     ),
                     width: MediaQuery.of(context).size.width * 0.12,
@@ -136,53 +112,6 @@ class _katalogPageState extends State<katalogPage> {
                           children: [
                             SizedBox(
                               height: 25,
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.70,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.10,
-                                  child: Image.asset('asset/gambar/logo.png'),
-                                ),
-                                SizedBox(width: 9.w),
-                                Container(
-                                  child: IconButton(
-                                    icon: Icon(Icons.shopping_cart_rounded),
-                                    onPressed: () {
-                                      // Route route =
-                                      //     MaterialPageRoute(builder: (context) => ());
-                                      // Navigator.push(context, route);
-                                    },
-                                  ),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.060,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.11,
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[100],
-                                      borderRadius: BorderRadius.circular(25)),
-                                ),
-                                SizedBox(width: 6.w),
-                                Container(
-                                  child: IconButton(
-                                    icon: Icon(Icons.notifications),
-                                    onPressed: () {
-                                      // Route route =
-                                      //     MaterialPageRoute(builder: (context) => ());
-                                      // Navigator.push(context, route);
-                                    },
-                                  ),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.060,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.11,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xFF53B175),
-                                      borderRadius: BorderRadius.circular(25)),
-                                ),
-                              ],
                             ),
                             SizedBox(
                               height: 15.h,

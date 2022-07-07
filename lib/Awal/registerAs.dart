@@ -1,7 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/loginAs.dart';
-import 'package:rojotani/Awal/registerPetani.dart';
+import 'package:rojotani/Awal/registerPenjual.dart';
 import 'package:rojotani/Awal/registerPelanggan.dart';
 
 class registerAsPage extends StatefulWidget {
@@ -38,125 +38,127 @@ class _registerAsPageState extends State<registerAsPage> {
         body: SafeArea(
             child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 36.w),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            SizedBox(
-              height: 60.h,
-            ),
-            Image.asset(
-              'asset/gambar/logo.png',
-            ),
-            SizedBox(
-              height: 26.h,
-            ),
-            Text(
-              'Cari produk berkualitas dengan harga terjangkau cuma di Rojotani !!',
-              style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w400),
-            ),
-            SizedBox(
-              height: 47.h,
-            ),
-            Text(
-              'Daftar Sebagai',
-              style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w700),
-            ),
-            SizedBox(
-              height: 19.h,
-            ),
-            new Container(
-              width: 317.w,
-              height: 51.h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xFF53B175),
+          child: SingleChildScrollView(
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              SizedBox(
+                height: 60.h,
               ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () {
-                    Route route = MaterialPageRoute(
-                        builder: (context) => registerPetaniPage());
-                    Navigator.push(context, route);
-                  },
-                  child: Center(
-                    child: Text(
-                      'PENJUAL PRODUK',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.sp,
-                          fontFamily: 'Mulish',
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ),
+              Image.asset(
+                'asset/gambar/logo.png',
               ),
-            ),
-            SizedBox(
-              height: 19.h,
-            ),
-            new Container(
-              width: 317.w,
-              height: 51.h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xFF53B175),
+              SizedBox(
+                height: 26.h,
               ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () {
-                    Route route = MaterialPageRoute(
-                        builder: (context) => registerPelangganPage());
-                    Navigator.push(context, route);
-                  },
-                  child: Center(
-                    child: Text(
-                      'PEMBELI PRODUK',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.sp,
-                          fontFamily: 'Mulish',
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 47.h,
-            ),
-            new Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(
-                ' Telah Memiliki Akun? ',
+                'Cari produk berkualitas dengan harga terjangkau cuma di Rojotani !!',
                 style: TextStyle(
-                    fontSize: 18.sp,
-                    color: Colors.black,
                     fontFamily: 'Mulish',
-                    fontWeight: FontWeight.w600),
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w400),
               ),
-              GestureDetector(
-                onTap: () {
-                   Route route = MaterialPageRoute(
-                        builder: (context) => loginAsPage());
-                    Navigator.push(context, route);
-                },
-                child: Text(
-                  'Masuk',
+              SizedBox(
+                height: 47.h,
+              ),
+              Text(
+                'Daftar Sebagai',
+                style: TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w700),
+              ),
+              SizedBox(
+                height: 19.h,
+              ),
+              new Container(
+                width: 317.w,
+                height: 51.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color(0xFF53B175),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      Route route = MaterialPageRoute(
+                          builder: (context) => registerPenjualPage());
+                      Navigator.push(context, route);
+                    },
+                    child: Center(
+                      child: Text(
+                        'PENJUAL PRODUK',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.sp,
+                            fontFamily: 'Mulish',
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 19.h,
+              ),
+              new Container(
+                width: 317.w,
+                height: 51.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color(0xFF53B175),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      Route route = MaterialPageRoute(
+                          builder: (context) => registerPelangganPage());
+                      Navigator.push(context, route);
+                    },
+                    child: Center(
+                      child: Text(
+                        'PEMBELI PRODUK',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.sp,
+                            fontFamily: 'Mulish',
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 47.h,
+              ),
+              new Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text(
+                  ' Telah Memiliki Akun? ',
                   style: TextStyle(
                       fontSize: 18.sp,
-                      color: Color(0xFF53B175),
+                      color: Colors.black,
                       fontFamily: 'Mulish',
                       fontWeight: FontWeight.w600),
                 ),
-              ),
+                GestureDetector(
+                  onTap: () {
+                    Route route =
+                        MaterialPageRoute(builder: (context) => loginAsPage());
+                    Navigator.push(context, route);
+                  },
+                  child: Text(
+                    'Masuk',
+                    style: TextStyle(
+                        fontSize: 18.sp,
+                        color: Color(0xFF53B175),
+                        fontFamily: 'Mulish',
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ]),
             ]),
-          ]),
+          ),
         )));
   }
 }

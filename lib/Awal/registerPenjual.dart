@@ -3,18 +3,20 @@ import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/loginPelanggan.dart';
+import 'package:rojotani/Awal/loginPenjual.dart';
 import 'package:rojotani/Awal/registerAs.dart';
 import 'package:rojotani/Awal/dataDiri.dart';
 import 'package:http/http.dart' as http;
 
-class registerPelangganPage extends StatefulWidget {
+class registerPenjualPage extends StatefulWidget {
   @override
-  State<registerPelangganPage> createState() => _registerPelangganPageState();
+  State<registerPenjualPage> createState() => _registerPenjualPageState();
 }
 
-class _registerPelangganPageState extends State<registerPelangganPage> {
-  bool isHiddenPassword = true;
-  String nama, alamat, email, password;
+class _registerPenjualPageState extends State<registerPenjualPage> {
+  bool isHiddenPassword1 = true;
+  bool isHiddenPassword2 = true;
+  String nama, alamat, email, password, no_rekening;
   final _key = new GlobalKey<FormState>();
 
   errorSnackBar(BuildContext context, String text) {
@@ -35,11 +37,12 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
 
   save() async {
     final response =
-        await http.post("http://192.168.43.135:8000/api/regpembeli", body: {
+        await http.post("http://192.168.43.135:8000/api/regpenjual", body: {
       'nama': nama,
       'alamat': alamat,
       'email': email,
       'password': password,
+      'no_rekening': no_rekening
     });
     final data = jsonDecode(response.body);
     int value = data['success'];
@@ -118,7 +121,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                             height: 47.h,
                           ),
                           Text(
-                            'Daftar Akun',
+                            'Daftar Akun Penjual',
                             style: TextStyle(
                                 fontFamily: 'Mulish',
                                 fontSize: 20.sp,
@@ -217,11 +220,11 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                               }
                             },
                             onSaved: (e) => password = e,
-                            obscureText: isHiddenPassword,
+                            obscureText: isHiddenPassword1,
                             decoration: InputDecoration(
                                 suffixIcon: IconButton(
                                   icon: Icon(Icons.remove_red_eye),
-                                  onPressed: _togglePasswordView,
+                                  onPressed: _togglePasswordView1,
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: new BorderRadius.circular(10.r),
@@ -242,35 +245,31 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                           SizedBox(
                             height: 19.h,
                           ),
-                          // TextFormField(
-                          //   validator: (e) {
-                          //     if (e.isEmpty) {
-                          //       return 'Konfirmasi password';
-                          //     }
-                          //   },
-                          //   onSaved: (e) => password = e,
-                          //   obscureText: isHiddenPassword2,
-                          //   decoration: InputDecoration(
-                          //       suffixIcon: IconButton(
-                          //         icon: Icon(Icons.remove_red_eye),
-                          //         onPressed: _togglePasswordView2,
-                          //       ),
-                          //       border: OutlineInputBorder(
-                          //         borderRadius: new BorderRadius.circular(10.r),
-                          //       ),
-                          //       focusedBorder: OutlineInputBorder(
-                          //           borderRadius:
-                          //               new BorderRadius.circular(10.r),
-                          //           borderSide: BorderSide(
-                          //               color: Color(0xFF53B175), width: 2.w)),
-                          //       contentPadding: EdgeInsets.symmetric(
-                          //           horizontal: 14.w, vertical: 14.h),
-                          //       hintText: 'Ulangi Katasandi',
-                          //       hintStyle: TextStyle(
-                          //           color: Colors.grey,
-                          //           fontFamily: 'Mulish',
-                          //           fontWeight: FontWeight.w400)),
-                          // ),
+                          TextFormField(
+                            validator: (e) {
+                              if (e.isEmpty) {
+                                return 'Masukkan nomer rekening';
+                              }
+                            },
+                            onSaved: (e) => no_rekening = e,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(10.r),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(10.r),
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF53B175), width: 2.w)),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 14.w, vertical: 14.h),
+                                hintText: 'Masukkan nomer rekening',
+                                hintStyle: TextStyle(
+                                    color: Colors.grey,
+                                    fontFamily: 'Mulish',
+                                    fontWeight: FontWeight.w400)),
+                          ),
                           SizedBox(
                             height: 12.h,
                           ),
@@ -321,7 +320,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                                   onTap: () {
                                     Route route = MaterialPageRoute(
                                         builder: (context) =>
-                                            loginPelangganPage());
+                                            loginPenjualPage());
                                     Navigator.push(context, route);
                                   },
                                   child: Text(
@@ -339,11 +338,20 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
         ));
   }
 
-  void _togglePasswordView() {
-    if (isHiddenPassword == true) {
-      isHiddenPassword = false;
+  void _togglePasswordView1() {
+    if (isHiddenPassword1 == true) {
+      isHiddenPassword1 = false;
     } else {
-      isHiddenPassword = true;
+      isHiddenPassword1 = true;
+    }
+    setState(() {});
+  }
+
+  void _togglePasswordView2() {
+    if (isHiddenPassword2 == true) {
+      isHiddenPassword2 = false;
+    } else {
+      isHiddenPassword2 = true;
     }
     setState(() {});
   }

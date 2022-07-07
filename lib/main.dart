@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:rojotani/pembeli/transaksi/cekOut.dart';
+import 'package:rojotani/pembeli/transaksi/pengiriman.dart';
 import 'package:rojotani/petani/produk/katalog.dart';
 import 'package:rojotani/petani/produk/tambah_produk/tambahLelang.dart';
 import 'package:rojotani/petani/produk/tambah_produk/tambahProduk.dart';
+import 'Awal/registerPelanggan.dart';
 import 'pembeli/produk/home.dart';
 import 'petani/transaksi/keranjang.dart';
 import 'SplashScreen.dart';
@@ -21,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: katalogPage(),
+      home: tambahProdukPage(),
       //homePage()
     );
   }
