@@ -7,6 +7,7 @@ import 'package:rojotani/layout.dart';
 import 'package:rojotani/petani/produk/product_card.dart';
 import 'package:rojotani/petani/produk/tambah_produk/tambahLelang.dart';
 import 'package:rojotani/petani/produk/tambah_produk/tambahProduk.dart';
+import 'package:rojotani/petani/produk/tambah_produk/tambahProdukCoba.dart';
 
 import '../../petani/produk/lelang_card.dart';
 
@@ -242,170 +243,176 @@ class _katalogPageState extends State<katalogPage> {
                   )
                 ////////////////////////////
                 //Potrait
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                        SizedBox(
-                          height: 60.h,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 40.sp),
-                          child: Text(
-                            'Lelang',
-                            style: TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 25.sp,
-                                fontWeight: FontWeight.w800),
+                : SingleChildScrollView(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 60.h,
                           ),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Container(
-                          color: Color(0xFF53B175),
-                          height: MediaQuery.of(context).size.height * 0.29,
-                          width: MediaQuery.of(context).size.width * 1,
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 20.w,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Route route = MaterialPageRoute(
-                                      builder: (context) => tambahLelangPage());
-                                  Navigator.push(context, route);
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(right: 6.w),
+                          Padding(
+                            padding: EdgeInsets.only(left: 40.sp),
+                            child: Text(
+                              'Lelang',
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 25.sp,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Container(
+                            color: Color(0xFF53B175),
+                            height: MediaQuery.of(context).size.height * 0.29,
+                            width: MediaQuery.of(context).size.width * 1,
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 20.w,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Route route = MaterialPageRoute(
+                                        builder: (context) =>
+                                            tambahLelangPage());
+                                    Navigator.push(context, route);
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 6.w),
+                                    width: MediaQuery.of(context).size.width *
+                                        0.25,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.27,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15.r),
+                                    ),
+                                    child: Icon(
+                                      Icons.add,
+                                      size: 40,
+                                    ),
+                                  ),
+                                ),
+                                Container(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.25,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.27,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15.r),
-                                  ),
-                                  child: Icon(
-                                    Icons.add,
-                                    size: 40,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.68,
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    children: [
-                                      lelangCard(
-                                        img: 'asset/gambar/jagung.png',
-                                        title: 'Pisang Ambon',
-                                        harga: 'Rp. 15.000 / Kg',
-                                        waktu: "00 : 00 : 00",
-                                        press: () {},
-                                      ),
-                                      lelangCard(
-                                        img: 'asset/gambar/jagung.png',
-                                        title: 'Pisang Ambon',
-                                        harga: 'Rp. 15.000 / Kg',
-                                        waktu: "00 : 00 : 00",
-                                        press: () {},
-                                      ),
-                                      lelangCard(
-                                        img: 'asset/gambar/jagung.png',
-                                        title: 'Pisang Ambon',
-                                        harga: 'Rp. 15.000 / Kg',
-                                        waktu: "00 : 00 : 00",
-                                        press: () {},
-                                      ),
-                                    ],
+                                      MediaQuery.of(context).size.width * 0.68,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        lelangCard(
+                                          img: 'asset/gambar/jagung.png',
+                                          title: 'Pisang Ambon',
+                                          harga: 'Rp. 15.000 / Kg',
+                                          waktu: "00 : 00 : 00",
+                                          press: () {},
+                                        ),
+                                        lelangCard(
+                                          img: 'asset/gambar/jagung.png',
+                                          title: 'Pisang Ambon',
+                                          harga: 'Rp. 15.000 / Kg',
+                                          waktu: "00 : 00 : 00",
+                                          press: () {},
+                                        ),
+                                        lelangCard(
+                                          img: 'asset/gambar/jagung.png',
+                                          title: 'Pisang Ambon',
+                                          harga: 'Rp. 15.000 / Kg',
+                                          waktu: "00 : 00 : 00",
+                                          press: () {},
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 38.sp),
-                          child: Text(
-                            'Produk',
-                            style: TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 25.sp,
-                                fontWeight: FontWeight.w800),
+                          SizedBox(
+                            height: 20.h,
                           ),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Container(
-                          color: Colors.grey[200],
-                          height: MediaQuery.of(context).size.height * 0.29,
-                          width: MediaQuery.of(context).size.width * 3,
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 20.w,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Route route = MaterialPageRoute(
-                                      builder: (context) => tambahProdukPage());
-                                  Navigator.push(context, route);
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(right: 6.w),
+                          Padding(
+                            padding: EdgeInsets.only(left: 38.sp),
+                            child: Text(
+                              'Produk',
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 25.sp,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Container(
+                            color: Colors.grey[200],
+                            height: MediaQuery.of(context).size.height * 0.29,
+                            width: MediaQuery.of(context).size.width * 3,
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 20.w,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Route route = MaterialPageRoute(
+                                        builder: (context) =>
+                                            tambahProdukCoba());
+                                    Navigator.push(context, route);
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 6.w),
+                                    width: MediaQuery.of(context).size.width *
+                                        0.25,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.25,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15.r),
+                                      border: Border.all(
+                                          width: 1.w, color: Colors.grey),
+                                    ),
+                                    child: Icon(
+                                      Icons.add,
+                                      size: 40,
+                                    ),
+                                  ),
+                                ),
+                                Container(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.25,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.25,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15.r),
-                                    border: Border.all(
-                                        width: 1.w, color: Colors.grey),
-                                  ),
-                                  child: Icon(
-                                    Icons.add,
-                                    size: 40,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.68,
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    children: [
-                                      productCard(
-                                        img: 'asset/gambar/jagung.png',
-                                        title: 'Pisang Ambon',
-                                        harga: 'Rp. 15.000 / Kg',
-                                        press: () {},
-                                      ),
-                                      productCard(
-                                        img: 'asset/gambar/jagung.png',
-                                        title: 'Pisang Ambon',
-                                        harga: 'Rp. 15.000 / Kg',
-                                        press: () {},
-                                      ),
-                                      productCard(
-                                        img: 'asset/gambar/jagung.png',
-                                        title: 'Pisang Ambon',
-                                        harga: 'Rp. 15.000 / Kg',
-                                        press: () {},
-                                      ),
-                                    ],
+                                      MediaQuery.of(context).size.width * 0.68,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        productCard(
+                                          img: 'asset/gambar/jagung.png',
+                                          title: 'Pisang Ambon',
+                                          harga: 'Rp. 15.000 / Kg',
+                                          press: () {},
+                                        ),
+                                        productCard(
+                                          img: 'asset/gambar/jagung.png',
+                                          title: 'Pisang Ambon',
+                                          harga: 'Rp. 15.000 / Kg',
+                                          press: () {},
+                                        ),
+                                        productCard(
+                                          img: 'asset/gambar/jagung.png',
+                                          title: 'Pisang Ambon',
+                                          harga: 'Rp. 15.000 / Kg',
+                                          press: () {},
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ])));
+                        ]),
+                  )));
   }
 }

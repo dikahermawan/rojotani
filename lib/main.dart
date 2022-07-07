@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:rojotani/Awal/loginAs.dart';
+import 'package:rojotani/Awal/loginPenjual.dart';
+import 'package:rojotani/Awal/registerAs.dart';
 import 'package:rojotani/pembeli/transaksi/cekOut.dart';
 import 'package:rojotani/pembeli/transaksi/pengiriman.dart';
+import 'package:rojotani/petani/akun/akunPetani.dart';
+import 'package:rojotani/petani/navPetani.dart';
 import 'package:rojotani/petani/produk/katalog.dart';
 import 'package:rojotani/petani/produk/tambah_produk/tambahLelang.dart';
 import 'package:rojotani/petani/produk/tambah_produk/tambahProduk.dart';
+import 'package:rojotani/petani/produk/tambah_produk/tambahProdukCoba.dart';
 import 'Awal/registerPelanggan.dart';
 import 'pembeli/produk/home.dart';
 import 'petani/transaksi/keranjang.dart';
@@ -21,10 +27,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       title: 'RojoTani',
+
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: tambahProdukPage(),
+      home: navPetani(),
       //homePage()
     );
   }

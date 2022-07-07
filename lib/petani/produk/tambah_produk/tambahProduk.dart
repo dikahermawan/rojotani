@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter/material.dart';
 import 'package:rojotani/layout.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:rojotani/Awal/loginPenjual.dart';
 
 class tambahProdukPage extends StatefulWidget {
   @override
@@ -11,18 +15,25 @@ class tambahProdukPage extends StatefulWidget {
 }
 
 class _tambahProdukPageState extends State<tambahProdukPage> {
-  File _image;
-  String gambar, nama, satuan, jenis, deskripsi;
+  // File _image;
+  String nama, satuan, jenis, deskripsi, penjual_id;
   int harga, stok;
   final _key = new GlobalKey<FormState>();
 
-  Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
+  Future getPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      _image = image;
+      penjual_id = preferences.getString('id');
     });
   }
+
+  // Future getImage() async {
+  //   var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+  //   setState(() {
+  //     _image = image;
+  //   });
+  // }
 
   Widget title(String text) {
     return Padding(
@@ -46,13 +57,13 @@ class _tambahProdukPageState extends State<tambahProdukPage> {
     );
   }
 
-  Widget Input(input, eror, nilai) {
+  Widget Input(input, error, nilai) {
     return Padding(
       padding: EdgeInsets.only(left: 15.w),
       child: TextFormField(
         validator: (e) {
           if (e.isEmpty) {
-            return eror;
+            return error;
           }
         },
         onSaved: (e) => nilai = e,
@@ -70,11 +81,54 @@ class _tambahProdukPageState extends State<tambahProdukPage> {
     );
   }
 
+  errorSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Color.fromARGB(255, 184, 15, 3),
+      content: Text(text),
+      duration: const Duration(seconds: 3),
+    ));
+  }
+
   check() {
     final form = _key.currentState;
     if (form.validate()) {
       form.save();
+      tambah();
     }
+  }
+
+  Future<Map<String, dynamic>> tambah() async {
+    Uri url = Uri.parse("http://192.168.43.56:8000/api/produk");
+    final response = await http.post(url, body: {
+      "penjual_id": penjual_id,
+      "nama": nama,
+      "harga": harga,
+      "satuan": satuan,
+      "stok": stok,
+      "jenis": jenis,
+      "deskripsi": deskripsi
+    });
+
+    final dataproduk = jsonDecode(response.body) as Map<String, dynamic>;
+    // id = data['penjual_id'];
+    int value = dataproduk['success'];
+    var pesan = dataproduk['message'];
+    // var user = data['user'];
+    if (value == 1) {
+      print(pesan);
+      setState(() {
+        Navigator.pop(context);
+      });
+    } else {
+      errorSnackBar(context, 'Akun tidak Valid');
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPref();
   }
 
   Widget InputLandscape(String input) {
@@ -131,9 +185,7 @@ class _tambahProdukPageState extends State<tambahProdukPage> {
                   color: Colors.black,
                 ),
                 onPressed: () {
-                  // Route route =
-                  //     MaterialPageRoute(builder: (context) => ());
-                  // Navigator.push(context, route);
+                  Navigator.of(context).pop();
                 },
               ),
               title: Text(
@@ -168,71 +220,71 @@ class _tambahProdukPageState extends State<tambahProdukPage> {
                             SizedBox(
                               height: 20.h,
                             ),
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 15.w),
-                                  child: InkWell(
-                                    onTap: getImage,
-                                    child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.2,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.15,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              width: 1.w,
-                                              color: Color(0xFF53B175)),
-                                          borderRadius:
-                                              BorderRadius.circular(5.r)),
-                                      child: _image == null
-                                          ? Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
-                                                Icon(
-                                                  Icons.add,
-                                                  size: 70.sp,
-                                                  color: Color(0xFF53B175),
-                                                ),
-                                                Text("Gambar",
-                                                    style: TextStyle(
-                                                        fontFamily: 'Mulish',
-                                                        fontSize: 30.sp,
-                                                        fontWeight:
-                                                            FontWeight.w500)),
-                                              ],
-                                            )
-                                          : Center(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(
-                                                    height: 20.h,
-                                                  ),
-                                                  Icon(
-                                                    Icons.image,
-                                                    size: 85.h,
-                                                  ),
-                                                  Text("Diunggah",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontFamily: 'Mulish',
-                                                          fontSize: 25.sp,
-                                                          fontWeight:
-                                                              FontWeight.w500)),
-                                                ],
-                                              ),
-                                            ),
-                                      // Image.file(_image),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // Row(
+                            //   children: [
+                            //     Padding(
+                            //       padding: EdgeInsets.only(left: 15.w),
+                            //       child: InkWell(
+                            //         // onTap: getImage,
+                            //         child: Container(
+                            //           height:
+                            //               MediaQuery.of(context).size.height *
+                            //                   0.2,
+                            //           width: MediaQuery.of(context).size.width *
+                            //               0.15,
+                            //           decoration: BoxDecoration(
+                            //               color: Colors.white,
+                            //               border: Border.all(
+                            //                   width: 1.w,
+                            //                   color: Color(0xFF53B175)),
+                            //               borderRadius:
+                            //                   BorderRadius.circular(5.r)),
+                            //           child: _image == null
+                            //               ? Column(
+                            //                   children: [
+                            //                     SizedBox(
+                            //                       height: 20.h,
+                            //                     ),
+                            //                     Icon(
+                            //                       Icons.add,
+                            //                       size: 70.sp,
+                            //                       color: Color(0xFF53B175),
+                            //                     ),
+                            //                     Text("Gambar",
+                            //                         style: TextStyle(
+                            //                             fontFamily: 'Mulish',
+                            //                             fontSize: 30.sp,
+                            //                             fontWeight:
+                            //                                 FontWeight.w500)),
+                            //                   ],
+                            //                 )
+                            //               : Center(
+                            //                   child: Column(
+                            //                     children: [
+                            //                       SizedBox(
+                            //                         height: 20.h,
+                            //                       ),
+                            //                       Icon(
+                            //                         Icons.image,
+                            //                         size: 85.h,
+                            //                       ),
+                            //                       Text("Diunggah",
+                            //                           textAlign:
+                            //                               TextAlign.center,
+                            //                           style: TextStyle(
+                            //                               fontFamily: 'Mulish',
+                            //                               fontSize: 25.sp,
+                            //                               fontWeight:
+                            //                                   FontWeight.w500)),
+                            //                     ],
+                            //                   ),
+                            //                 ),
+                            //           // Image.file(_image),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                             TextField(
                               decoration: InputDecoration(
                                 enabledBorder: InputBorder.none,
@@ -321,9 +373,7 @@ class _tambahProdukPageState extends State<tambahProdukPage> {
                   color: Colors.black,
                 ),
                 onPressed: () {
-                  // Route route =
-                  //     MaterialPageRoute(builder: (context) => ());
-                  // Navigator.push(context, route);
+                  Navigator.of(context).pop();
                 },
               ),
               title: Text(
@@ -359,123 +409,123 @@ class _tambahProdukPageState extends State<tambahProdukPage> {
                               SizedBox(
                                 height: 10.h,
                               ),
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 15.w),
-                                    child: InkWell(
-                                      onTap: getImage,
-                                      child: _image == null
-                                          ? Column(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 18.w),
-                                                  child: Container(
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.1,
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.2,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          border: Border.all(
-                                                              width: 1.w,
-                                                              color: Color(
-                                                                  0xFF53B175)),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      5.r)),
-                                                      child: Column(
-                                                        children: [
-                                                          SizedBox(
-                                                            height: 10.h,
-                                                          ),
-                                                          Icon(
-                                                            Icons.add,
-                                                            size: 45.sp,
-                                                            color: Color(
-                                                                0xFF53B175),
-                                                          ),
-                                                          Text("Gambar",
-                                                              style: TextStyle(
-                                                                  fontFamily:
-                                                                      'Mulish',
-                                                                  fontSize:
-                                                                      18.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500)),
-                                                        ],
-                                                      )
-                                                      // : Image.file(_image),
-                                                      ),
-                                                ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
-                                                Text(
-                                                  'Gambar harus diisi',
-                                                  style: TextStyle(
-                                                      color: Color.fromARGB(
-                                                          255, 206, 23, 10),
-                                                      fontFamily: 'Mulish',
-                                                      fontSize: 13.sp),
-                                                )
-                                              ],
-                                            )
-                                          : Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.1,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.2,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  border: Border.all(
-                                                      width: 1.w,
-                                                      color: Color(0xFF53B175)),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          5.r)),
-                                              child: Center(
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 20.h,
-                                                    ),
-                                                    Icon(
-                                                      Icons.image,
-                                                      // size: 45.sp,
-                                                    ),
-                                                    Text("Diunggah",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                'Mulish',
-                                                            fontSize: 16.sp,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500)),
-                                                  ],
-                                                ),
-                                              ),
-                                              // : Image.file(_image),
-                                            ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              // Row(
+                              //   children: [
+                              //     Padding(
+                              //       padding: EdgeInsets.only(left: 15.w),
+                              //       child: InkWell(
+                              //         // onTap: getImage,
+                              //         child: _image == null
+                              //             ? Column(
+                              //                 children: [
+                              //                   Padding(
+                              //                     padding: EdgeInsets.only(
+                              //                         right: 18.w),
+                              //                     child: Container(
+                              //                         height:
+                              //                             MediaQuery.of(context)
+                              //                                     .size
+                              //                                     .height *
+                              //                                 0.1,
+                              //                         width:
+                              //                             MediaQuery.of(context)
+                              //                                     .size
+                              //                                     .width *
+                              //                                 0.2,
+                              //                         decoration: BoxDecoration(
+                              //                             color: Colors.white,
+                              //                             border: Border.all(
+                              //                                 width: 1.w,
+                              //                                 color: Color(
+                              //                                     0xFF53B175)),
+                              //                             borderRadius:
+                              //                                 BorderRadius
+                              //                                     .circular(
+                              //                                         5.r)),
+                              //                         child: Column(
+                              //                           children: [
+                              //                             SizedBox(
+                              //                               height: 10.h,
+                              //                             ),
+                              //                             Icon(
+                              //                               Icons.add,
+                              //                               size: 45.sp,
+                              //                               color: Color(
+                              //                                   0xFF53B175),
+                              //                             ),
+                              //                             Text("Gambar",
+                              //                                 style: TextStyle(
+                              //                                     fontFamily:
+                              //                                         'Mulish',
+                              //                                     fontSize:
+                              //                                         18.sp,
+                              //                                     fontWeight:
+                              //                                         FontWeight
+                              //                                             .w500)),
+                              //                           ],
+                              //                         )
+                              //                         // : Image.file(_image),
+                              //                         ),
+                              //                   ),
+                              //                   SizedBox(
+                              //                     height: 10.h,
+                              //                   ),
+                              //                   Text(
+                              //                     'Gambar harus diisi',
+                              //                     style: TextStyle(
+                              //                         color: Color.fromARGB(
+                              //                             255, 206, 23, 10),
+                              //                         fontFamily: 'Mulish',
+                              //                         fontSize: 13.sp),
+                              //                   )
+                              //                 ],
+                              //               )
+                              //             : Container(
+                              //                 height: MediaQuery.of(context)
+                              //                         .size
+                              //                         .height *
+                              //                     0.1,
+                              //                 width: MediaQuery.of(context)
+                              //                         .size
+                              //                         .width *
+                              //                     0.2,
+                              //                 decoration: BoxDecoration(
+                              //                     color: Colors.white,
+                              //                     border: Border.all(
+                              //                         width: 1.w,
+                              //                         color: Color(0xFF53B175)),
+                              //                     borderRadius:
+                              //                         BorderRadius.circular(
+                              //                             5.r)),
+                              //                 child: Center(
+                              //                   child: Column(
+                              //                     children: [
+                              //                       SizedBox(
+                              //                         height: 20.h,
+                              //                       ),
+                              //                       Icon(
+                              //                         Icons.image,
+                              //                         // size: 45.sp,
+                              //                       ),
+                              //                       Text("Diunggah",
+                              //                           textAlign:
+                              //                               TextAlign.center,
+                              //                           style: TextStyle(
+                              //                               fontFamily:
+                              //                                   'Mulish',
+                              //                               fontSize: 16.sp,
+                              //                               fontWeight:
+                              //                                   FontWeight
+                              //                                       .w500)),
+                              //                     ],
+                              //                   ),
+                              //                 ),
+                              //                 // : Image.file(_image),
+                              //               ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                               space(),
                               title('Nama Produk'),
                               Input('Masukkan Nama Produk',

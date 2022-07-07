@@ -115,9 +115,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
                   color: Colors.black,
                 ),
                 onPressed: () {
-                  // Route route =
-                  //     MaterialPageRoute(builder: (context) => ());
-                  // Navigator.push(context, route);
+                  Navigator.of(context).pop();
                 },
               ),
               title: Text(
@@ -286,9 +284,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
                   color: Colors.black,
                 ),
                 onPressed: () {
-                  // Route route =
-                  //     MaterialPageRoute(builder: (context) => ());
-                  // Navigator.push(context, route);
+                  Navigator.of(context).pop();
                 },
               ),
               title: Text(

@@ -39,17 +39,20 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     }
   }
 
-  login() async {
-    final response = await http.post(
-        "http://192.168.43.135:8000/api/logpenjual",
-        body: {'email': email, 'password': password});
-    final data = jsonDecode(response.body);
-    int value = data['success'];
+  Future<Map<String, dynamic>> login() async {
+    Uri url = Uri.parse("http://192.168.43.56:8000/api/logpenjual");
+    final response = await http.post(url, body: {
+      'email': email,
+      'password': password,
+    });
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    var value = data['success'];
     pesan = data['message'];
+    String id = data['id'];
     if (value == 1) {
       setState(() {
         _loginStatus = LoginStatus.SignIn;
-        savePref(value);
+        savePref(value, id);
       });
       print(pesan);
     } else {
@@ -57,10 +60,11 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     }
   }
 
-  savePref(int value) async {
+  savePref(int value, String id) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt('value', value);
+      preferences.setString('id', id);
       preferences.commit();
     });
   }
@@ -78,6 +82,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt('value', null);
+      preferences.setInt('id', null);
       preferences.commit();
       _loginStatus = LoginStatus.notSignIn;
     });
