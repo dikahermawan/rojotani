@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 
 class akunPetani extends StatefulWidget {
   const akunPetani({Key key}) : super(key: key);
@@ -9,6 +12,16 @@ class akunPetani extends StatefulWidget {
 }
 
 class _akunPetaniState extends State<akunPetani> {
+  File _image;
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(
@@ -24,6 +37,7 @@ class _akunPetaniState extends State<akunPetani> {
     Size size = MediaQuery.of(context).size;
     final bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -47,20 +61,72 @@ class _akunPetaniState extends State<akunPetani> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 40.h),
-                Center(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.22,
-                    width: MediaQuery.of(context).size.width * 0.42,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(100.r),
-                      image: DecorationImage(
-                        image: AssetImage('asset/profil/kosong.png'),
-                        fit: BoxFit.cover,
+                _image == null
+                    ? Center(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.22,
+                          width: MediaQuery.of(context).size.width * 0.45,
+                          child: Stack(
+                            children: [
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.22,
+                                width: MediaQuery.of(context).size.width * 0.42,
+                                decoration: BoxDecoration(
+                                  //color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(100.r),
+                                  image: DecorationImage(
+                                    image:
+                                        AssetImage('asset/profil/kosong.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: FloatingActionButton(
+                                  onPressed: getImage,
+                                  backgroundColor: Color(0xFF53B175),
+                                  child: Icon(Icons.camera_alt),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.22,
+                          width: MediaQuery.of(context).size.width * 0.42,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(100.r),
+                          ),
+                          child: Stack(
+                            children: [
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.22,
+                                width: MediaQuery.of(context).size.width * 0.42,
+                                child: ClipOval(
+                                  child: Image.file(
+                                    _image,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: FloatingActionButton(
+                                  onPressed: getImage,
+                                  backgroundColor: Color(0xFF53B175),
+                                  child: Icon(Icons.camera_alt),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
                 SizedBox(
                   height: 10.h,
                 ),
@@ -137,49 +203,52 @@ class _akunPetaniState extends State<akunPetani> {
                         Divider(
                           thickness: 3,
                         ),
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 223, 220, 220),
-                            borderRadius: BorderRadius.circular(15.r),
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 15.w,
-                              ),
-                              Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.07,
-                                width: MediaQuery.of(context).size.width * 0.14,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF53B175),
-                                  borderRadius: BorderRadius.circular(15.r),
+                        InkWell(
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 223, 220, 220),
+                              borderRadius: BorderRadius.circular(15.r),
+                            ),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 15.w,
                                 ),
-                                child: Icon(
-                                  Icons.password_rounded,
-                                  color: Color.fromARGB(255, 255, 255, 255),
+                                Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.07,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.14,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF53B175),
+                                    borderRadius: BorderRadius.circular(15.r),
+                                  ),
+                                  child: Icon(
+                                    Icons.password_rounded,
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 20.w,
-                              ),
-                              Text(
-                                'Password',
-                                style: TextStyle(
-                                    fontFamily: 'Mulish',
-                                    fontSize: 22.sp,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              SizedBox(
-                                width: 80.w,
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                size: 35.sp,
-                              )
-                            ],
+                                SizedBox(
+                                  width: 20.w,
+                                ),
+                                Text(
+                                  'Password',
+                                  style: TextStyle(
+                                      fontFamily: 'Mulish',
+                                      fontSize: 22.sp,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                SizedBox(
+                                  width: 80.w,
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  size: 35.sp,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         Divider(

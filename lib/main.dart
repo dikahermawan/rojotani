@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: navPetani(),
+      home: akunPetani(),
       //homePage()
     );
   }

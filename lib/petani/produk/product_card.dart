@@ -150,7 +150,7 @@ class productCard extends StatelessWidget {
                         margin: const EdgeInsets.only(
                           right: 12.0,
                         ),
-                        width: 121,
+                        width: 110,
                         child: Text(
                           title,
                           style: TextStyle(
@@ -173,7 +173,7 @@ class productCard extends StatelessWidget {
                         margin: const EdgeInsets.only(
                           right: 12.0,
                         ),
-                        width: 121,
+                        width: 110,
                         child: Text(
                           harga,
                           style: TextStyle(

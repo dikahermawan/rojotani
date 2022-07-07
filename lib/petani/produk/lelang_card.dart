@@ -191,7 +191,7 @@ class lelangCard extends StatelessWidget {
                         margin: const EdgeInsets.only(
                           right: 18.0,
                         ),
-                        width: 138,
+                        width: 125,
                         child: Text(
                           harga,
                           style: TextStyle(
@@ -208,13 +208,13 @@ class lelangCard extends StatelessWidget {
                   Row(
                     children: [
                       SizedBox(
-                        width: 90.w,
+                        width: 89.w,
                       ),
                       Container(
                         margin: const EdgeInsets.only(
                           right: 18.0,
                         ),
-                        width: 65,
+                        width: 60,
                         child: Text(
                           waktu,
                           style: TextStyle(
