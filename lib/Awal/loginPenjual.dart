@@ -48,11 +48,16 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     final data = jsonDecode(response.body) as Map<String, dynamic>;
     var value = data['success'];
     pesan = data['message'];
-    String id = data['id'];
+
+//menyimpan data id
+    SharedPreferences localdata = await SharedPreferences.getInstance();
+    localdata..setString('penjual_id', data['penjual_id']);
+    // var id = data['penjual_id'];
+    // var penjual_id;
     if (value == 1) {
       setState(() {
         _loginStatus = LoginStatus.SignIn;
-        savePref(value, id);
+        // savePref(penjual_id, id);
       });
       print(pesan);
     } else {
@@ -60,14 +65,15 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     }
   }
 
-  savePref(int value, String id) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      preferences.setInt('value', value);
-      preferences.setString('id', id);
-      preferences.commit();
-    });
-  }
+  // savePref(int value, String id) async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     preferences.setInt('value', value);
+  //     // preferences.setString('penjual_id', penjual_id);
+  //     // preferences.setString('id', id);
+  //     preferences.commit();
+  //   });
+  // }
 
   var value;
   getPref() async {

@@ -5,6 +5,7 @@ import 'package:rojotani/Awal/registerAs.dart';
 import 'package:rojotani/pembeli/transaksi/cekOut.dart';
 import 'package:rojotani/pembeli/transaksi/pengiriman.dart';
 import 'package:rojotani/petani/akun/akunPetani.dart';
+import 'package:rojotani/petani/akun/katasandi.dart';
 import 'package:rojotani/petani/navPetani.dart';
 import 'package:rojotani/petani/produk/katalog.dart';
 import 'package:rojotani/petani/produk/tambah_produk/tambahLelang.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: akunPetani(),
+      home: loginPenjualPage(),
       //homePage()
     );
   }

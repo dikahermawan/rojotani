@@ -99,7 +99,6 @@ class _akunPetaniState extends State<akunPetani> {
                           height: MediaQuery.of(context).size.height * 0.22,
                           width: MediaQuery.of(context).size.width * 0.42,
                           decoration: BoxDecoration(
-                            color: Colors.blue,
                             borderRadius: BorderRadius.circular(100.r),
                           ),
                           child: Stack(

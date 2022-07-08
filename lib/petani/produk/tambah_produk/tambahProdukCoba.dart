@@ -19,10 +19,10 @@ class _tambahProdukCobaState extends State<tambahProdukCoba> {
   var harga, stok, penjual_id;
   final _key = new GlobalKey<FormState>();
 
-  Future<Map> getPref() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
+  getPref() async {
+    SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
-      penjual_id = preferences.getString('id');
+      penjual_id = localdata.getString('penjual_id');
     });
   }
 
@@ -311,6 +311,7 @@ class _tambahProdukCobaState extends State<tambahProdukCoba> {
                                 child: InkWell(
                                   onTap: () {
                                     check();
+                                    // print(penjual_id.toString());
                                   },
                                   child: Center(
                                     child: Text(
