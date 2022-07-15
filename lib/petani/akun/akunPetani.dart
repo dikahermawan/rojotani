@@ -5,9 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 class akunPetani extends StatefulWidget {
-  const akunPetani({Key key}) : super(key: key);
+  // const akunPetani({Key key}) : super(key: key);
 
   @override
+  // final VoidCallback signOut;
+  // akunPetani(this.signOut);
   State<akunPetani> createState() => _akunPetaniState();
 }
 
@@ -21,6 +23,12 @@ class _akunPetaniState extends State<akunPetani> {
       _image = image;
     });
   }
+
+  // signOut() {
+  //   setState(() {
+  //     widget.signOut();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -260,42 +268,46 @@ class _akunPetaniState extends State<akunPetani> {
                             color: Color.fromARGB(255, 223, 220, 220),
                             borderRadius: BorderRadius.circular(15.r),
                           ),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 15.w,
-                              ),
-                              Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.07,
-                                width: MediaQuery.of(context).size.width * 0.14,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF53B175),
-                                  borderRadius: BorderRadius.circular(15.r),
+                          child: InkWell(
+                            onTap: () {},
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 15.w,
                                 ),
-                                child: Icon(
-                                  Icons.logout_outlined,
-                                  color: Color.fromARGB(255, 255, 255, 255),
+                                Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.07,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.14,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF53B175),
+                                    borderRadius: BorderRadius.circular(15.r),
+                                  ),
+                                  child: Icon(
+                                    Icons.logout_outlined,
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 20.w,
-                              ),
-                              Text(
-                                'Keluar',
-                                style: TextStyle(
-                                    fontFamily: 'Mulish',
-                                    fontSize: 22.sp,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              SizedBox(
-                                width: 110.w,
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                size: 35.sp,
-                              )
-                            ],
+                                SizedBox(
+                                  width: 20.w,
+                                ),
+                                Text(
+                                  'Keluar',
+                                  style: TextStyle(
+                                      fontFamily: 'Mulish',
+                                      fontSize: 22.sp,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                SizedBox(
+                                  width: 110.w,
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  size: 35.sp,
+                                )
+                              ],
+                            ),
                           ),
                         )
                       ],

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:rojotani/Awal/registerPenjual.dart';
 import 'package:rojotani/pembeli/produk/home.dart';
+import 'package:rojotani/petani/akun/akunPetani.dart';
+import 'package:rojotani/petani/navPetani.dart';
 import 'package:rojotani/petani/produk/katalog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -40,7 +42,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
   }
 
   Future<Map<String, dynamic>> login() async {
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/logpenjual");
+    Uri url = Uri.parse("http://192.168.168.56:8000/api/logpenjual");
     final response = await http.post(url, body: {
       'email': email,
       'password': password,
@@ -49,7 +51,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     var value = data['success'];
     pesan = data['message'];
 
-//menyimpan data id
+    //menyimpan data id
     SharedPreferences localdata = await SharedPreferences.getInstance();
     localdata..setString('penjual_id', data['penjual_id']);
     // var id = data['penjual_id'];
@@ -57,7 +59,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     if (value == 1) {
       setState(() {
         _loginStatus = LoginStatus.SignIn;
-        // savePref(penjual_id, id);
+        savePref(value);
       });
       print(pesan);
     } else {
@@ -65,15 +67,15 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     }
   }
 
-  // savePref(int value, String id) async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     preferences.setInt('value', value);
-  //     // preferences.setString('penjual_id', penjual_id);
-  //     // preferences.setString('id', id);
-  //     preferences.commit();
-  //   });
-  // }
+  savePref(int value) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.setInt('value', value);
+      // preferences.setString('penjual_id', penjual_id);
+      // preferences.setString('id', id);
+      preferences.commit();
+    });
+  }
 
   var value;
   getPref() async {
@@ -88,7 +90,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt('value', null);
-      preferences.setInt('id', null);
+      preferences.setInt('penjual_id', null);
       preferences.commit();
       _loginStatus = LoginStatus.notSignIn;
     });

@@ -37,7 +37,7 @@ class _registerPenjualPageState extends State<registerPenjualPage> {
 
   save() async {
     final response =
-        await http.post("http://192.168.43.56:8000/api/regpenjual", body: {
+        await http.post("http://192.168.168.56:8000/api/regpenjual", body: {
       'nama': nama,
       'alamat': alamat,
       'email': email,

@@ -1,30 +1,29 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/loginPelanggan.dart';
 import 'package:rojotani/Awal/registerAs.dart';
 import 'package:rojotani/Awal/dataDiri.dart';
 import 'package:http/http.dart' as http;
+import 'package:rojotani/petani/produk/katalog.dart';
+import 'package:rojotani/petani/produk/product_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rojotani/Awal/loginPenjual.dart';
 
-class tambahProdukCoba extends StatefulWidget {
+class editProduk extends StatefulWidget {
   @override
-  State<tambahProdukCoba> createState() => _tambahProdukCobaState();
+  State<editProduk> createState() => _editProdukState();
 }
 
-class _tambahProdukCobaState extends State<tambahProdukCoba> {
+class _editProdukState extends State<editProduk> {
   bool isHiddenPassword = true;
   String nama, satuan, jenis, deskripsi;
-  var harga, stok, penjual_id;
+  var namaP, hargaP, stokP, satuanP, jenisP, deskripsiP;
+  var harga, stok, penjual_id, barang_id, dataProduk;
   final _key = new GlobalKey<FormState>();
 
-  getPref() async {
-    SharedPreferences localdata = await SharedPreferences.getInstance();
-    setState(() {
-      penjual_id = localdata.getString('penjual_id');
-    });
-  }
+  VoidCallback get signOut => null;
 
   errorSnackBar(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -34,18 +33,38 @@ class _tambahProdukCobaState extends State<tambahProdukCoba> {
     ));
   }
 
+  getDataProduk() async {
+    SharedPreferences localdata = await SharedPreferences.getInstance();
+    setState(() {
+      barang_id = localdata.getString('barang_id');
+    });
+    Uri url = Uri.parse("http://192.168.168.56:8000/api/produk/edit");
+    final response = await http.post(url, body: {
+      "barang_id": barang_id,
+    });
+    dataProduk = jsonDecode(response.body);
+    setState(() {
+      namaP = dataProduk['nama'];
+      hargaP = dataProduk['harga'].toString();
+      satuanP = dataProduk['satuan'];
+      stokP = dataProduk['stok'].toString();
+      jenisP = dataProduk['jenis'];
+      deskripsiP = dataProduk['deskripsi'];
+    });
+  }
+
   check() {
     final form = _key.currentState;
     if (form.validate()) {
       form.save();
-      tambah();
+      update();
     }
   }
 
-  Future<Map> tambah() async {
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/produk");
+  update() async {
+    Uri url = Uri.parse("http://192.168.168.56:8000/api/produk/update");
     final response = await http.post(url, body: {
-      "penjual_id": penjual_id,
+      "barang_id": barang_id,
       'nama': nama,
       'harga': harga,
       'stok': stok,
@@ -59,18 +78,20 @@ class _tambahProdukCobaState extends State<tambahProdukCoba> {
     if (value == 1) {
       print(pesan);
       setState(() {
-        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => katalogPage(signOut)),
+        );
       });
     } else {
-      errorSnackBar(context, 'Email telah tersedia');
+      errorSnackBar(context, 'Produk telah tersedia');
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getPref();
+    getDataProduk();
   }
 
   @override
@@ -93,13 +114,11 @@ class _tambahProdukCobaState extends State<tambahProdukCoba> {
               color: Colors.black,
             ),
             onPressed: () {
-              Route route =
-                  MaterialPageRoute(builder: (context) => registerAsPage());
-              Navigator.push(context, route);
+              Navigator.pop(context);
             },
           ),
           title: Text(
-            'Tambah Produk Coba',
+            'Edit Produk Coba' + '$barang_id',
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontFamily: 'Mulish',
@@ -140,12 +159,20 @@ class _tambahProdukCobaState extends State<tambahProdukCoba> {
                                             fontSize: 18.sp,
                                             fontWeight: FontWeight.w600)),
                                     TextFormField(
+                                      controller:
+                                          TextEditingController(text: namaP),
                                       validator: (e) {
                                         if (e.isEmpty) {
                                           return 'masukkan username';
                                         }
                                       },
                                       onSaved: (e) => nama = e,
+                                      onChanged: (e) {
+                                        setState(() {
+                                          namaP = e;
+                                        });
+                                      },
+                                      autofocus: false,
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -172,6 +199,8 @@ class _tambahProdukCobaState extends State<tambahProdukCoba> {
                                         }
                                       },
                                       onSaved: (e) => harga = e,
+                                      controller:
+                                          TextEditingController(text: hargaP),
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -198,6 +227,8 @@ class _tambahProdukCobaState extends State<tambahProdukCoba> {
                                         }
                                       },
                                       onSaved: (e) => satuan = e,
+                                      controller:
+                                          TextEditingController(text: satuanP),
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -224,6 +255,8 @@ class _tambahProdukCobaState extends State<tambahProdukCoba> {
                                         }
                                       },
                                       onSaved: (e) => stok = e,
+                                      controller:
+                                          TextEditingController(text: stokP),
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -250,6 +283,8 @@ class _tambahProdukCobaState extends State<tambahProdukCoba> {
                                         }
                                       },
                                       onSaved: (e) => jenis = e,
+                                      controller:
+                                          TextEditingController(text: jenisP),
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -276,6 +311,8 @@ class _tambahProdukCobaState extends State<tambahProdukCoba> {
                                         }
                                       },
                                       onSaved: (e) => deskripsi = e,
+                                      controller: TextEditingController(
+                                          text: deskripsiP),
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -311,6 +348,7 @@ class _tambahProdukCobaState extends State<tambahProdukCoba> {
                                 child: InkWell(
                                   onTap: () {
                                     check();
+
                                     // print(penjual_id.toString());
                                   },
                                   child: Center(

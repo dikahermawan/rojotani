@@ -10,7 +10,7 @@ import 'package:rojotani/petani/navPetani.dart';
 import 'package:rojotani/petani/produk/katalog.dart';
 import 'package:rojotani/petani/produk/tambah_produk/tambahLelang.dart';
 import 'package:rojotani/petani/produk/tambah_produk/tambahProduk.dart';
-import 'package:rojotani/petani/produk/tambah_produk/tambahProdukCoba.dart';
+import 'package:rojotani/petani/produk/tambah_produk/tambahProduk.dart';
 import 'Awal/registerPelanggan.dart';
 import 'pembeli/produk/home.dart';
 import 'petani/transaksi/keranjang.dart';
