@@ -42,7 +42,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     final data = jsonDecode(response.body);
     int value = data['success'];
     String pesan = data['message'];
-    String user = data['user'];
+    var user = data['user'];
     if (value == 1) {
       setState(() {
         _loginStatus = LoginStatus.SignIn;

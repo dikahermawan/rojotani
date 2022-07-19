@@ -17,8 +17,10 @@ class _registerPenjualPageState extends State<registerPenjualPage> {
   bool isHiddenPassword1 = true;
   bool isHiddenPassword2 = true;
   String nama, alamat, email, password, no_rekening;
-  final _key = new GlobalKey<FormState>();
+  final _key =
+      new GlobalKey<FormState>(); // inisialisasi key membaca data pada form
 
+  //fubgsi untuk menampilkan eror
   errorSnackBar(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Color.fromARGB(255, 184, 15, 3),
@@ -27,24 +29,26 @@ class _registerPenjualPageState extends State<registerPenjualPage> {
     ));
   }
 
+  // fungsi untuk validasi apakah data sudah terisi atau tidak
   check() {
     final form = _key.currentState;
     if (form.validate()) {
       form.save();
-      save();
+      register();
     }
   }
 
-  save() async {
+  // untuk memproses data yang dikirim melalui api ke backend
+  register() async {
     final response =
-        await http.post("http://192.168.168.56:8000/api/regpenjual", body: {
+        await http.post("http://192.168.43.56:8000/api/regpenjual", body: {
       'nama': nama,
       'alamat': alamat,
       'email': email,
       'password': password,
       'no_rekening': no_rekening
     });
-    final data = jsonDecode(response.body);
+    final data = jsonDecode(response.body); //meerima respo dari backend
     int value = data['success'];
     var pesan = data['pesan'];
     if (value == 1) {
@@ -133,10 +137,10 @@ class _registerPenjualPageState extends State<registerPenjualPage> {
                           TextFormField(
                             validator: (e) {
                               if (e.isEmpty) {
-                                return 'masukkan username';
+                                return 'masukkan username'; // keteragan eror ketika kosong
                               }
                             },
-                            onSaved: (e) => nama = e,
+                            onSaved: (e) => nama = e, //merekam data berupa text
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderRadius: new BorderRadius.circular(10.r),
@@ -224,7 +228,8 @@ class _registerPenjualPageState extends State<registerPenjualPage> {
                             decoration: InputDecoration(
                                 suffixIcon: IconButton(
                                   icon: Icon(Icons.remove_red_eye),
-                                  onPressed: _togglePasswordView1,
+                                  onPressed:
+                                      _togglePasswordView1, //buka tutup password
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: new BorderRadius.circular(10.r),
@@ -287,7 +292,7 @@ class _registerPenjualPageState extends State<registerPenjualPage> {
                               color: Colors.transparent,
                               child: InkWell(
                                 onTap: () {
-                                  check();
+                                  check(); //mejalakan fungsi cek
                                 },
                                 child: Center(
                                   child: Text(
@@ -338,20 +343,12 @@ class _registerPenjualPageState extends State<registerPenjualPage> {
         ));
   }
 
+// fungsi hide password
   void _togglePasswordView1() {
     if (isHiddenPassword1 == true) {
       isHiddenPassword1 = false;
     } else {
       isHiddenPassword1 = true;
-    }
-    setState(() {});
-  }
-
-  void _togglePasswordView2() {
-    if (isHiddenPassword2 == true) {
-      isHiddenPassword2 = false;
-    } else {
-      isHiddenPassword2 = true;
     }
     setState(() {});
   }

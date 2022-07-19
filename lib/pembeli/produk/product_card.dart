@@ -159,7 +159,7 @@ class productCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                         child: Image.asset(
                           img,
-                          width: size.width * 0.33,
+                          width: size.width * 0.31,
                         )),
                   ),
                   SizedBox(
@@ -171,9 +171,6 @@ class productCard extends StatelessWidget {
                         width: 18.w,
                       ),
                       Container(
-                        margin: const EdgeInsets.only(
-                          right: 18.0,
-                        ),
                         width: 125,
                         child: Text(
                           title,
@@ -194,9 +191,6 @@ class productCard extends StatelessWidget {
                         width: 18.w,
                       ),
                       Container(
-                        margin: const EdgeInsets.only(
-                          right: 18.0,
-                        ),
                         width: 125,
                         child: Text(
                           harga,

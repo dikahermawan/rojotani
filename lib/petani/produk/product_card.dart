@@ -14,33 +14,22 @@ class productCard extends StatefulWidget {
   State<productCard> createState() => _productCardState();
 }
 
-// class productCard extends StatelessWidget
 class _productCardState extends State<productCard> {
   var penjual_id;
-  final String url = 'http://192.168.168.56:8000/api/getproduk';
   var _future;
 
-  // Future getProducts() async {
-  //   var response = await http.get(Uri.parse(url));
-  //   print(jsonDecode(response.body));
-  //   return jsonDecode(response.body);
-  // }
-
+  //function menampilkan data produk
   Future getProducts() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
       penjual_id = localdata.getString('penjual_id');
     });
+    final String url =
+        'http://192.168.43.56:8000/api/getproduk'; //api menampilkan data produk
 
     final response = await http.post(url, body: {
       "penjual_id": penjual_id,
     });
-    // var response = await http.get(Uri.parse(url));
-
-    // final data = jsonDecode(response.body);
-    // int value = data['success'];
-    // var pesan = data['message'];
-
     return jsonDecode(response.body);
   }
 
@@ -48,6 +37,89 @@ class _productCardState extends State<productCard> {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     localdata..setString('barang_id', barang_id.toString());
   }
+
+  //function delete
+
+  Future deleteProduct(id) async {
+    String url = 'http://192.168.43.56:8000/api/delete/' +
+        id; //api menghapus data produk
+    var response = await http.delete(Uri.parse(url));
+    setState(() {
+      _future = getProducts();
+    });
+    print(json.decode(response.body));
+    return json.decode(response.body);
+  }
+
+  dialogDelete(id) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: ListView(
+              padding: EdgeInsets.all(16.0),
+              shrinkWrap: true,
+              children: [
+                Text(
+                  'Apakah anda yakin akan menghapus?',
+                  style: TextStyle(
+                      fontFamily: 'Mulish',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Tidak',
+                        style: TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF53B175),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 18,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        deleteProduct(id);
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Yakin',
+                        style: TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Color.fromARGB(255, 138, 16, 7),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  // Future deleteProduct(String barang_id) async {
+  //   String url = 'http://192.168.43.56:8000/api/delete/' +
+  //       barang_id; //api menghapus data produk
+  //   var response = await http.delete(Uri.parse(url));
+  //   print(json.decode(response.body));
+  //   return json.decode(response.body);
+  // }
 
   @override
   void initState() {
@@ -58,7 +130,6 @@ class _productCardState extends State<productCard> {
 
   @override
   Widget build(BuildContext context) {
-    // getProducts();
     ScreenUtil.init(
       BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width,
@@ -214,10 +285,10 @@ class _productCardState extends State<productCard> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
-                                      getDataBarang(snapshot.data[index]['id']);
-                                      Route route = MaterialPageRoute(
-                                          builder: (context) => editProduk());
-                                      Navigator.push(context, route);
+                                      // getDataBarang(snapshot.data[index]['id']);
+                                      // Route route = MaterialPageRoute(
+                                      //     builder: (context) => editProduk());
+                                      // Navigator.push(context, route);
                                     },
                                     child: Column(
                                       children: [
@@ -321,8 +392,50 @@ class _productCardState extends State<productCard> {
                                           ],
                                         ),
                                         SizedBox(
-                                          height: 8.h,
+                                          height: 10.h,
                                         ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            IconButton(
+                                                onPressed: () {
+                                                  getDataBarang(snapshot
+                                                      .data[index]['id']);
+                                                  Route route =
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              editProduk());
+                                                  Navigator.push(
+                                                      context, route);
+                                                },
+                                                icon: Icon(
+                                                  Icons.edit,
+                                                  color: Color.fromARGB(
+                                                      255, 14, 117, 201),
+                                                  size: 25.w,
+                                                )),
+                                            IconButton(
+                                                onPressed: () {
+                                                  dialogDelete(snapshot
+                                                      .data[index]['id']
+                                                      .toString());
+                                                  //     .then((value) {
+                                                  //   ScaffoldMessenger.of(context)
+                                                  //       .showSnackBar(SnackBar(
+                                                  //     content: Text(
+                                                  //         'produk berhasil di hapus'),
+                                                  //   ));
+                                                  // });
+                                                },
+                                                icon: Icon(
+                                                  Icons.delete,
+                                                  color: Color.fromARGB(
+                                                      255, 197, 27, 15),
+                                                  size: 25.w,
+                                                )),
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ),

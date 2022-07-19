@@ -16,7 +16,7 @@ class loginPenjualPage extends StatefulWidget {
   State<loginPenjualPage> createState() => _loginPenjualPageState();
 }
 
-enum LoginStatus { notSignIn, SignIn }
+enum LoginStatus { notSignIn, SignIn } //inisialisasi status login
 
 class _loginPenjualPageState extends State<loginPenjualPage> {
   LoginStatus _loginStatus = LoginStatus.notSignIn;
@@ -33,6 +33,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     ));
   }
 
+// fungsi untu calidsi data dan mengarahkan ke fungsi login
   check() {
     final form = _key.currentState;
     if (form.validate()) {
@@ -41,8 +42,9 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     }
   }
 
+// fugsi untuk proses login
   Future<Map<String, dynamic>> login() async {
-    Uri url = Uri.parse("http://192.168.168.56:8000/api/logpenjual");
+    Uri url = Uri.parse("http://192.168.43.56:8000/api/logpenjual");
     final response = await http.post(url, body: {
       'email': email,
       'password': password,
@@ -51,11 +53,10 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     var value = data['success'];
     pesan = data['message'];
 
-    //menyimpan data id
+    //menyimpan da menyediakan data id penjual secara local
     SharedPreferences localdata = await SharedPreferences.getInstance();
     localdata..setString('penjual_id', data['penjual_id']);
-    // var id = data['penjual_id'];
-    // var penjual_id;
+
     if (value == 1) {
       setState(() {
         _loginStatus = LoginStatus.SignIn;
@@ -67,6 +68,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     }
   }
 
+// menyimpan value status login atau tidak, ketika reload tetap pada status terakhr signout atau logout
   savePref(int value) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
@@ -77,6 +79,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     });
   }
 
+// mengambil value dari set pref / penyimpanan local
   var value;
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -86,6 +89,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     });
   }
 
+  // fungsi utuk signout
   signOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
@@ -96,6 +100,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     });
   }
 
+//fungsi mejalankan perubahan
   @override
   void initState() {
     // TODO: implement initState
@@ -285,7 +290,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
                                   color: Colors.transparent,
                                   child: InkWell(
                                     onTap: () {
-                                      check();
+                                      check(); // menjalankan fungsi cek pada button
                                     },
                                     child: Center(
                                       child: Text(
