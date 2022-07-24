@@ -33,7 +33,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     ));
   }
 
-// fungsi untu calidsi data dan mengarahkan ke fungsi login
+// fungsi untu validasi data dan mengarahkan ke fungsi login
   check() {
     final form = _key.currentState;
     if (form.validate()) {

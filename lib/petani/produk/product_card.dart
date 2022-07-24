@@ -41,7 +41,7 @@ class _productCardState extends State<productCard> {
   //function delete
 
   Future deleteProduct(id) async {
-    String url = 'http://192.168.43.56:8000/api/delete/' +
+    String url = 'http://192.168.43.56:8000/api/deleteProduk/' +
         id; //api menghapus data produk
     var response = await http.delete(Uri.parse(url));
     setState(() {
@@ -296,12 +296,15 @@ class _productCardState extends State<productCard> {
                                           padding: EdgeInsets.only(
                                             top: 10.h,
                                           ),
-                                          // child: ClipRRect(
-                                          //     borderRadius: BorderRadius.circular(10),
-                                          //     child: Image.asset(
-                                          //       img,
-                                          //       width: size.width * 0.33,
-                                          //     )),
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Image.network(
+                                                'http://192.168.43.56:8000/img/produk/' +
+                                                    snapshot.data[index][
+                                                        'gambar'], // alamat untuk mengambil gambar
+                                                width: size.width * 0.33,
+                                              )),
                                         ),
                                         SizedBox(
                                           height: 3.h,
