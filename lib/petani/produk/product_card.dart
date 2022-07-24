@@ -25,7 +25,7 @@ class _productCardState extends State<productCard> {
       penjual_id = localdata.getString('penjual_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/getproduk'; //api menampilkan data produk
+        'http://192.168.0.105:8000/api/getproduk'; //api menampilkan data produk
 
     final response = await http.post(url, body: {
       "penjual_id": penjual_id,
@@ -41,7 +41,7 @@ class _productCardState extends State<productCard> {
   //function delete
 
   Future deleteProduct(id) async {
-    String url = 'http://192.168.43.56:8000/api/deleteProduk/' +
+    String url = 'http://192.168.0.105:8000/api/deleteProduk/' +
         id; //api menghapus data produk
     var response = await http.delete(Uri.parse(url));
     setState(() {
@@ -234,7 +234,7 @@ class _productCardState extends State<productCard> {
               if (snapshot.hasData) {
                 return Container(
                   color: Colors.grey[200],
-                  height: MediaQuery.of(context).size.height * 0.29,
+                  height: MediaQuery.of(context).size.height * 0.3,
                   width: MediaQuery.of(context).size.width * 3,
                   child: Row(
                     children: [
@@ -250,7 +250,7 @@ class _productCardState extends State<productCard> {
                         child: Container(
                           margin: EdgeInsets.only(right: 6.w),
                           width: MediaQuery.of(context).size.width * 0.25,
-                          height: MediaQuery.of(context).size.height * 0.25,
+                          height: MediaQuery.of(context).size.height * 0.28,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15.r),
@@ -276,7 +276,7 @@ class _productCardState extends State<productCard> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.38,
                                   height:
-                                      MediaQuery.of(context).size.height * 0.25,
+                                      MediaQuery.of(context).size.height * 0.28,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(15.r),
@@ -296,15 +296,15 @@ class _productCardState extends State<productCard> {
                                           padding: EdgeInsets.only(
                                             top: 10.h,
                                           ),
-                                          child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: Image.network(
-                                                'http://192.168.43.56:8000/img/produk/' +
-                                                    snapshot.data[index][
-                                                        'gambar'], // alamat untuk mengambil gambar
-                                                width: size.width * 0.33,
-                                              )),
+                                          // child: ClipRRect(
+                                          // borderRadius:
+                                          // BorderRadius.circular(10),
+                                          // child: Image.network(
+                                          // 'http://192.168.0.105:8000/img/produk/' +
+                                          // snapshot.data[index][
+                                          // 'gambar'], // alamat untuk mengambil gambar
+                                          // width: size.width * 0.33,
+                                          // )),
                                         ),
                                         SizedBox(
                                           height: 3.h,
@@ -331,7 +331,7 @@ class _productCardState extends State<productCard> {
                                           ],
                                         ),
                                         SizedBox(
-                                          height: 10.h,
+                                          height: 5.h,
                                         ),
                                         Row(
                                           children: [
@@ -347,7 +347,7 @@ class _productCardState extends State<productCard> {
                                                 'Rp.',
                                                 style: TextStyle(
                                                     fontFamily: 'Mulish',
-                                                    fontSize: 14.sp,
+                                                    fontSize: 12.sp,
                                                     fontWeight:
                                                         FontWeight.w800),
                                               ),
@@ -359,7 +359,7 @@ class _productCardState extends State<productCard> {
                                                     .toString(),
                                                 style: TextStyle(
                                                     fontFamily: 'Mulish',
-                                                    fontSize: 14.sp,
+                                                    fontSize: 12.sp,
                                                     fontWeight:
                                                         FontWeight.w800),
                                               ),
@@ -373,7 +373,7 @@ class _productCardState extends State<productCard> {
                                                 ' / ',
                                                 style: TextStyle(
                                                     fontFamily: 'Mulish',
-                                                    fontSize: 14.sp,
+                                                    fontSize: 12.sp,
                                                     fontWeight:
                                                         FontWeight.w800),
                                               ),
@@ -382,12 +382,12 @@ class _productCardState extends State<productCard> {
                                               margin: const EdgeInsets.only(
                                                 right: 1,
                                               ),
-                                              width: 35,
+                                              width: 38,
                                               child: Text(
                                                 snapshot.data[index]['satuan'],
                                                 style: TextStyle(
                                                     fontFamily: 'Mulish',
-                                                    fontSize: 14.sp,
+                                                    fontSize: 12.sp,
                                                     fontWeight:
                                                         FontWeight.w800),
                                               ),

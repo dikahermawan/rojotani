@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rojotani/petani/produk/tambah_produk/editLelang.dart';
 import 'package:rojotani/petani/produk/tambah_produk/tambahLelang.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,7 +22,7 @@ class _lelangCardState extends State<lelangCard> {
       penjual_id = localdata.getString('penjual_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/getlelang'; //api menampilkan data produk
+        'http://192.168.0.105:8000/api/getlelang'; //api menampilkan data produk
 
     final response = await http.post(url, body: {
       "penjual_id": penjual_id,
@@ -37,7 +38,7 @@ class _lelangCardState extends State<lelangCard> {
   //function delete
 
   Future deleteLelang(id) async {
-    String url = 'http://192.168.43.56:8000/api/deleteLelang/' +
+    String url = 'http://192.168.0.105:8000/api/deleteLelang/' +
         id; //api menghapus data produk
     var response = await http.delete(Uri.parse(url));
     setState(() {
@@ -110,7 +111,7 @@ class _lelangCardState extends State<lelangCard> {
   }
 
   // Future deleteProduct(String barang_id) async {
-  //   String url = 'http://192.168.43.56:8000/api/delete/' +
+  //   String url = 'http://192.168.0.105:8000/api/delete/' +
   //       barang_id; //api menghapus data produk
   //   var response = await http.delete(Uri.parse(url));
   //   print(json.decode(response.body));
@@ -252,7 +253,7 @@ class _lelangCardState extends State<lelangCard> {
               if (snapshot.hasData) {
                 return Container(
                   color: Color(0xFF53B175),
-                  height: MediaQuery.of(context).size.height * 0.29,
+                  height: MediaQuery.of(context).size.height * 0.32,
                   width: MediaQuery.of(context).size.width * 1,
                   child: Row(
                     children: [
@@ -268,7 +269,7 @@ class _lelangCardState extends State<lelangCard> {
                         child: Container(
                           margin: EdgeInsets.only(right: 6.w),
                           width: MediaQuery.of(context).size.width * 0.25,
-                          height: MediaQuery.of(context).size.height * 0.27,
+                          height: MediaQuery.of(context).size.height * 0.3,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15.r),
@@ -291,7 +292,7 @@ class _lelangCardState extends State<lelangCard> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.45,
                                   height:
-                                      MediaQuery.of(context).size.height * 0.27,
+                                      MediaQuery.of(context).size.height * 0.3,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(15.r),
@@ -304,24 +305,17 @@ class _lelangCardState extends State<lelangCard> {
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.only(
-                                            top: 2.h,
+                                            top: 10.h,
                                           ),
-                                          child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: Image.network(
-                                                'http://192.168.43.56:8000/img /lelang/' +
-                                                    snapshot.data[index][
-                                                        'gambar'], // alamat untuk mengambil gambar
-                                                width: size.width * 0.33,
-                                              )),
                                           // child: ClipRRect(
-                                          //     borderRadius: BorderRadius.circular(30.r),
-                                          //     child: Image.asset(
-                                          //       widget.img,
-                                          //       width: size.width * 0.36,
-                                          //       height: size.width * 0.3,
-                                          //     )),
+                                          // borderRadius:
+                                          // BorderRadius.circular(10),
+                                          // child: Image.network(
+                                          // 'http://192.168.0.105:8000/imglelang/lelang/' +
+                                          // snapshot.data[index][
+                                          // 'gambar'], // alamat untuk mengambil gambar
+                                          // width: size.width * 0.38,
+                                          // )),
                                         ),
                                         Row(
                                           children: [
@@ -337,7 +331,7 @@ class _lelangCardState extends State<lelangCard> {
                                                 snapshot.data[index]['nama'],
                                                 style: TextStyle(
                                                     fontFamily: 'Mulish',
-                                                    fontSize: 18.sp,
+                                                    fontSize: 17.sp,
                                                     fontWeight:
                                                         FontWeight.w800),
                                               ),
@@ -350,13 +344,24 @@ class _lelangCardState extends State<lelangCard> {
                                         Row(
                                           children: [
                                             SizedBox(
-                                              width: 17.w,
+                                              width: 18.w,
                                             ),
                                             Container(
                                               margin: const EdgeInsets.only(
-                                                right: 18.0,
+                                                right: 1,
                                               ),
-                                              width: 125,
+                                              width: 20,
+                                              child: Text(
+                                                'Rp.',
+                                                style: TextStyle(
+                                                    fontFamily: 'Mulish',
+                                                    fontSize: 14.sp,
+                                                    fontWeight:
+                                                        FontWeight.w800),
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 40,
                                               child: Text(
                                                 snapshot.data[index]['harga']
                                                     .toString(),
@@ -367,56 +372,83 @@ class _lelangCardState extends State<lelangCard> {
                                                         FontWeight.w800),
                                               ),
                                             ),
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                right: 1,
+                                              ),
+                                              width: 10,
+                                              child: Text(
+                                                ' / ',
+                                                style: TextStyle(
+                                                    fontFamily: 'Mulish',
+                                                    fontSize: 14.sp,
+                                                    fontWeight:
+                                                        FontWeight.w800),
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                right: 1,
+                                              ),
+                                              width: 35,
+                                              child: Text(
+                                                snapshot.data[index]['satuan'],
+                                                style: TextStyle(
+                                                    fontFamily: 'Mulish',
+                                                    fontSize: 14.sp,
+                                                    fontWeight:
+                                                        FontWeight.w800),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                         SizedBox(
-                                          height: 15.h,
+                                          height: 8.h,
                                         ),
-                                        // Row(
-                                        //  children: [
-                                        //   SizedBox(
-                                        //  width: 89.w,
-                                        // ),
-                                        // Container(
-                                        //  margin: const EdgeInsets.only(
-                                        //  right: 18.0,
-                                        //  ),
-                                        //  width: 60,
-                                        // child: Text(
-                                        // snapshot.data[index]['waktu'],
-                                        // style: TextStyle(
-                                        //     fontFamily: 'Mulish',
-                                        //    fontSize: 14.sp,
-                                        //    fontWeight:
-                                        //   FontWeight.w800),
-                                        // ),
-                                        // ),
-                                        // ],
-                                        //  ),
-                                        SizedBox(
-                                          height: 7.h,
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 18.w,
+                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                right: 18.0,
+                                              ),
+                                              width: 135,
+                                              child: Text(
+                                                snapshot.data[index]['status'],
+                                                style: TextStyle(
+                                                    color: Color.fromARGB(
+                                                        255, 197, 21, 8),
+                                                    fontFamily: 'Mulish',
+                                                    fontSize: 14.sp,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
                                           children: [
-                                            // IconButton(
-                                            // onPressed: () {
-                                            // getDataBarang(snapshot
-                                            // .data[index]['id']);
-                                            // Route route =
-                                            // MaterialPageRoute(
-                                            // builder: (context) =>
-                                            // editProduk());
-                                            // Navigator.push(
-                                            // context, route);
-                                            // },
-                                            // icon: Icon(
-                                            // Icons.edit,
-                                            // color: Color.fromARGB(
-                                            // 255, 14, 117, 201),
-                                            // size: 25.w,
-                                            // )),
+                                            IconButton(
+                                                onPressed: () {
+                                                  getDataBarang(snapshot
+                                                      .data[index]['id']);
+                                                  Route route =
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              editLelang());
+                                                  Navigator.push(
+                                                      context, route);
+                                                },
+                                                icon: Icon(
+                                                  Icons.edit,
+                                                  color: Color.fromARGB(
+                                                      255, 14, 117, 201),
+                                                  size: 25.w,
+                                                )),
                                             IconButton(
                                                 onPressed: () {
                                                   dialogDelete(snapshot

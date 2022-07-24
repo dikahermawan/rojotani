@@ -11,16 +11,16 @@ import 'package:rojotani/petani/produk/product_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rojotani/Awal/loginPenjual.dart';
 
-class editProduk extends StatefulWidget {
+class editLelang extends StatefulWidget {
   @override
-  State<editProduk> createState() => _editProdukState();
+  State<editLelang> createState() => _editLelangState();
 }
 
-class _editProdukState extends State<editProduk> {
+class _editLelangState extends State<editLelang> {
   bool isHiddenPassword = true;
-  String nama, satuan, jenis, deskripsi;
-  var namaP, hargaP, stokP, satuanP, jenisP, deskripsiP;
-  var harga, stok, penjual_id, barang_id, dataProduk;
+  String nama, satuan, jenis, deskripsi, status;
+  var namaL, hargaL, stokL, satuanL, jenisL, deskripsiL, statusL;
+  var harga, stok, penjual_id, lelang_id, dataLelang;
   final _key = new GlobalKey<FormState>();
 
   VoidCallback get signOut => null;
@@ -33,23 +33,23 @@ class _editProdukState extends State<editProduk> {
     ));
   }
 
-  getDataProduk() async {
+  getDataLelang() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
-      barang_id = localdata.getString('barang_id');
+      lelang_id = localdata.getString('lelang_id');
     });
-    Uri url = Uri.parse("http://192.168.0.105:8000/api/produk/edit");
+    Uri url = Uri.parse("http://192.168.0.105:8000/api/lelang/edit");
     final response = await http.post(url, body: {
-      "barang_id": barang_id,
+      "lelang_id": lelang_id,
     });
-    dataProduk = jsonDecode(response.body);
+    dataLelang = jsonDecode(response.body);
     setState(() {
-      namaP = dataProduk['nama'];
-      hargaP = dataProduk['harga'].toString();
-      satuanP = dataProduk['satuan'];
-      stokP = dataProduk['stok'].toString();
-      jenisP = dataProduk['jenis'];
-      deskripsiP = dataProduk['deskripsi'];
+      namaL = dataLelang['nama'];
+      hargaL = dataLelang['harga'].toString();
+      satuanL = dataLelang['satuan'];
+      jenisL = dataLelang['jenis'];
+      deskripsiL = dataLelang['deskripsi'];
+      statusL = dataLelang['status'];
     });
   }
 
@@ -62,15 +62,15 @@ class _editProdukState extends State<editProduk> {
   }
 
   update() async {
-    Uri url = Uri.parse("http://192.168.0.105:8000/api/produk/update");
+    Uri url = Uri.parse("http://192.168.0.105:8000/api/lelang/update");
     final response = await http.post(url, body: {
-      "barang_id": barang_id,
+      "lelang_id": lelang_id,
       'nama': nama,
       'harga': harga,
-      'stok': stok,
       'satuan': satuan,
       'jenis': jenis,
       'deskripsi': deskripsi,
+      'status': status,
     });
     final data = jsonDecode(response.body);
     int value = data['success'];
@@ -91,7 +91,7 @@ class _editProdukState extends State<editProduk> {
   @override
   void initState() {
     super.initState();
-    getDataProduk();
+    getDataLelang();
   }
 
   @override
@@ -118,7 +118,7 @@ class _editProdukState extends State<editProduk> {
             },
           ),
           title: Text(
-            'Edit Produk',
+            'Edit Produk Lelang ',
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontFamily: 'Mulish',
@@ -160,7 +160,7 @@ class _editProdukState extends State<editProduk> {
                                             fontWeight: FontWeight.w600)),
                                     TextFormField(
                                       controller:
-                                          TextEditingController(text: namaP),
+                                          TextEditingController(text: namaL),
                                       validator: (e) {
                                         if (e.isEmpty) {
                                           return 'masukkan username';
@@ -169,7 +169,7 @@ class _editProdukState extends State<editProduk> {
                                       onSaved: (e) => nama = e,
                                       onChanged: (e) {
                                         setState(() {
-                                          namaP = e;
+                                          namaL = e;
                                         });
                                       },
                                       autofocus: false,
@@ -200,7 +200,7 @@ class _editProdukState extends State<editProduk> {
                                       },
                                       onSaved: (e) => harga = e,
                                       controller:
-                                          TextEditingController(text: hargaP),
+                                          TextEditingController(text: hargaL),
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -228,39 +228,11 @@ class _editProdukState extends State<editProduk> {
                                       },
                                       onSaved: (e) => satuan = e,
                                       controller:
-                                          TextEditingController(text: satuanP),
+                                          TextEditingController(text: satuanL),
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
                                         hintText: 'masukkan harga',
-                                        hintStyle: TextStyle(
-                                          // <-- Change this
-                                          fontSize: 16.sp,
-                                        ),
-                                        // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
-                                    Text('stok Produk',
-                                        style: TextStyle(
-                                            fontFamily: 'Mulish',
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w600)),
-                                    TextFormField(
-                                      validator: (e) {
-                                        if (e.isEmpty) {
-                                          return 'masukkan stok';
-                                        }
-                                      },
-                                      onSaved: (e) => stok = e,
-                                      controller:
-                                          TextEditingController(text: stokP),
-                                      decoration: InputDecoration(
-                                        enabledBorder: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        hintText: 'masukkan stok',
                                         hintStyle: TextStyle(
                                           // <-- Change this
                                           fontSize: 16.sp,
@@ -284,7 +256,7 @@ class _editProdukState extends State<editProduk> {
                                       },
                                       onSaved: (e) => jenis = e,
                                       controller:
-                                          TextEditingController(text: jenisP),
+                                          TextEditingController(text: jenisL),
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -312,7 +284,7 @@ class _editProdukState extends State<editProduk> {
                                       },
                                       onSaved: (e) => deskripsi = e,
                                       controller: TextEditingController(
-                                          text: deskripsiP),
+                                          text: deskripsiL),
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -326,6 +298,32 @@ class _editProdukState extends State<editProduk> {
                                     ),
                                     SizedBox(
                                       height: 10.h,
+                                    ),
+                                    Text('status Lelang',
+                                        style: TextStyle(
+                                            fontFamily: 'Mulish',
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w600)),
+                                    TextFormField(
+                                      validator: (e) {
+                                        if (e.isEmpty) {
+                                          return 'masukkan status';
+                                        }
+                                      },
+                                      onSaved: (e) => status = e,
+                                      controller:
+                                          TextEditingController(text: statusL),
+                                      decoration: InputDecoration(
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        hintText:
+                                            'sedang di lelang / lelang selesai',
+                                        hintStyle: TextStyle(
+                                          // <-- Change this
+                                          fontSize: 16.sp,
+                                        ),
+                                        // contentPadding: EdgeInsets.symmetric(vertical:
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -353,7 +351,7 @@ class _editProdukState extends State<editProduk> {
                                   },
                                   child: Center(
                                     child: Text(
-                                      'Daftar',
+                                      'Simpan',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 18.sp,

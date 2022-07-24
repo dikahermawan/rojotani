@@ -36,7 +36,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
   TextEditingController satuanController = TextEditingController();
   TextEditingController jenisController = TextEditingController();
   TextEditingController deskripsiController = TextEditingController();
-  TextEditingController waktuController = TextEditingController();
+  TextEditingController statusController = TextEditingController();
 
   getPref() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
@@ -70,7 +70,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
       'satuan': satuanController.text,
       'jenis': jenisController.text,
       'deskripsi': deskripsiController.text,
-      // 'waktu': waktuController.text,
+      'status': statusController.text,
     });
     final data = jsonDecode(response.body);
     int value = data['success'];
@@ -407,27 +407,27 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
                           Divider(
                             thickness: 1,
                           ),
-                          // Text('waktu Lelang',
-                          // style: TextStyle(
-                          // fontFamily: 'Mulish',
-                          // fontSize: 18.sp,
-                          // fontWeight: FontWeight.w600)),
-                          // TextFormField(
-                          // validator: (waktuController) {
-                          // if (waktuController.isEmpty) {
-                          // return 'masukkan waktu';
-                          // }
-                          // },
-                          // controller: waktuController,
-                          // decoration: InputDecoration(
-                          // enabledBorder: InputBorder.none,
-                          // focusedBorder: InputBorder.none,
-                          // hintText: 'masukkan waktu',
-                          // hintStyle: TextStyle(
-                          // fontSize: 16.sp,
-                          // ),
-                          // ),
-                          // ),
+                          Text('waktu Lelang',
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600)),
+                          TextFormField(
+                            validator: (waktuController) {
+                              if (waktuController.isEmpty) {
+                                return 'masukkan waktu';
+                              }
+                            },
+                            controller: statusController,
+                            decoration: InputDecoration(
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              hintText: 'masukkan waktu',
+                              hintStyle: TextStyle(
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

@@ -67,7 +67,7 @@ class _tambahProdukState extends State<tambahProduk> {
   }
 
   tambah() async {
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/produk");
+    Uri url = Uri.parse("http://192.168.0.105:8000/api/produk");
     final response = await http.post(url, body: {
       "penjual_id": penjual_id,
       'nama': namaController.text,
