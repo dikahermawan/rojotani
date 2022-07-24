@@ -22,7 +22,7 @@ class _lelangCardState extends State<lelangCard> {
       penjual_id = localdata.getString('penjual_id');
     });
     final String url =
-        'http://192.168.0.105:8000/api/getlelang'; //api menampilkan data produk
+        'http://192.168.43.56:8000/api/getlelang'; //api menampilkan data produk
 
     final response = await http.post(url, body: {
       "penjual_id": penjual_id,
@@ -38,7 +38,7 @@ class _lelangCardState extends State<lelangCard> {
   //function delete
 
   Future deleteLelang(id) async {
-    String url = 'http://192.168.0.105:8000/api/deleteLelang/' +
+    String url = 'http://192.168.43.56:8000/api/deleteLelang/' +
         id; //api menghapus data produk
     var response = await http.delete(Uri.parse(url));
     setState(() {
@@ -307,15 +307,15 @@ class _lelangCardState extends State<lelangCard> {
                                           padding: EdgeInsets.only(
                                             top: 10.h,
                                           ),
-                                          // child: ClipRRect(
-                                          // borderRadius:
-                                          // BorderRadius.circular(10),
-                                          // child: Image.network(
-                                          // 'http://192.168.0.105:8000/imglelang/lelang/' +
-                                          // snapshot.data[index][
-                                          // 'gambar'], // alamat untuk mengambil gambar
-                                          // width: size.width * 0.38,
-                                          // )),
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Image.network(
+                                                'http://192.168.43.56:8000/imglelang/lelang/' +
+                                                    snapshot.data[index][
+                                                        'gambar'], // alamat untuk mengambil gambar
+                                                width: size.width * 0.38,
+                                              )),
                                         ),
                                         Row(
                                           children: [
@@ -414,7 +414,7 @@ class _lelangCardState extends State<lelangCard> {
                                               margin: const EdgeInsets.only(
                                                 right: 18.0,
                                               ),
-                                              width: 135,
+                                              width: 125,
                                               child: Text(
                                                 snapshot.data[index]['status'],
                                                 style: TextStyle(
@@ -477,7 +477,7 @@ class _lelangCardState extends State<lelangCard> {
                   ),
                 );
               } else {
-                return Text(' Data Eror');
+                return Center(child: Text(' Data Eror'));
               }
             });
   }

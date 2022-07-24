@@ -176,49 +176,7 @@ class _homePageState extends State<homePage> {
                           SizedBox(
                             height: 20.h,
                           ),
-                          Container(
-                            color: Color(0xFF53B175),
-                            height: MediaQuery.of(context).size.height * 0.55,
-                            width: MediaQuery.of(context).size.width * 1,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 25.w,
-                                  ),
-                                  lelangCard(
-                                    img: 'asset/gambar/jagung.png',
-                                    title: 'Pisang Ambon',
-                                    harga: 'Rp. 15.000 / Kg',
-                                    waktu: '00 : 00 : 00',
-                                    press: () {},
-                                  ),
-                                  lelangCard(
-                                    img: 'asset/gambar/jagung.png',
-                                    title: 'Pisang Ambon',
-                                    harga: 'Rp. 15.000 / Kg',
-                                    waktu: '00 : 00 : 00',
-                                    press: () {},
-                                  ),
-                                  lelangCard(
-                                    img: 'asset/gambar/jagung.png',
-                                    title: 'Pisang Ambon',
-                                    harga: 'Rp. 15.000 / Kg',
-                                    waktu: '00 : 00 : 00',
-                                    press: () {},
-                                  ),
-                                  lelangCard(
-                                    img: 'asset/gambar/jagung.png',
-                                    title: 'Pisang Ambon',
-                                    harga: 'Rp. 15.000 / Kg',
-                                    waktu: '00 : 00 : 00',
-                                    press: () {},
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          lelangCard(),
                           SizedBox(
                             height: 15.h,
                           ),
@@ -310,42 +268,7 @@ class _homePageState extends State<homePage> {
                           SizedBox(
                             height: 10.h,
                           ),
-                          Container(
-                            color: Color(0xFF53B175),
-                            height: MediaQuery.of(context).size.height * 0.32,
-                            width: MediaQuery.of(context).size.width * 1,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 20.w,
-                                  ),
-                                  lelangCard(
-                                    img: 'asset/gambar/jagung.png',
-                                    title: 'Pisang Ambon',
-                                    harga: 'Rp. 15.000 / Kg',
-                                    waktu: '00 : 00 : 00',
-                                    press: () {},
-                                  ),
-                                  lelangCard(
-                                    img: 'asset/gambar/jagung.png',
-                                    title: 'Pisang Ambon',
-                                    harga: 'Rp. 15.000 / Kg',
-                                    waktu: '00 : 00 : 00',
-                                    press: () {},
-                                  ),
-                                  lelangCard(
-                                    img: 'asset/gambar/jagung.png',
-                                    title: 'Pisang Ambon',
-                                    harga: 'Rp. 15.000 / Kg',
-                                    waktu: '00 : 00 : 00',
-                                    press: () {},
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          lelangCard(),
                           SizedBox(
                             height: 10.h,
                           ),

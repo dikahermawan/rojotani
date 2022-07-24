@@ -1,20 +1,33 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class lelangCard extends StatelessWidget {
-  final String title, harga, img, waktu;
-  final Function press;
-  const lelangCard({
-    Key key,
-    this.title,
-    this.harga,
-    this.img,
-    this.press,
-    this.waktu,
-  }) : super(key: key);
+class lelangCard extends StatefulWidget {
+  @override
+  State<lelangCard> createState() => _lelangCardState();
+}
 
+class _lelangCardState extends State<lelangCard> {
+  var _future;
+  final String url = 'http://192.168.43.56:8000/api/getlelangall';
+
+  Future getLelang() async {
+    var response = await http.get(url); //api menampilkan data produk
+    print(json.decode(response.body));
+    return json.decode(response.body);
+  }
+
+  // @override
+  // void initState() {
+  // TODO: implement initState
+  // super.initState();
+  // _future = getLelang();
+  // }
+//
   @override
   Widget build(BuildContext context) {
+    getLelang();
     ScreenUtil.init(
       BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width,
@@ -40,7 +53,7 @@ class lelangCard extends StatelessWidget {
               border: Border.all(width: 1.w, color: Colors.grey),
             ),
             child: InkWell(
-              onTap: press,
+              onTap: () {},
               child: Column(
                 children: [
                   Padding(
@@ -50,7 +63,7 @@ class lelangCard extends StatelessWidget {
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(20.r),
                         child: Image.asset(
-                          img,
+                          '',
                           width: size.width * 0.21,
                           height: size.width * 0.13,
                         )),
@@ -69,7 +82,7 @@ class lelangCard extends StatelessWidget {
                         ),
                         width: 75.w,
                         child: Text(
-                          title,
+                          '',
                           style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 28.sp,
@@ -92,7 +105,7 @@ class lelangCard extends StatelessWidget {
                         ),
                         width: 138,
                         child: Text(
-                          harga,
+                          '',
                           style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 24.sp,
@@ -115,7 +128,7 @@ class lelangCard extends StatelessWidget {
                         ),
                         width: 60,
                         child: Text(
-                          waktu,
+                          '',
                           style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 24.sp,
@@ -134,7 +147,7 @@ class lelangCard extends StatelessWidget {
                       ),
                       Material(
                         child: InkWell(
-                          onTap: press,
+                          onTap: () {},
                           child: Container(
                             width: size.width * 0.195,
                             height: size.height * 0.06,
@@ -165,128 +178,201 @@ class lelangCard extends StatelessWidget {
         :
         /////////////////////////////////////////////////
         //Potrait
-        Container(
-            margin: EdgeInsets.only(right: 6.w),
-            width: MediaQuery.of(context).size.width * 0.45,
-            height: MediaQuery.of(context).size.height * 0.3,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15.r),
-              border: Border.all(width: 1.w, color: Colors.grey),
-            ),
-            child: InkWell(
-              onTap: press,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: 2.h,
-                    ),
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(30.r),
-                        child: Image.asset(
-                          img,
-                          width: size.width * 0.36,
-                          height: size.width * 0.3,
-                        )),
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 17.w,
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                          right: 16.0,
-                        ),
-                        width: 138.w,
-                        child: Text(
-                          title,
-                          style: TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w800),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 3.h,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 17.w,
-                      ),
-                      Container(
-                        width: 138,
-                        child: Text(
-                          harga,
-                          style: TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w800),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 7.h,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80.w,
-                      ),
-                      Container(
-                        width: 70,
-                        child: Text(
-                          waktu,
-                          style: TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w800),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 7.h,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Material(
-                        child: InkWell(
-                          onTap: press,
-                          child: Container(
-                            width: size.width * 0.35,
-                            height: size.height * 0.04,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF53B175),
-                              borderRadius: BorderRadius.circular(12.r),
+        FutureBuilder(
+            future: getLelang(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return Container(
+                  color: Color(0xFF53B175),
+                  height: MediaQuery.of(context).size.height * 0.32,
+                  width: MediaQuery.of(context).size.width * 1,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: snapshot.data['data'].length,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          children: [
+                            SizedBox(
+                              width: 20.w,
                             ),
-                            child: Center(
-                              child: Text(
-                                "Tawar",
-                                style: TextStyle(
-                                  fontFamily: 'Mulish',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
+                            Container(
+                              margin: EdgeInsets.only(right: 6.w),
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15.r),
+                                border:
+                                    Border.all(width: 1.w, color: Colors.grey),
+                              ),
+                              child: InkWell(
+                                onTap: () {},
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        top: 10.h,
+                                      ),
+                                      child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10.r),
+                                          child: Image.network(
+                                            'http://192.168.43.56:8000/imglelang/lelang/' +
+                                                snapshot.data['data'][index][
+                                                    'gambar'], // alamat untuk mengambil gambar
+                                            width: size.width * 0.38,
+                                          )),
+                                    ),
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 17.w,
+                                        ),
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                            right: 16.0,
+                                          ),
+                                          width: 138.w,
+                                          child: Text(
+                                            snapshot.data['data'][index]
+                                                ['nama'],
+                                            style: TextStyle(
+                                                fontFamily: 'Mulish',
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3.h,
+                                    ),
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 17.w,
+                                        ),
+                                        Container(
+                                          width: 138,
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                child: Text(
+                                                  'Rp. ',
+                                                  style: TextStyle(
+                                                      fontFamily: 'Mulish',
+                                                      fontSize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  snapshot.data['data'][index]
+                                                          ['harga']
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      fontFamily: 'Mulish',
+                                                      fontSize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  ' / ',
+                                                  style: TextStyle(
+                                                      fontFamily: 'Mulish',
+                                                      fontSize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  snapshot.data['data'][index]
+                                                      ['satuan'],
+                                                  style: TextStyle(
+                                                      fontFamily: 'Mulish',
+                                                      fontSize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 15.h,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 28 .w),
+                                          child: Container(
+                                            child: Text(
+                                              snapshot.data['data'][index]
+                                                  ['status'],
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 197, 21, 8),
+                                                  fontFamily: 'Mulish',
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w800),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 15.w,
+                                        ),
+                                        Material(
+                                          child: InkWell(
+                                            onTap: () {},
+                                            child: Container(
+                                              width: size.width * 0.35,
+                                              height: size.height * 0.04,
+                                              decoration: BoxDecoration(
+                                                color: Color(0xFF53B175),
+                                                borderRadius:
+                                                    BorderRadius.circular(12.r),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  "Tawar",
+                                                  style: TextStyle(
+                                                    fontFamily: 'Mulish',
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
+                            )
+                          ],
+                        );
+                      }),
+                );
+              } else {
+                return Center(child: Text(' Data Eror'));
+              }
+            });
   }
 }

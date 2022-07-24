@@ -25,7 +25,7 @@ class _productCardState extends State<productCard> {
       penjual_id = localdata.getString('penjual_id');
     });
     final String url =
-        'http://192.168.0.105:8000/api/getproduk'; //api menampilkan data produk
+        'http://192.168.43.56:8000/api/getproduk'; //api menampilkan data produk
 
     final response = await http.post(url, body: {
       "penjual_id": penjual_id,
@@ -41,7 +41,7 @@ class _productCardState extends State<productCard> {
   //function delete
 
   Future deleteProduct(id) async {
-    String url = 'http://192.168.0.105:8000/api/deleteProduk/' +
+    String url = 'http://192.168.43.56:8000/api/deleteProduk/' +
         id; //api menghapus data produk
     var response = await http.delete(Uri.parse(url));
     setState(() {
@@ -296,15 +296,15 @@ class _productCardState extends State<productCard> {
                                           padding: EdgeInsets.only(
                                             top: 10.h,
                                           ),
-                                          // child: ClipRRect(
-                                          // borderRadius:
-                                          // BorderRadius.circular(10),
-                                          // child: Image.network(
-                                          // 'http://192.168.0.105:8000/img/produk/' +
-                                          // snapshot.data[index][
-                                          // 'gambar'], // alamat untuk mengambil gambar
-                                          // width: size.width * 0.33,
-                                          // )),
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Image.network(
+                                                'http://192.168.43.56:8000/img/produk/' +
+                                                    snapshot.data[index][
+                                                        'gambar'], // alamat untuk mengambil gambar
+                                                width: size.width * 0.33,
+                                              )),
                                         ),
                                         SizedBox(
                                           height: 3.h,

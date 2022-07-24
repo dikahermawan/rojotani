@@ -38,7 +38,7 @@ class _editLelangState extends State<editLelang> {
     setState(() {
       lelang_id = localdata.getString('lelang_id');
     });
-    Uri url = Uri.parse("http://192.168.0.105:8000/api/lelang/edit");
+    Uri url = Uri.parse("http://192.168.43.56:8000/api/lelang/edit");
     final response = await http.post(url, body: {
       "lelang_id": lelang_id,
     });
@@ -62,7 +62,7 @@ class _editLelangState extends State<editLelang> {
   }
 
   update() async {
-    Uri url = Uri.parse("http://192.168.0.105:8000/api/lelang/update");
+    Uri url = Uri.parse("http://192.168.43.56:8000/api/lelang/update");
     final response = await http.post(url, body: {
       "lelang_id": lelang_id,
       'nama': nama,

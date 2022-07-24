@@ -2,12 +2,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-class homePage extends StatefulWidget {
+class dashboard extends StatefulWidget {
   @override
-  State<homePage> createState() => _homePageState();
+  State<dashboard> createState() => _dashboardState();
 }
 
-class _homePageState extends State<homePage> {
+class _dashboardState extends State<dashboard> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(

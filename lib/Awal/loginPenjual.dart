@@ -44,7 +44,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
 
 // fugsi untuk proses login
   Future<Map<String, dynamic>> login() async {
-    Uri url = Uri.parse("http://192.168.0.105:8000/api/logpenjual");
+    Uri url = Uri.parse("http://192.168.43.56:8000/api/logpenjual");
     final response = await http.post(url, body: {
       'email': email,
       'password': password,
