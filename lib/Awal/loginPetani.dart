@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:rojotani/Awal/registerPenjual.dart';
-import 'package:rojotani/pembeli/produk/home.dart';
+import 'package:rojotani/Awal/registerPetani.dart';
+import 'package:rojotani/pelanggan/produk/home.dart';
 import 'package:rojotani/petani/akun/akunPetani.dart';
 import 'package:rojotani/petani/navPetani.dart';
 import 'package:rojotani/petani/produk/katalog.dart';
@@ -11,14 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/registerPelanggan.dart';
 import 'package:rojotani/Awal/loginAs.dart';
 
-class loginPenjualPage extends StatefulWidget {
+class loginPetaniPage extends StatefulWidget {
   @override
-  State<loginPenjualPage> createState() => _loginPenjualPageState();
+  State<loginPetaniPage> createState() => _loginPetaniPageState();
 }
 
 enum LoginStatus { notSignIn, SignIn } //inisialisasi status login
 
-class _loginPenjualPageState extends State<loginPenjualPage> {
+class _loginPetaniPageState extends State<loginPetaniPage> {
   LoginStatus _loginStatus = LoginStatus.notSignIn;
   String email, password;
   bool isHiddenPassword = true;
@@ -86,17 +86,6 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
     setState(() {
       value = preferences.getInt('value');
       _loginStatus = value == 1 ? LoginStatus.SignIn : LoginStatus.notSignIn;
-    });
-  }
-
-  // fungsi utuk signout
-  signOut() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      preferences.setInt('value', null);
-      preferences.setInt('penjual_id', null);
-      preferences.commit();
-      _loginStatus = LoginStatus.notSignIn;
     });
   }
 
@@ -324,7 +313,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (cotext) =>
-                                                    registerPenjualPage()));
+                                                    registerPetaniPage()));
                                       },
                                       child: Text(
                                         'Daftar',
@@ -340,7 +329,7 @@ class _loginPenjualPageState extends State<loginPenjualPage> {
             ));
         break;
       case LoginStatus.SignIn:
-        return katalogPage(signOut);
+        return navPetani();
     }
   }
 

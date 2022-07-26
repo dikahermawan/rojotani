@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:rojotani/petani/produk/katalog.dart';
 import 'package:rojotani/petani/produk/product_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:rojotani/Awal/loginPenjual.dart';
+import 'package:rojotani/Awal/loginPetani.dart';
 import 'package:async/src/delegate/stream.dart';
 import 'package:path/path.dart' as path;
 
@@ -24,8 +24,6 @@ class _tambahProdukState extends State<tambahProduk> {
   String nama, satuan, jenis, deskripsi;
   var harga, stok, penjual_id;
   final _key = new GlobalKey<FormState>();
-
-  VoidCallback get signOut => null;
 
   File image;
 
@@ -85,7 +83,7 @@ class _tambahProdukState extends State<tambahProduk> {
       setState(() {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => katalogPage(signOut)),
+          MaterialPageRoute(builder: (context) => katalogPage()),
         );
       });
     } else {

@@ -292,19 +292,20 @@ class _productCardState extends State<productCard> {
                                     },
                                     child: Column(
                                       children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                            top: 10.h,
+                                        Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(
+                                              5,
+                                            ),
+                                            child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                child: Image.network(
+                                                  'http://192.168.43.56:8000/img/produk/' +
+                                                      snapshot.data[index][
+                                                          'gambar'], // alamat untuk mengambil gambar
+                                                )),
                                           ),
-                                          child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: Image.network(
-                                                'http://192.168.43.56:8000/img/produk/' +
-                                                    snapshot.data[index][
-                                                        'gambar'], // alamat untuk mengambil gambar
-                                                width: size.width * 0.33,
-                                              )),
                                         ),
                                         SizedBox(
                                           height: 3.h,
@@ -333,66 +334,23 @@ class _productCardState extends State<productCard> {
                                         SizedBox(
                                           height: 5.h,
                                         ),
-                                        Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 12.w,
+                                        Align(
+                                          alignment: Alignment.bottomLeft,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(left: 12),
+                                            child: Text(
+                                              'Rp ' +
+                                                  snapshot.data[index]['harga']
+                                                      .toString() +
+                                                  ' / ' +
+                                                  snapshot.data[index]
+                                                      ['satuan'],
+                                              style: TextStyle(
+                                                  fontFamily: 'Mulish',
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.w800),
                                             ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                right: 1,
-                                              ),
-                                              width: 20,
-                                              child: Text(
-                                                'Rp.',
-                                                style: TextStyle(
-                                                    fontFamily: 'Mulish',
-                                                    fontSize: 12.sp,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 40,
-                                              child: Text(
-                                                snapshot.data[index]['harga']
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontFamily: 'Mulish',
-                                                    fontSize: 12.sp,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                right: 1,
-                                              ),
-                                              width: 10,
-                                              child: Text(
-                                                ' / ',
-                                                style: TextStyle(
-                                                    fontFamily: 'Mulish',
-                                                    fontSize: 12.sp,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                right: 1,
-                                              ),
-                                              width: 38,
-                                              child: Text(
-                                                snapshot.data[index]['satuan'],
-                                                style: TextStyle(
-                                                    fontFamily: 'Mulish',
-                                                    fontSize: 12.sp,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ),
-                                            ),
-                                          ],
+                                          ),
                                         ),
                                         SizedBox(
                                           height: 10.h,
@@ -454,7 +412,7 @@ class _productCardState extends State<productCard> {
                   ),
                 );
               } else {
-                return Text(' Data Eror');
+                return Center(child: Text(' Data Eror'));
               }
             });
   }

@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:rojotani/pembeli/produk/home.dart';
+import 'package:rojotani/pelanggan/produk/home.dart';
+import 'package:rojotani/pelanggan/produk/navPembeli.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -68,15 +69,6 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     setState(() {
       value = preferences.getInt('value');
       _loginStatus = value == 1 ? LoginStatus.SignIn : LoginStatus.notSignIn;
-    });
-  }
-
-  signOut() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      preferences.setInt('value', null);
-      preferences.commit();
-      _loginStatus = LoginStatus.notSignIn;
     });
   }
 
@@ -314,7 +306,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
             ));
         break;
       case LoginStatus.SignIn:
-        return homePage(signOut);
+        return navPembeli();
     }
   }
 

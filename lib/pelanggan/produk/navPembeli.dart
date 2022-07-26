@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rojotani/pembeli/produk/dashboard.dart';
-import 'package:rojotani/pembeli/produk/home.dart';
-import 'package:rojotani/pembeli/transaksi/pengiriman.dart';
+import 'package:rojotani/pelanggan/produk/dashboard.dart';
+import 'package:rojotani/pelanggan/produk/home.dart';
+import 'package:rojotani/pelanggan/transaksi/pengiriman.dart';
 
 import 'akun/akunPetani.dart';
 
@@ -12,13 +12,7 @@ class navPembeli extends StatefulWidget {
 
 class _navPembeliState extends State<navPembeli> {
   int currentIndex = 0;
-  final List<Widget> body = [
-    homePage(signOut),
-    pengirimanPage(),
-    akunPembeli()
-  ];
-
-  static VoidCallback get signOut => null;
+  final List<Widget> body = [homePage(), pengirimanPage(), akunPelanggan()];
 
   @override
   Widget build(BuildContext context) {

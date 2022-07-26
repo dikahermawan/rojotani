@@ -3,17 +3,17 @@ import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/loginPelanggan.dart';
-import 'package:rojotani/Awal/loginPenjual.dart';
+import 'package:rojotani/Awal/loginPetani.dart';
 import 'package:rojotani/Awal/registerAs.dart';
 import 'package:rojotani/Awal/dataDiri.dart';
 import 'package:http/http.dart' as http;
 
-class registerPenjualPage extends StatefulWidget {
+class registerPetaniPage extends StatefulWidget {
   @override
-  State<registerPenjualPage> createState() => _registerPenjualPageState();
+  State<registerPetaniPage> createState() => _registerPetaniPageState();
 }
 
-class _registerPenjualPageState extends State<registerPenjualPage> {
+class _registerPetaniPageState extends State<registerPetaniPage> {
   bool isHiddenPassword1 = true;
   bool isHiddenPassword2 = true;
   String nama, alamat, email, password, no_rekening;
@@ -325,7 +325,7 @@ class _registerPenjualPageState extends State<registerPenjualPage> {
                                   onTap: () {
                                     Route route = MaterialPageRoute(
                                         builder: (context) =>
-                                            loginPenjualPage());
+                                            loginPetaniPage());
                                     Navigator.push(context, route);
                                   },
                                   child: Text(

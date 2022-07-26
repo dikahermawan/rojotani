@@ -11,13 +11,7 @@ class navPetani extends StatefulWidget {
 
 class _navPetaniState extends State<navPetani> {
   int currentIndex = 0;
-  final List<Widget> body = [
-    katalogPage(signOut),
-    pengirimanPage(),
-    akunPetani()
-  ];
-
-  static VoidCallback get signOut => null;
+  final List<Widget> body = [katalogPage(), pengirimanPage(), akunPetani()];
 
   @override
   Widget build(BuildContext context) {

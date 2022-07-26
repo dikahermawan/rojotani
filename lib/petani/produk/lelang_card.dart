@@ -303,19 +303,20 @@ class _lelangCardState extends State<lelangCard> {
                                     onTap: () {},
                                     child: Column(
                                       children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                            top: 10.h,
+                                        Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(
+                                              5,
+                                            ),
+                                            child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                child: Image.network(
+                                                  'http://192.168.43.56:8000/imglelang/lelang/' +
+                                                      snapshot.data[index][
+                                                          'gambar'], // alamat untuk mengambil gambar
+                                                )),
                                           ),
-                                          child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: Image.network(
-                                                'http://192.168.43.56:8000/imglelang/lelang/' +
-                                                    snapshot.data[index][
-                                                        'gambar'], // alamat untuk mengambil gambar
-                                                width: size.width * 0.38,
-                                              )),
                                         ),
                                         Row(
                                           children: [
@@ -341,66 +342,23 @@ class _lelangCardState extends State<lelangCard> {
                                         SizedBox(
                                           height: 3.h,
                                         ),
-                                        Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 18.w,
+                                        Align(
+                                          alignment: Alignment.bottomLeft,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(left: 16),
+                                            child: Text(
+                                              'Rp. ' +
+                                                  snapshot.data[index]['harga']
+                                                      .toString() +
+                                                  ' / ' +
+                                                  snapshot.data[index]
+                                                      ['satuan'],
+                                              style: TextStyle(
+                                                  fontFamily: 'Mulish',
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w800),
                                             ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                right: 1,
-                                              ),
-                                              width: 20,
-                                              child: Text(
-                                                'Rp.',
-                                                style: TextStyle(
-                                                    fontFamily: 'Mulish',
-                                                    fontSize: 14.sp,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 40,
-                                              child: Text(
-                                                snapshot.data[index]['harga']
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontFamily: 'Mulish',
-                                                    fontSize: 14.sp,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                right: 1,
-                                              ),
-                                              width: 10,
-                                              child: Text(
-                                                ' / ',
-                                                style: TextStyle(
-                                                    fontFamily: 'Mulish',
-                                                    fontSize: 14.sp,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                right: 1,
-                                              ),
-                                              width: 35,
-                                              child: Text(
-                                                snapshot.data[index]['satuan'],
-                                                style: TextStyle(
-                                                    fontFamily: 'Mulish',
-                                                    fontSize: 14.sp,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ),
-                                            ),
-                                          ],
+                                          ),
                                         ),
                                         SizedBox(
                                           height: 8.h,

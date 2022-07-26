@@ -18,8 +18,6 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
   var penjual_id;
   final _key = new GlobalKey<FormState>();
 
-  VoidCallback get signOut => null;
-
   File _image;
 
   Future getImage() async {
@@ -80,7 +78,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
       setState(() {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => katalogPage(signOut)),
+          MaterialPageRoute(builder: (context) => katalogPage()),
         );
       });
     } else {

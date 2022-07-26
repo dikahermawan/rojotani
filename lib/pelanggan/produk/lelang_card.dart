@@ -9,7 +9,6 @@ class lelangCard extends StatefulWidget {
 }
 
 class _lelangCardState extends State<lelangCard> {
-  var _future;
   final String url = 'http://192.168.43.56:8000/api/getlelangall';
 
   Future getLelang() async {
@@ -18,16 +17,8 @@ class _lelangCardState extends State<lelangCard> {
     return json.decode(response.body);
   }
 
-  // @override
-  // void initState() {
-  // TODO: implement initState
-  // super.initState();
-  // _future = getLelang();
-  // }
-//
   @override
   Widget build(BuildContext context) {
-    getLelang();
     ScreenUtil.init(
       BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width,
@@ -209,19 +200,18 @@ class _lelangCardState extends State<lelangCard> {
                                 onTap: () {},
                                 child: Column(
                                   children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        top: 10.h,
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(15.r),
+                                            child: Image.network(
+                                              'http://192.168.43.56:8000/imglelang/lelang/' +
+                                                  snapshot.data['data'][index][
+                                                      'gambar'], // alamat untuk mengambil gambar
+                                            )),
                                       ),
-                                      child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10.r),
-                                          child: Image.network(
-                                            'http://192.168.43.56:8000/imglelang/lelang/' +
-                                                snapshot.data['data'][index][
-                                                    'gambar'], // alamat untuk mengambil gambar
-                                            width: size.width * 0.38,
-                                          )),
                                     ),
                                     Row(
                                       children: [
@@ -254,52 +244,18 @@ class _lelangCardState extends State<lelangCard> {
                                         ),
                                         Container(
                                           width: 138,
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                child: Text(
-                                                  'Rp. ',
-                                                  style: TextStyle(
-                                                      fontFamily: 'Mulish',
-                                                      fontSize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.w800),
-                                                ),
-                                              ),
-                                              Container(
-                                                child: Text(
-                                                  snapshot.data['data'][index]
-                                                          ['harga']
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontFamily: 'Mulish',
-                                                      fontSize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.w800),
-                                                ),
-                                              ),
-                                              Container(
-                                                child: Text(
-                                                  ' / ',
-                                                  style: TextStyle(
-                                                      fontFamily: 'Mulish',
-                                                      fontSize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.w800),
-                                                ),
-                                              ),
-                                              Container(
-                                                child: Text(
-                                                  snapshot.data['data'][index]
-                                                      ['satuan'],
-                                                  style: TextStyle(
-                                                      fontFamily: 'Mulish',
-                                                      fontSize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.w800),
-                                                ),
-                                              ),
-                                            ],
+                                          child: Text(
+                                            'Rp. ' +
+                                                snapshot.data['data'][index]
+                                                        ['harga']
+                                                    .toString() +
+                                                ' / ' +
+                                                snapshot.data['data'][index]
+                                                    ['satuan'],
+                                            style: TextStyle(
+                                                fontFamily: 'Mulish',
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w800),
                                           ),
                                         ),
                                       ],
@@ -311,7 +267,7 @@ class _lelangCardState extends State<lelangCard> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Padding(
-                                          padding: EdgeInsets.only(right: 28 .w),
+                                          padding: EdgeInsets.only(right: 28.w),
                                           child: Container(
                                             child: Text(
                                               snapshot.data['data'][index]
@@ -335,25 +291,31 @@ class _lelangCardState extends State<lelangCard> {
                                         SizedBox(
                                           width: 15.w,
                                         ),
-                                        Material(
-                                          child: InkWell(
-                                            onTap: () {},
-                                            child: Container(
-                                              width: size.width * 0.35,
-                                              height: size.height * 0.04,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFF53B175),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.r),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  "Tawar",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Mulish',
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.white,
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 5),
+                                          child: Material(
+                                            child: InkWell(
+                                              onTap: () {},
+                                              child: Container(
+                                                width: size.width * 0.35,
+                                                height: size.height * 0.04,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xFF53B175),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12.r),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    "Tawar",
+                                                    style: TextStyle(
+                                                      fontFamily: 'Mulish',
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Colors.white,
+                                                    ),
                                                   ),
                                                 ),
                                               ),

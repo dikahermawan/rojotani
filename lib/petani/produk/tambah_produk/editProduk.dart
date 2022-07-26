@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:rojotani/petani/produk/katalog.dart';
 import 'package:rojotani/petani/produk/product_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:rojotani/Awal/loginPenjual.dart';
+import 'package:rojotani/Awal/loginPetani.dart';
 
 class editProduk extends StatefulWidget {
   @override
@@ -22,8 +22,6 @@ class _editProdukState extends State<editProduk> {
   var namaP, hargaP, stokP, satuanP, jenisP, deskripsiP;
   var harga, stok, penjual_id, barang_id, dataProduk;
   final _key = new GlobalKey<FormState>();
-
-  VoidCallback get signOut => null;
 
   errorSnackBar(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -80,7 +78,7 @@ class _editProdukState extends State<editProduk> {
       setState(() {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => katalogPage(signOut)),
+          MaterialPageRoute(builder: (context) => katalogPage()),
         );
       });
     } else {

@@ -13,18 +13,10 @@ import '../../petani/produk/lelang_card.dart';
 
 class katalogPage extends StatefulWidget {
   @override
-  final VoidCallback signOut;
-  katalogPage(this.signOut);
   State<katalogPage> createState() => _katalogPageState();
 }
 
 class _katalogPageState extends State<katalogPage> {
-  signOut() {
-    setState(() {
-      widget.signOut();
-    });
-  }
-
   Future<void> _refresh() {
     return Future.delayed(Duration(seconds: 0));
   }
@@ -88,7 +80,7 @@ class _katalogPageState extends State<katalogPage> {
                   Container(
                     child: IconButton(
                       icon: Icon(Icons.notifications),
-                      onPressed: signOut,
+                      onPressed: () {},
                     ),
                     width: MediaQuery.of(context).size.width * 0.12,
                     height: MediaQuery.of(context).size.height * 0.062,
