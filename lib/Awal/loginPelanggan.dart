@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:rojotani/pelanggan/produk/home.dart';
 import 'package:rojotani/pelanggan/produk/navPembeli.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/registerPelanggan.dart';
 import 'package:rojotani/Awal/loginAs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class loginPelangganPage extends StatefulWidget {
   @override
@@ -37,13 +37,17 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     }
   }
 
-  login() async {
+  Future<Map<String, dynamic>> login() async {
     final response = await http.post("http://192.168.43.56:8000/api/logpembeli",
         body: {'email': email, 'password': password});
-    final data = jsonDecode(response.body);
-    int value = data['success'];
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    var value = data['success'];
     String pesan = data['message'];
-    var user = data['user'];
+    // var user = data['user'];
+
+    SharedPreferences localId = await SharedPreferences.getInstance();
+    localId.setString('pembeli_id', data['pembeli_id']);
+
     if (value == 1) {
       setState(() {
         _loginStatus = LoginStatus.SignIn;

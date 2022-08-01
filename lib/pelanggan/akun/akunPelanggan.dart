@@ -3,20 +3,21 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rojotani/Awal/loginPelanggan.dart';
 import 'package:rojotani/Awal/loginPetani.dart';
-import 'package:rojotani/petani/akun/katasandi.dart';
+import 'package:rojotani/pelanggan/akun/katasandi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class akunPetani extends StatefulWidget {
-  // const akunPetani({Key key}) : super(key: key);
+class akunPelanggan extends StatefulWidget {
+  // const akunPelanggan({Key key}) : super(key: key);
 
   @override
   // final VoidCallback signOut;
-  // akunPetani(this.signOut);
-  State<akunPetani> createState() => _akunPetaniState();
+  // akunPelanggan(this.signOut);
+  State<akunPelanggan> createState() => _akunPelangganState();
 }
 
-class _akunPetaniState extends State<akunPetani> {
+class _akunPelangganState extends State<akunPelanggan> {
   File _image;
 
   Future getImage() async {
@@ -30,7 +31,7 @@ class _akunPetaniState extends State<akunPetani> {
   signOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.clear();
-    Route route = MaterialPageRoute(builder: (context) => loginPetaniPage());
+    Route route = MaterialPageRoute(builder: (context) => loginPelangganPage());
     Navigator.push(context, route);
   }
 
@@ -142,14 +143,13 @@ class _akunPetaniState extends State<akunPetani> {
                   height: 10.h,
                 ),
                 Center(
-                  child: Text('Dika Hermawan'
-                      //  snapshot.data[index]['nama'],
-                      // style: TextStyle(
-                      // fontFamily: 'Mulish',
-                      // fontSize: 23.sp,
-                      // fontWeight:
-                      // FontWeight.w600),
-                      ),
+                  child: Text(
+                    'Dika Hermawan',
+                    style: TextStyle(
+                        fontSize: 23.sp,
+                        fontFamily: 'Mulish',
+                        fontWeight: FontWeight.w600),
+                  ),
                 ),
                 SizedBox(
                   height: 60.h,
@@ -218,7 +218,7 @@ class _akunPetaniState extends State<akunPetani> {
                         InkWell(
                           onTap: () {
                             Route route = MaterialPageRoute(
-                                builder: (context) => katasandiPetani());
+                                builder: (context) => katasandiPelanggan());
                             Navigator.push(context, route);
                           },
                           child: Container(

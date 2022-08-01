@@ -9,19 +9,20 @@ import 'package:http/http.dart' as http;
 import 'package:rojotani/petani/navPetani.dart';
 import 'package:rojotani/petani/produk/katalog.dart';
 import 'package:rojotani/petani/produk/product_card.dart';
+import 'package:rojotani/petani/produk/tambah_produk/editLelang.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rojotani/Awal/loginPetani.dart';
 
-class editLelang extends StatefulWidget {
+class editProfilPetani extends StatefulWidget {
   @override
-  State<editLelang> createState() => _editLelangState();
+  State<editProfilPetani> createState() => _editProfilPetaniState();
 }
 
-class _editLelangState extends State<editLelang> {
+class _editProfilPetaniState extends State<editProfilPetani> {
   bool isHiddenPassword = true;
-  String nama, satuan, jenis, deskripsi, status;
-  var namaL, hargaL, stokL, satuanL, jenisL, deskripsiL, statusL;
-  var harga, stok, penjual_id, lelang_id, dataLelang;
+  String nama, alamat;
+  var namaP, alamatP, rekeningP;
+  var rekening, penjual_id, barang_id, dataProduk;
   final _key = new GlobalKey<FormState>();
 
   errorSnackBar(BuildContext context, String text) {
@@ -32,23 +33,20 @@ class _editLelangState extends State<editLelang> {
     ));
   }
 
-  getDataLelang() async {
+  getDataProduk() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
-      lelang_id = localdata.getString('lelang_id');
+      barang_id = localdata.getString('barang_id');
     });
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/lelang/edit");
+    Uri url = Uri.parse("http://192.168.43.56:8000/api/produk/edit");
     final response = await http.post(url, body: {
-      "lelang_id": lelang_id,
+      "barang_id": barang_id,
     });
-    dataLelang = jsonDecode(response.body);
+    dataProduk = jsonDecode(response.body);
     setState(() {
-      namaL = dataLelang['nama'];
-      hargaL = dataLelang['harga'].toString();
-      satuanL = dataLelang['satuan'];
-      jenisL = dataLelang['jenis'];
-      deskripsiL = dataLelang['deskripsi'];
-      statusL = dataLelang['status'];
+      namaP = dataProduk['nama'];
+      alamatP = dataProduk['harga'].toString();
+      rekeningP = dataProduk['satuan'];
     });
   }
 
@@ -61,15 +59,12 @@ class _editLelangState extends State<editLelang> {
   }
 
   update() async {
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/lelang/update");
+    Uri url = Uri.parse("http://192.168.43.56:8000/api/produk/update");
     final response = await http.post(url, body: {
-      "lelang_id": lelang_id,
+      "barang_id": barang_id,
       'nama': nama,
-      'harga': harga,
-      'satuan': satuan,
-      'jenis': jenis,
-      'deskripsi': deskripsi,
-      'status': status,
+      'alamat': alamat,
+      'rekening': rekening,
     });
     final data = jsonDecode(response.body);
     int value = data['success'];
@@ -90,7 +85,7 @@ class _editLelangState extends State<editLelang> {
   @override
   void initState() {
     super.initState();
-    getDataLelang();
+    getDataProduk();
   }
 
   @override
@@ -117,7 +112,7 @@ class _editLelangState extends State<editLelang> {
             },
           ),
           title: Text(
-            'Edit Produk Lelang ',
+            'Edit Profil',
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontFamily: 'Mulish',
@@ -140,7 +135,6 @@ class _editLelangState extends State<editLelang> {
                             height: 20.h,
                           ),
                           Container(
-                            color: Color.fromARGB(255, 221, 219, 219),
                             height: MediaQuery.of(context).size.height * 0.67,
                             //width: MediaQuery.of(context).size.width * 0.6,
                             child: Padding(
@@ -152,14 +146,14 @@ class _editLelangState extends State<editLelang> {
                                     SizedBox(
                                       height: 20.h,
                                     ),
-                                    Text('Nama Produk',
+                                    Text('Nama',
                                         style: TextStyle(
                                             fontFamily: 'Mulish',
                                             fontSize: 18.sp,
                                             fontWeight: FontWeight.w600)),
                                     TextFormField(
                                       controller:
-                                          TextEditingController(text: namaL),
+                                          TextEditingController(text: namaP),
                                       validator: (e) {
                                         if (e.isEmpty) {
                                           return 'masukkan username';
@@ -168,7 +162,7 @@ class _editLelangState extends State<editLelang> {
                                       onSaved: (e) => nama = e,
                                       onChanged: (e) {
                                         setState(() {
-                                          namaL = e;
+                                          namaP = e;
                                         });
                                       },
                                       autofocus: false,
@@ -184,9 +178,15 @@ class _editLelangState extends State<editLelang> {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 10.h,
+                                      height: 2.h,
                                     ),
-                                    Text('harga Produk',
+                                    Divider(
+                                      thickness: 2,
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    Text('Alamat',
                                         style: TextStyle(
                                             fontFamily: 'Mulish',
                                             fontSize: 18.sp,
@@ -194,16 +194,16 @@ class _editLelangState extends State<editLelang> {
                                     TextFormField(
                                       validator: (e) {
                                         if (e.isEmpty) {
-                                          return 'masukkan harga';
+                                          return 'masukkan alamat';
                                         }
                                       },
-                                      onSaved: (e) => harga = e,
+                                      onSaved: (e) => alamat = e,
                                       controller:
-                                          TextEditingController(text: hargaL),
+                                          TextEditingController(text: alamatP),
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
-                                        hintText: 'masukkan harga',
+                                        hintText: 'masukkan alamat',
                                         hintStyle: TextStyle(
                                           // <-- Change this
                                           fontSize: 16.sp,
@@ -212,37 +212,15 @@ class _editLelangState extends State<editLelang> {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 10.h,
+                                      height: 2.h,
                                     ),
-                                    Text('satuan Produk',
-                                        style: TextStyle(
-                                            fontFamily: 'Mulish',
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w600)),
-                                    TextFormField(
-                                      validator: (e) {
-                                        if (e.isEmpty) {
-                                          return 'masukkan satuan';
-                                        }
-                                      },
-                                      onSaved: (e) => satuan = e,
-                                      controller:
-                                          TextEditingController(text: satuanL),
-                                      decoration: InputDecoration(
-                                        enabledBorder: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        hintText: 'masukkan harga',
-                                        hintStyle: TextStyle(
-                                          // <-- Change this
-                                          fontSize: 16.sp,
-                                        ),
-                                        // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
-                                      ),
+                                    Divider(
+                                      thickness: 2,
                                     ),
                                     SizedBox(
-                                      height: 10.h,
+                                      height: 20.h,
                                     ),
-                                    Text('jenis Produk',
+                                    Text('No. Rekening',
                                         style: TextStyle(
                                             fontFamily: 'Mulish',
                                             fontSize: 18.sp,
@@ -250,44 +228,16 @@ class _editLelangState extends State<editLelang> {
                                     TextFormField(
                                       validator: (e) {
                                         if (e.isEmpty) {
-                                          return 'masukkan jenis';
+                                          return 'masukkan nomor rekening';
                                         }
                                       },
-                                      onSaved: (e) => jenis = e,
-                                      controller:
-                                          TextEditingController(text: jenisL),
-                                      decoration: InputDecoration(
-                                        enabledBorder: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        hintText: 'masukkan jenis',
-                                        hintStyle: TextStyle(
-                                          // <-- Change this
-                                          fontSize: 16.sp,
-                                        ),
-                                        // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
-                                    Text('deskripsi Produk',
-                                        style: TextStyle(
-                                            fontFamily: 'Mulish',
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w600)),
-                                    TextFormField(
-                                      validator: (e) {
-                                        if (e.isEmpty) {
-                                          return 'masukkan deskripsi';
-                                        }
-                                      },
-                                      onSaved: (e) => deskripsi = e,
+                                      onSaved: (e) => rekening = e,
                                       controller: TextEditingController(
-                                          text: deskripsiL),
+                                          text: rekeningP),
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
-                                        hintText: 'masukkan deskripsi',
+                                        hintText: 'masukkan nomor rekening',
                                         hintStyle: TextStyle(
                                           // <-- Change this
                                           fontSize: 16.sp,
@@ -296,41 +246,18 @@ class _editLelangState extends State<editLelang> {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 10.h,
+                                      height: 2.h,
                                     ),
-                                    Text('status Lelang',
-                                        style: TextStyle(
-                                            fontFamily: 'Mulish',
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w600)),
-                                    TextFormField(
-                                      validator: (e) {
-                                        if (e.isEmpty) {
-                                          return 'masukkan status';
-                                        }
-                                      },
-                                      onSaved: (e) => status = e,
-                                      controller:
-                                          TextEditingController(text: statusL),
-                                      decoration: InputDecoration(
-                                        enabledBorder: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        hintText:
-                                            'sedang di lelang / lelang selesai',
-                                        hintStyle: TextStyle(
-                                          // <-- Change this
-                                          fontSize: 16.sp,
-                                        ),
-                                        // contentPadding: EdgeInsets.symmetric(vertical:
-                                      ),
+                                    Divider(
+                                      thickness: 2,
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 29.h,
                           ),
                           Center(
                             child: Container(

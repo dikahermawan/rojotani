@@ -6,19 +6,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class katasandiPetani extends StatefulWidget {
-  const katasandiPetani({Key key}) : super(key: key);
+class katasandiPelanggan extends StatefulWidget {
+  const katasandiPelanggan({Key key}) : super(key: key);
 
   @override
-  State<katasandiPetani> createState() => _katasandiPetaniState();
+  State<katasandiPelanggan> createState() => _katasandiPelangganState();
 }
 
-class _katasandiPetaniState extends State<katasandiPetani> {
+class _katasandiPelangganState extends State<katasandiPelanggan> {
   bool isHiddenPassword1 = true;
   bool isHiddenPassword2 = true;
   bool isHiddenPassword3 = true;
   final _key = new GlobalKey<FormState>();
-  var penjual_id, katasandi, konfirmasi;
+  var pembeli_id, katasandi, konfirmasi;
 
   // void _togglePasswordView1() {
   // if (isHiddenPassword1 == true) {
@@ -61,24 +61,27 @@ class _katasandiPetaniState extends State<katasandiPetani> {
     final form = _key.currentState;
     if (form.validate()) {
       form.save();
-      updatePassword();
+      updatePasswordPembeli();
     }
   }
 
-  updatePassword() async {
-    SharedPreferences localdata = await SharedPreferences.getInstance();
+  updatePasswordPembeli() async {
+    SharedPreferences localId = await SharedPreferences.getInstance();
     setState(() {
-      penjual_id = localdata.getString('penjual_id');
+      pembeli_id = localId.getString('pembeli_id');
     });
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/updatepenjual");
-    final response = await http.post(url, body: {
-      "penjual_id": penjual_id,
+    // Uri url = Uri.parse("http://192.168.43.56:8000/api/updatepembeli");
+    final response =
+        await http.post("http://192.168.43.56:8000/api/updatepembeli", body: {
+      'pembeli_id': pembeli_id,
       'password': katasandi,
       'password_confirmation': konfirmasi,
     });
     final data = jsonDecode(response.body);
     int value = data['success'];
     var pesan = data['message'];
+    print(value);
+
     if (value == 1) {
       print(pesan);
       setState(() {
@@ -150,33 +153,6 @@ class _katasandiPetaniState extends State<katasandiPetani> {
                   SizedBox(
                     height: 60.h,
                   ),
-                  // TextFormField(
-
-                  // validator: (e) {
-                  //   if (e.isEmpty) {
-                  //     return error;
-                  //   }
-                  // },
-                  // onSaved: (e) => nilai = e,
-                  // obscureText: isHiddenPassword1,
-                  // decoration: InputDecoration(
-                  // suffixIcon: IconButton(
-                  // icon: Icon(Icons.visibility),
-                  // onPressed: _togglePasswordView1),
-                  // hintText: 'Katasandi Lama',
-                  // hintStyle: TextStyle(
-                  // fontSize: 16.sp,
-                  // ),
-                  // enabledBorder: UnderlineInputBorder(
-                  // borderSide: BorderSide(color: Colors.grey),
-                  // ),
-                  // focusedBorder: UnderlineInputBorder(
-                  // borderSide: BorderSide(color: Color(0xFF53B175)),
-                  // ),
-                  // )),
-                  SizedBox(
-                    height: 20.h,
-                  ),
                   TextFormField(
                       validator: (e) {
                         if (e.isEmpty) {
@@ -238,6 +214,7 @@ class _katasandiPetaniState extends State<katasandiPetani> {
                               backgroundColor:
                                   MaterialStateProperty.all(Color(0xFF53B175))),
                           onPressed: () {
+                            // print(pembeli_id);
                             check();
                           },
                           child: Text(

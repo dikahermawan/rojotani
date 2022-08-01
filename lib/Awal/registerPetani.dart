@@ -20,7 +20,7 @@ class _registerPetaniPageState extends State<registerPetaniPage> {
   final _key =
       new GlobalKey<FormState>(); // inisialisasi key membaca data pada form
 
-  //fubgsi untuk menampilkan eror
+  //fungsi untuk menampilkan eror
   errorSnackBar(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Color.fromARGB(255, 184, 15, 3),
@@ -48,7 +48,7 @@ class _registerPetaniPageState extends State<registerPetaniPage> {
       'password': password,
       'no_rekening': no_rekening
     });
-    final data = jsonDecode(response.body); //meerima respo dari backend
+    final data = jsonDecode(response.body); //menerima respon dari backend
     int value = data['success'];
     var pesan = data['pesan'];
     if (value == 1) {

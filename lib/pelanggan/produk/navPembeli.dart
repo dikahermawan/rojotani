@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rojotani/pelanggan/produk/dashboard.dart';
 import 'package:rojotani/pelanggan/produk/home.dart';
 import 'package:rojotani/pelanggan/transaksi/pengiriman.dart';
-
-import 'akun/akunPetani.dart';
+import '../akun/akunPelanggan.dart';
 
 class navPembeli extends StatefulWidget {
   @override

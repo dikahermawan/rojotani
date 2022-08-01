@@ -303,21 +303,21 @@ class _lelangCardState extends State<lelangCard> {
                                     onTap: () {},
                                     child: Column(
                                       children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: EdgeInsets.all(
-                                              5,
-                                            ),
-                                            child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                child: Image.network(
-                                                  'http://192.168.43.56:8000/imglelang/lelang/' +
-                                                      snapshot.data[index][
-                                                          'gambar'], // alamat untuk mengambil gambar
-                                                )),
-                                          ),
-                                        ),
+                                        // Expanded(
+                                        // child: Padding(
+                                        // padding: EdgeInsets.all(
+                                        // 5,
+                                        // ),
+                                        // child: ClipRRect(
+                                        // borderRadius:
+                                        // BorderRadius.circular(25),
+                                        // child: Image.network(
+                                        // 'http://192.168.43.56:8000/imglelang/lelang/' +
+                                        // snapshot.data[index][
+                                        // 'gambar'], // alamat untuk mengambil gambar
+                                        // )),
+                                        // ),
+                                        // ),
                                         Row(
                                           children: [
                                             SizedBox(

@@ -7,16 +7,16 @@ import 'package:rojotani/Awal/loginPetani.dart';
 import 'package:rojotani/petani/akun/katasandi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class akunPetani extends StatefulWidget {
-  // const akunPetani({Key key}) : super(key: key);
+class profilPetani extends StatefulWidget {
+  // const profilPetani({Key key}) : super(key: key);
 
   @override
   // final VoidCallback signOut;
-  // akunPetani(this.signOut);
-  State<akunPetani> createState() => _akunPetaniState();
+  // profilPetani(this.signOut);
+  State<profilPetani> createState() => _profilPetaniState();
 }
 
-class _akunPetaniState extends State<akunPetani> {
+class _profilPetaniState extends State<profilPetani> {
   File _image;
 
   Future getImage() async {

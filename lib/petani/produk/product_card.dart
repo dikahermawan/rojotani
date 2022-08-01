@@ -292,21 +292,21 @@ class _productCardState extends State<productCard> {
                                     },
                                     child: Column(
                                       children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: EdgeInsets.all(
-                                              5,
-                                            ),
-                                            child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                child: Image.network(
-                                                  'http://192.168.43.56:8000/img/produk/' +
-                                                      snapshot.data[index][
-                                                          'gambar'], // alamat untuk mengambil gambar
-                                                )),
-                                          ),
-                                        ),
+                                        // Expanded(
+                                        // child: Padding(
+                                        // padding: EdgeInsets.all(
+                                        // 5,
+                                        // ),
+                                        // child: ClipRRect(
+                                        // borderRadius:
+                                        // BorderRadius.circular(25),
+                                        // child: Image.network(
+                                        // 'http://192.168.43.56:8000/img/produk/' +
+                                        // snapshot.data[index][
+                                        // 'gambar'], // alamat untuk mengambil gambar
+                                        // )),
+                                        // ),
+                                        // ),
                                         SizedBox(
                                           height: 3.h,
                                         ),
