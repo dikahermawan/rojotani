@@ -22,7 +22,7 @@ class _editProdukState extends State<editProduk> {
   bool isHiddenPassword = true;
   String nama, satuan, jenis, deskripsi;
   var namaP, hargaP, stokP, satuanP, jenisP, deskripsiP;
-  var harga, stok, penjual_id, barang_id, dataProduk;
+  var harga, stok, penjual_id, produk_id, dataProduk;
   final _key = new GlobalKey<FormState>();
 
   errorSnackBar(BuildContext context, String text) {
@@ -36,11 +36,11 @@ class _editProdukState extends State<editProduk> {
   getDataProduk() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
-      barang_id = localdata.getString('barang_id');
+      produk_id = localdata.getString('produk_id');
     });
     Uri url = Uri.parse("http://192.168.43.56:8000/api/produk/edit");
     final response = await http.post(url, body: {
-      "barang_id": barang_id,
+      "produk_id": produk_id,
     });
     dataProduk = jsonDecode(response.body);
     setState(() {
@@ -64,7 +64,7 @@ class _editProdukState extends State<editProduk> {
   update() async {
     Uri url = Uri.parse("http://192.168.43.56:8000/api/produk/update");
     final response = await http.post(url, body: {
-      "barang_id": barang_id,
+      "produk_id": produk_id,
       'nama': nama,
       'harga': harga,
       'stok': stok,

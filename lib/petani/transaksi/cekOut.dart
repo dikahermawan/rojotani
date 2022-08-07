@@ -76,9 +76,7 @@ class _cekoutPageState extends State<cekoutPage> {
               color: Colors.black,
             ),
             onPressed: () {
-              // Route route =
-              //     MaterialPageRoute(builder: (context) => ());
-              // Navigator.push(context, route);
+              Navigator.pop(context);
             },
           ),
           title: Text(
@@ -110,10 +108,10 @@ class _cekoutPageState extends State<cekoutPage> {
                           height: 90,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100.0),
-                            image: DecorationImage(
-                              image: AssetImage('asset/gambar/ayam.png'),
-                              fit: BoxFit.cover,
-                            ),
+                            // image: DecorationImage(
+                            // image: AssetImage('asset/gambar/ayam.png'),
+                            // fit: BoxFit.cover,
+                            // ),
                           ),
                         ),
                       ],

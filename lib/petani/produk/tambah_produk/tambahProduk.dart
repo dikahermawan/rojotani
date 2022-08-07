@@ -8,6 +8,7 @@ import 'package:rojotani/Awal/loginPelanggan.dart';
 import 'package:rojotani/Awal/registerAs.dart';
 import 'package:rojotani/Awal/dataDiri.dart';
 import 'package:http/http.dart' as http;
+import 'package:rojotani/petani/navPetani.dart';
 import 'package:rojotani/petani/produk/katalog.dart';
 import 'package:rojotani/petani/produk/product_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -78,12 +79,13 @@ class _tambahProdukState extends State<tambahProduk> {
     final data = jsonDecode(response.body);
     int value = data['success'];
     var pesan = data['message'];
+
     if (value == 1) {
       print(pesan);
       setState(() {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => katalogPage()),
+          MaterialPageRoute(builder: (context) => navPetani()),
         );
       });
     } else {

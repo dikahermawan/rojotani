@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rojotani/Awal/loginPetani.dart';
+import 'package:rojotani/petani/akun/edit/editProfilPertani.dart';
 import 'package:rojotani/petani/akun/katasandi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -167,49 +168,57 @@ class _akunPetaniState extends State<akunPetani> {
                         SizedBox(
                           height: 10.sp,
                         ),
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 223, 220, 220),
-                            borderRadius: BorderRadius.circular(15.r),
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 15.w,
-                              ),
-                              Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.07,
-                                width: MediaQuery.of(context).size.width * 0.14,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF53B175),
-                                  borderRadius: BorderRadius.circular(15.r),
+                        InkWell(
+                          onTap: () {
+                            Route route = MaterialPageRoute(
+                                builder: (context) => editProfilPetani());
+                            Navigator.push(context, route);
+                          },
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 223, 220, 220),
+                              borderRadius: BorderRadius.circular(15.r),
+                            ),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 15.w,
                                 ),
-                                child: Icon(
-                                  Icons.person_outline_rounded,
-                                  color: Color.fromARGB(255, 255, 255, 255),
+                                Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.07,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.14,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF53B175),
+                                    borderRadius: BorderRadius.circular(15.r),
+                                  ),
+                                  child: Icon(
+                                    Icons.person_outline_rounded,
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 20.w,
-                              ),
-                              Text(
-                                'Profil',
-                                style: TextStyle(
-                                    fontFamily: 'Mulish',
-                                    fontSize: 22.sp,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              SizedBox(
-                                width: 120.w,
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                size: 35.sp,
-                              )
-                            ],
+                                SizedBox(
+                                  width: 20.w,
+                                ),
+                                Text(
+                                  'Profil',
+                                  style: TextStyle(
+                                      fontFamily: 'Mulish',
+                                      fontSize: 22.sp,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                SizedBox(
+                                  width: 120.w,
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  size: 35.sp,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         Divider(

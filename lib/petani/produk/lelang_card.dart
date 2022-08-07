@@ -110,9 +110,9 @@ class _lelangCardState extends State<lelangCard> {
         });
   }
 
-  // Future deleteProduct(String barang_id) async {
+  // Future deleteProduct(String produk_id) async {
   //   String url = 'http://192.168.0.105:8000/api/delete/' +
-  //       barang_id; //api menghapus data produk
+  //       produk_id; //api menghapus data produk
   //   var response = await http.delete(Uri.parse(url));
   //   print(json.decode(response.body));
   //   return json.decode(response.body);
@@ -303,21 +303,21 @@ class _lelangCardState extends State<lelangCard> {
                                     onTap: () {},
                                     child: Column(
                                       children: [
-                                        // Expanded(
-                                        // child: Padding(
-                                        // padding: EdgeInsets.all(
-                                        // 5,
-                                        // ),
-                                        // child: ClipRRect(
-                                        // borderRadius:
-                                        // BorderRadius.circular(25),
-                                        // child: Image.network(
-                                        // 'http://192.168.43.56:8000/imglelang/lelang/' +
-                                        // snapshot.data[index][
-                                        // 'gambar'], // alamat untuk mengambil gambar
-                                        // )),
-                                        // ),
-                                        // ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(
+                                              5,
+                                            ),
+                                            child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                child: Image.network(
+                                                  'http://192.168.43.56:8000/imglelang/lelang/' +
+                                                      snapshot.data[index][
+                                                          'gambar'], // alamat untuk mengambil gambar
+                                                )),
+                                          ),
+                                        ),
                                         Row(
                                           children: [
                                             SizedBox(

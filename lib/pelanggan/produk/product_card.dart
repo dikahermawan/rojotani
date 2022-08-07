@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rojotani/pelanggan/transaksi/cekOut.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class productCard extends StatefulWidget {
   @override
@@ -15,6 +17,11 @@ class _productCardState extends State<productCard> {
     var response = await http.get(url); //api menampilkan data produk
     print(json.decode(response.body));
     return json.decode(response.body);
+  }
+
+  Future getDataProduk(produk_id) async {
+    SharedPreferences dataProduk = await SharedPreferences.getInstance();
+    dataProduk..setString('produk_id', produk_id.toString());
   }
 
   // @override
@@ -180,18 +187,18 @@ class _productCardState extends State<productCard> {
                             onTap: () {},
                             child: Column(
                               children: [
-                                // Expanded(
-                                // child: Padding(
-                                // padding: EdgeInsets.only(top: 8),
-                                // child: ClipRRect(
-                                // borderRadius: BorderRadius.circular(10),
-                                // child: Image.network(
-                                // 'http://192.168.43.56:8000/img/produk/' +
-                                // snapshot.data['data'][index][
-                                // 'gambar'], // alamat untuk mengambil gambar
-                                // )),
-                                // ),
-                                // ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 8),
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          'http://192.168.43.56:8000/img/produk/' +
+                                              snapshot.data['data'][index][
+                                                  'gambar'], // alamat untuk mengambil gambar
+                                        )),
+                                  ),
+                                ),
                                 SizedBox(
                                   height: 3.h,
                                 ),
@@ -250,7 +257,16 @@ class _productCardState extends State<productCard> {
                                       padding: const EdgeInsets.all(5),
                                       child: Material(
                                         child: InkWell(
-                                          onTap: () {},
+                                          onTap: () {
+                                            getDataProduk(snapshot.data['data']
+                                                [index]['id']);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      cekoutPage()),
+                                            );
+                                          },
                                           child: Container(
                                             width: size.width * 0.12,
                                             height: size.height * 0.055,

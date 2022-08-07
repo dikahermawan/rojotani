@@ -21,8 +21,8 @@ class editProfilPetani extends StatefulWidget {
 class _editProfilPetaniState extends State<editProfilPetani> {
   bool isHiddenPassword = true;
   String nama, alamat;
-  var namaP, alamatP, rekeningP;
-  var rekening, penjual_id, barang_id, dataProduk;
+  var namaA, alamatA, rekeningA;
+  var rekening, penjual_id, dataProduk;
   final _key = new GlobalKey<FormState>();
 
   errorSnackBar(BuildContext context, String text) {
@@ -33,20 +33,20 @@ class _editProfilPetaniState extends State<editProfilPetani> {
     ));
   }
 
-  getDataProduk() async {
+  getDataPenjual() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
-      barang_id = localdata.getString('barang_id');
+      penjual_id = localdata.getString('penjual_id');
     });
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/produk/edit");
+    Uri url = Uri.parse("http://192.168.43.56:8000/api/editProfilPjl");
     final response = await http.post(url, body: {
-      "barang_id": barang_id,
+      "penjual_id": penjual_id,
     });
     dataProduk = jsonDecode(response.body);
     setState(() {
-      namaP = dataProduk['nama'];
-      alamatP = dataProduk['harga'].toString();
-      rekeningP = dataProduk['satuan'];
+      namaA = dataProduk['nama'];
+      alamatA = dataProduk['alamat'];
+      rekeningA = dataProduk['no_rekening'];
     });
   }
 
@@ -59,12 +59,12 @@ class _editProfilPetaniState extends State<editProfilPetani> {
   }
 
   update() async {
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/produk/update");
+    Uri url = Uri.parse("http://192.168.43.56:8000/api/profilPenjual");
     final response = await http.post(url, body: {
-      "barang_id": barang_id,
+      "penjual_id": penjual_id,
       'nama': nama,
       'alamat': alamat,
-      'rekening': rekening,
+      'no_rekening': rekening,
     });
     final data = jsonDecode(response.body);
     int value = data['success'];
@@ -85,7 +85,7 @@ class _editProfilPetaniState extends State<editProfilPetani> {
   @override
   void initState() {
     super.initState();
-    getDataProduk();
+    getDataPenjual();
   }
 
   @override
@@ -153,7 +153,7 @@ class _editProfilPetaniState extends State<editProfilPetani> {
                                             fontWeight: FontWeight.w600)),
                                     TextFormField(
                                       controller:
-                                          TextEditingController(text: namaP),
+                                          TextEditingController(text: namaA),
                                       validator: (e) {
                                         if (e.isEmpty) {
                                           return 'masukkan username';
@@ -162,7 +162,7 @@ class _editProfilPetaniState extends State<editProfilPetani> {
                                       onSaved: (e) => nama = e,
                                       onChanged: (e) {
                                         setState(() {
-                                          namaP = e;
+                                          namaA = e;
                                         });
                                       },
                                       autofocus: false,
@@ -199,7 +199,7 @@ class _editProfilPetaniState extends State<editProfilPetani> {
                                       },
                                       onSaved: (e) => alamat = e,
                                       controller:
-                                          TextEditingController(text: alamatP),
+                                          TextEditingController(text: alamatA),
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -233,7 +233,7 @@ class _editProfilPetaniState extends State<editProfilPetani> {
                                       },
                                       onSaved: (e) => rekening = e,
                                       controller: TextEditingController(
-                                          text: rekeningP),
+                                          text: rekeningA),
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,

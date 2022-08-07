@@ -252,7 +252,10 @@ class _homePageState extends State<homePage> {
                             SizedBox(
                               height: 10.h,
                             ),
-                            productCard()
+                            productCard(),
+                            SizedBox(
+                              height: 10.h,
+                            ),
                           ]),
                     )),
         ));

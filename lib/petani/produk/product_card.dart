@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:rojotani/petani/models/produkModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:rojotani/petani/produk/tambah_produk/editProduk.dart';
 import 'package:rojotani/petani/produk/tambah_produk/tambahProduk.dart';
@@ -26,16 +25,15 @@ class _productCardState extends State<productCard> {
     });
     final String url =
         'http://192.168.43.56:8000/api/getproduk'; //api menampilkan data produk
-
     final response = await http.post(url, body: {
       "penjual_id": penjual_id,
     });
     return jsonDecode(response.body);
   }
 
-  Future getDataBarang(barang_id) async {
+  Future getDataBarang(produk_id) async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
-    localdata..setString('barang_id', barang_id.toString());
+    localdata..setString('produk_id', produk_id.toString());
   }
 
   //function delete
@@ -113,9 +111,9 @@ class _productCardState extends State<productCard> {
         });
   }
 
-  // Future deleteProduct(String barang_id) async {
+  // Future deleteProduct(String produk_id) async {
   //   String url = 'http://192.168.43.56:8000/api/delete/' +
-  //       barang_id; //api menghapus data produk
+  //       produk_id; //api menghapus data produk
   //   var response = await http.delete(Uri.parse(url));
   //   print(json.decode(response.body));
   //   return json.decode(response.body);
@@ -292,21 +290,21 @@ class _productCardState extends State<productCard> {
                                     },
                                     child: Column(
                                       children: [
-                                        // Expanded(
-                                        // child: Padding(
-                                        // padding: EdgeInsets.all(
-                                        // 5,
-                                        // ),
-                                        // child: ClipRRect(
-                                        // borderRadius:
-                                        // BorderRadius.circular(25),
-                                        // child: Image.network(
-                                        // 'http://192.168.43.56:8000/img/produk/' +
-                                        // snapshot.data[index][
-                                        // 'gambar'], // alamat untuk mengambil gambar
-                                        // )),
-                                        // ),
-                                        // ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(
+                                              5,
+                                            ),
+                                            child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                child: Image.network(
+                                                  'http://192.168.43.56:8000/img/produk/' +
+                                                      snapshot.data[index][
+                                                          'gambar'], // alamat untuk mengambil gambar
+                                                )),
+                                          ),
+                                        ),
                                         SizedBox(
                                           height: 3.h,
                                         ),

@@ -13,9 +13,7 @@ class belumBayarPage extends StatelessWidget {
         margin: EdgeInsets.only(top: 17.sp),
         decoration: BoxDecoration(
             //color: Colors.blue,
-            border: Border.all(
-             color: Colors.grey[300], width: 1
-            ) ,
+            border: Border.all(color: Colors.grey[300], width: 1),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(
                   10,
