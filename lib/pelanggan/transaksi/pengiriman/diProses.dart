@@ -28,47 +28,6 @@ class _diProsesPageState extends State<diProsesPage>
     super.dispose();
   }
 
-  // Widget tabar(){
-  //   return Column(
-  //     children: [
-  //       SizedBox(height: 20.h,),
-  //       TabBar(
-  //             controller: controller,
-  //             labelColor: Color(0xFF53B175),
-  //             unselectedLabelColor: Colors.grey,
-  //             indicatorColor: Color(0xFF53B175),
-  //             indicatorWeight: 0.001,
-  //             tabs: <Widget>[
-  //               Tab( icon: new Icon(Icons.payments),
-  //                   child: Text('Belum Bayar',
-  //                       style: TextStyle(
-  //                           fontFamily: 'Mulish',
-  //                           fontWeight: FontWeight.w500,
-  //                           fontSize: 12.sp))),
-  //               Tab( icon: new Icon(Icons.table_chart_rounded),
-  //                   child: Text('Di Kemas',
-  //                       style: TextStyle(
-  //                           fontFamily: 'Mulish',
-  //                           fontWeight: FontWeight.w500,
-  //                           fontSize: 13.sp))),
-  //               Tab( icon: new Icon(Icons.local_shipping),
-  //                   child: Text('Di Kirim',
-  //                       style: TextStyle(
-  //                           fontFamily: 'Mulish',
-  //                           fontWeight: FontWeight.w500,
-  //                           fontSize: 13.sp))),
-  //               Tab(icon: new Icon(Icons.check_circle),
-  //                   child: Text('Di Terima',
-  //                       style: TextStyle(
-  //                           fontFamily: 'Mulish',
-  //                           fontWeight: FontWeight.w500,
-  //                           fontSize: 13.sp))),
-  //             ],
-  //           ),
-  //     ],
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(
@@ -126,7 +85,7 @@ class _diProsesPageState extends State<diProsesPage>
       body: TabBarView(
         controller: controller,
         children: <Widget>[
-         // belumBayar.belumBayarPage(controller),
+          // belumBayar.belumBayarPage(controller),
           belumBayar.pesananBayarPage(controller),
           diKemas.kemasPage(),
           diKirim.kirimPage(),

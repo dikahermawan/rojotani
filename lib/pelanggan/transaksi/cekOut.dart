@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/layout.dart';
+import 'package:rojotani/pelanggan/produk/navPembeli.dart';
 import 'package:rojotani/pelanggan/transaksi/pengiriman/diProses.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,8 +24,7 @@ class _cekoutPageState extends State<cekoutPage> {
       dataPembeli,
       status_pesanan,
       catatan,
-      _future,
-      _futur1;
+      _future;
   final _key = new GlobalKey<FormState>();
 
   errorSnackBar(BuildContext context, String text) {
@@ -111,7 +111,7 @@ class _cekoutPageState extends State<cekoutPage> {
       setState(() {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => diProsesPage()),
+          MaterialPageRoute(builder: (context) => navPembeli()),
         );
       });
     } else {
