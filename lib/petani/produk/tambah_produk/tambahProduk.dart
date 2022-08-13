@@ -25,14 +25,14 @@ class _tambahProdukState extends State<tambahProduk> {
   String nama, satuan, jenis, deskripsi;
   var harga, stok, penjual_id;
   final _key = new GlobalKey<FormState>();
+  File _imageFile;
 
-  File image;
-
-  Future getImage() async {
-    var _image = await ImagePicker.pickImage(source: ImageSource.gallery);
+  //fungsi megambil gambar dari galeri
+  Future _getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     setState(() {
-      image = _image;
+      _imageFile = image;
     });
   }
 
@@ -42,6 +42,8 @@ class _tambahProdukState extends State<tambahProduk> {
   TextEditingController satuanController = TextEditingController();
   TextEditingController jenisController = TextEditingController();
   TextEditingController deskripsiController = TextEditingController();
+
+  //fungsi mengambil id pejual dari penyimpaan lokal
   getPref() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
@@ -49,6 +51,7 @@ class _tambahProdukState extends State<tambahProduk> {
     });
   }
 
+  // fungsi membuat snackbar pemberitahuan
   errorSnackBar(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Color.fromARGB(255, 184, 15, 3),
@@ -57,6 +60,7 @@ class _tambahProdukState extends State<tambahProduk> {
     ));
   }
 
+  // fungsi untuk validasi data
   check() {
     final form = _key.currentState;
     if (form.validate()) {
@@ -65,132 +69,40 @@ class _tambahProdukState extends State<tambahProduk> {
     }
   }
 
+  // fungsi mengirim input data ke database
   tambah() async {
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/produk");
-    final response = await http.post(url, body: {
-      "penjual_id": penjual_id,
-      'nama': namaController.text,
-      'harga': hargaController.text,
-      'stok': stokController.text,
-      'satuan': satuanController.text,
-      'jenis': jenisController.text,
-      'deskripsi': deskripsiController.text,
-    });
-    final data = jsonDecode(response.body);
-    int value = data['success'];
-    var pesan = data['message'];
+    try {
+      var stream =
+          http.ByteStream(DelegatingStream.typed(_imageFile.openRead()));
+      var length = await _imageFile.length();
+      var uri = Uri.parse("http://192.168.43.56:8000/api/produk");
+      var request = http.MultipartRequest("POST", uri);
+      request.fields['penjual_id'] = penjual_id;
+      request.fields['nama'] = namaController.text;
+      request.fields['harga'] = hargaController.text;
+      request.fields['stok'] = stokController.text;
+      request.fields['satuan'] = satuanController.text;
+      request.fields['jenis'] = jenisController.text;
+      request.fields['deskripsi'] = deskripsiController.text;
 
-    if (value == 1) {
-      print(pesan);
-      setState(() {
+      request.files.add(http.MultipartFile("gambar", stream, length,
+          filename: path.basename(_imageFile.path)));
+      var response = await request.send();
+      if (response.statusCode > 2) {
+        print("image upload");
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => navPetani()),
         );
-      });
-    } else {
-      errorSnackBar(context, 'Produk telah tersedia');
+      } else {
+        errorSnackBar(context, 'Produk telah tersedia');
+      }
+    } catch (e) {
+      debugPrint("Error $e");
     }
   }
 
-  // tambah() async {
-  //   try {
-  //     var stream = http.ByteStream(DelegatingStream.typed(image.openRead()));
-  //     var length = await image.length();
-  //     var url = Uri.parse("http://192.168.43.56:8000/api/produk");
-  //     var request = http.MultipartRequest('POST', url);
-  //     var multipartFile = http.MultipartFile(
-  //         'public/storage/app/post-image', stream, length,
-  //         filename: path.basename(image.path));
-
-  //     request.fields['penjual_id'] = penjual_id;
-  //     request.fields['nama'] = namaController.text;
-  //     request.fields['harga'] = hargaController.text;
-  //     request.fields['stok'] = stokController.text;
-  //     request.fields['satuan'] = satuanController.text;
-  //     request.fields['jenis'] = jenisController.text;
-  //     request.fields['deskripsi'] = deskripsiController.text;
-  //     request.files.add(multipartFile);
-
-  //     var response = await request.send();
-  //     response.stream.transform(utf8.decoder).listen((success) {
-  //       final data = jsonDecode(success);
-  //       int valueGet = data['success'];
-  //       var pesan = data['message'];
-  //       if (valueGet == 1) {
-  //         print(pesan);
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(builder: (context) => katalogPage(signOut)),
-  //         );
-  //       } else {
-  //         errorSnackBar(context, 'Produk telah tersedia');
-  //         print(pesan);
-  //       }
-  //     });
-  //   } catch (e) {
-  //     debugPrint('Error $e');
-  //   }
-  // }
-
-//   Future<Map<String, dynamic>> _tambah(File image) async {
-//     setState(() {});
-
-//     SharedPreferences localdata = await SharedPreferences.getInstance();
-//     setState(() {
-//       penjual_id = localdata.getString('penjual_id');
-//     });
-//     print(localdata.getString('penjual_id'));
-
-//     Uri apiUrl = Uri.parse('http://192.168.43.56:8000/api/produk');
-
-//     var stream = http.ByteStream(DelegatingStream.typed(image.openRead()));
-//     var length = await image.length();
-//     // var url = Uri.parse("http://192.168.43.56:8000/api/produk");
-//     var request = http.MultipartRequest('POST', apiUrl);
-//     var multipartFile = http.MultipartFile(
-//         "public/storage/app/post-image", stream, length,
-//         filename: path.basename(image.path));
-//     // Explicitly pass the extension of the image with request body
-//     // Since image_picker has some bugs due which it mixes up
-//     // image extension with file name like this filenamejpge
-//     // Which creates some problem at the server side to manage
-//     // or verify the file extension
-
-// //    imageUploadRequest.fields['ext'] = mimeTypeData[1];
-
-//     request.files.add(multipartFile);
-
-//     request.fields['penjual_id'] = penjual_id;
-//     request.fields['nama'] = namaController.text;
-//     request.fields['harga'] = hargaController.text;
-//     request.fields['stok'] = stokController.text;
-//     request.fields['satuan'] = satuanController.text;
-//     request.fields['jenis'] = jenisController.text;
-//     request.fields['deskripsi'] = deskripsiController.text;
-
-//     try {
-//       final streamedResponse = await request.send();
-//       final response = await http.Response.fromStream(streamedResponse);
-//       Map<String, dynamic> responseData = json.decode(response.body);
-//       int valueGet = responseData['success'];
-//       var pesan = responseData['message'];
-//       if (valueGet == 1) {
-//         print(pesan);
-//         Navigator.push(
-//           context,
-//           MaterialPageRoute(builder: (context) => katalogPage(signOut)),
-//         );
-//       } else {
-//         errorSnackBar(context, 'Produk telah tersedia');
-//         print(pesan);
-//       }
-//     } catch (e) {
-//       print(e);
-//       return null;
-//     }
-//   }
-
+//
   @override
   void initState() {
     // TODO: implement initState
@@ -261,7 +173,7 @@ class _tambahProdukState extends State<tambahProduk> {
                                     Row(
                                       children: [
                                         InkWell(
-                                          onTap: getImage,
+                                          onTap: _getImage,
                                           child: Container(
                                             height: MediaQuery.of(context)
                                                     .size
@@ -278,7 +190,7 @@ class _tambahProdukState extends State<tambahProduk> {
                                                     color: Color(0xFF53B175)),
                                                 borderRadius:
                                                     BorderRadius.circular(5.r)),
-                                            child: image == null
+                                            child: _imageFile == null
                                                 ? Column(
                                                     children: [
                                                       SizedBox(
@@ -323,7 +235,6 @@ class _tambahProdukState extends State<tambahProduk> {
                                                       ],
                                                     ),
                                                   ),
-                                            // : Image.file(_image),
                                           ),
                                         ),
                                       ],

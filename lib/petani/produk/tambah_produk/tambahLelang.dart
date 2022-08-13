@@ -6,8 +6,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/layout.dart';
+import 'package:rojotani/petani/navPetani.dart';
 import 'package:rojotani/petani/produk/katalog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart' as path;
+import 'package:async/src/delegate/stream.dart';
 
 class tambahLelangPage extends StatefulWidget {
   @override
@@ -18,13 +21,14 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
   var penjual_id;
   final _key = new GlobalKey<FormState>();
 
-  File _image;
+  File _imageFile;
 
+  //fungsi megambil gambar dari galeri
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     setState(() {
-      _image = image;
+      _imageFile = image;
     });
   }
 
@@ -36,6 +40,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
   TextEditingController deskripsiController = TextEditingController();
   TextEditingController statusController = TextEditingController();
 
+  // fungsi mengambil id penjual dari penyimpanan lokal
   getPref() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
@@ -43,6 +48,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
     });
   }
 
+  // fungsi membuat snackbar pemberitahuan
   errorSnackBar(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Color.fromARGB(255, 184, 15, 3),
@@ -51,6 +57,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
     ));
   }
 
+// fungsi untuk validasi data
   check() {
     final form = _key.currentState;
     if (form.validate()) {
@@ -59,30 +66,36 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
     }
   }
 
+  // fungsi mengirim input data ke database
   tambah() async {
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/lelang");
-    final response = await http.post(url, body: {
-      "penjual_id": penjual_id,
-      'nama': namaController.text,
-      'harga': hargaController.text,
-      'satuan': satuanController.text,
-      'jenis': jenisController.text,
-      'deskripsi': deskripsiController.text,
-      'status': statusController.text,
-    });
-    final data = jsonDecode(response.body);
-    int value = data['success'];
-    var pesan = data['message'];
-    if (value == 1) {
-      print(pesan);
-      setState(() {
+    try {
+      var stream =
+          http.ByteStream(DelegatingStream.typed(_imageFile.openRead()));
+      var length = await _imageFile.length();
+      var uri = Uri.parse("http://192.168.43.56:8000/api/lelang");
+      var request = http.MultipartRequest("POST", uri);
+      request.fields['penjual_id'] = penjual_id;
+      request.fields['nama'] = namaController.text;
+      request.fields['harga'] = hargaController.text;
+      request.fields['satuan'] = satuanController.text;
+      request.fields['jenis'] = jenisController.text;
+      request.fields['deskripsi'] = deskripsiController.text;
+      request.fields['status'] = statusController.text;
+
+      request.files.add(http.MultipartFile("gambar", stream, length,
+          filename: path.basename(_imageFile.path)));
+      var response = await request.send();
+      if (response.statusCode > 2) {
+        print("image upload");
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => katalogPage()),
+          MaterialPageRoute(builder: (context) => navPetani()),
         );
-      });
-    } else {
-      errorSnackBar(context, 'Produk telah tersedia');
+      } else {
+        errorSnackBar(context, 'Produk telah tersedia');
+      }
+    } catch (e) {
+      debugPrint("Error $e");
     }
   }
 
@@ -91,76 +104,6 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
     // TODO: implement initState
     super.initState();
     getPref();
-  }
-
-  ////////////////////////////////////////////////
-
-  Widget title(String text) {
-    return Padding(
-      padding: EdgeInsets.only(left: 15.w),
-      child: Text(text,
-          style: TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w700)),
-    );
-  }
-
-  Widget titleLandscape(String text) {
-    return Padding(
-      padding: EdgeInsets.only(left: 16.w),
-      child: Text(text,
-          style: TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 35.sp,
-              fontWeight: FontWeight.w700)),
-    );
-  }
-
-  Widget Input(String input) {
-    return Padding(
-      padding: EdgeInsets.only(left: 15.w),
-      child: TextField(
-        decoration: InputDecoration(
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          hintText: input,
-          hintStyle: TextStyle(
-            // <-- Change this
-            fontSize: 16.sp,
-          ),
-          // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
-        ),
-      ),
-    );
-  }
-
-  Widget InputLandscape(String input) {
-    return Padding(
-      padding: EdgeInsets.only(left: 16.w),
-      child: TextField(
-        decoration: InputDecoration(
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          hintText: input,
-          hintStyle: TextStyle(
-            // <-- Change this
-            fontSize: 30.sp,
-          ),
-          // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
-        ),
-      ),
-    );
-  }
-
-  Widget space() {
-    return Column(
-      children: [
-        Divider(
-          thickness: 1,
-        ),
-      ],
-    );
   }
 
   @override
@@ -240,7 +183,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
                                             color: Color(0xFF53B175)),
                                         borderRadius:
                                             BorderRadius.circular(5.r)),
-                                    child: _image == null
+                                    child: _imageFile == null
                                         ? Column(
                                             children: [
                                               SizedBox(
@@ -545,7 +488,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             5.r)),
-                                                child: _image == null
+                                                child: _imageFile == null
                                                     ? Column(
                                                         children: [
                                                           SizedBox(
@@ -722,27 +665,27 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
                                         Divider(
                                           thickness: 1,
                                         ),
-                                        // Text('waktu Lelang',
-                                        // style: TextStyle(
-                                        // fontFamily: 'Mulish',
-                                        // fontSize: 18.sp,
-                                        // fontWeight: FontWeight.w600)),
-                                        // TextFormField(
-                                        // validator: (waktuController) {
-                                        // if (waktuController.isEmpty) {
-                                        // return 'masukkan waktu';
-                                        // }
-                                        // },
-                                        // controller: waktuController,
-                                        // decoration: InputDecoration(
-                                        // enabledBorder: InputBorder.none,
-                                        // focusedBorder: InputBorder.none,
-                                        // hintText: 'masukkan waktu',
-                                        // hintStyle: TextStyle(
-                                        // fontSize: 16.sp,
-                                        // ),
-                                        // ),
-                                        // ),
+                                        Text('Status Lelang',
+                                            style: TextStyle(
+                                                fontFamily: 'Mulish',
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w600)),
+                                        TextFormField(
+                                          validator: (waktuController) {
+                                            if (waktuController.isEmpty) {
+                                              return 'masukkan waktu';
+                                            }
+                                          },
+                                          controller: statusController,
+                                          decoration: InputDecoration(
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            hintText: 'masukkan waktu',
+                                            hintStyle: TextStyle(
+                                              fontSize: 16.sp,
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),

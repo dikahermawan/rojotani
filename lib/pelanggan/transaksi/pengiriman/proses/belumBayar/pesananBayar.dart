@@ -41,14 +41,15 @@ class _pesananBayarPageState extends State<pesananBayarPage> {
 
 // fungsi utuk memaggil data dari tabel cekout dan pembeli
   Future getCekout() async {
-    SharedPreferences localdata = await SharedPreferences.getInstance();
+    SharedPreferences localId = await SharedPreferences.getInstance();
     setState(() {
-      cekout_id = localdata.getString('cekout_id');
+      pembeli_id = localId.getString('pembeli_id');
     });
     final String url =
         'http://192.168.43.56:8000/api/bayar/ambildata'; //api menampilkan data  dari cekout id
     final response = await http.post(url, body: {
-      "cekout_id": cekout_id, // mengirim  id sesuai data yag diminta
+      // mengirim  id sesuai data yag diminta
+
       "pembeli_id": pembeli_id,
     });
     return jsonDecode(response.body);
@@ -101,19 +102,10 @@ class _pesananBayarPageState extends State<pesananBayarPage> {
     }
   }
 
-// fungsi memanggil id pembeli yag disimpan dilokal
-  getPembeli() async {
-    SharedPreferences localId = await SharedPreferences.getInstance();
-    setState(() {
-      pembeli_id = localId.getString('pembeli_id');
-    });
-  }
-
 // mengatasi perubahan yang terjadi
   @override
   void initState() {
     super.initState();
-    getPembeli();
     _future = getCekout();
   }
 

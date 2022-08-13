@@ -191,7 +191,7 @@ class _productCardState extends State<productCard> {
                                   child: Padding(
                                     padding: EdgeInsets.only(top: 8),
                                     child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(5),
                                         child: Image.network(
                                           'http://192.168.43.56:8000/img/produk/' +
                                               snapshot.data['data'][index][

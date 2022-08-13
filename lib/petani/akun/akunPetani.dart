@@ -9,11 +9,7 @@ import 'package:rojotani/petani/akun/katasandi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class akunPetani extends StatefulWidget {
-  // const akunPetani({Key key}) : super(key: key);
-
   @override
-  // final VoidCallback signOut;
-  // akunPetani(this.signOut);
   State<akunPetani> createState() => _akunPetaniState();
 }
 
@@ -55,15 +51,14 @@ class _akunPetaniState extends State<akunPetani> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 1,
-          title: Center(
-            child: Text(
-              'Akun',
-              style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 23.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black),
-            ),
+          centerTitle: true,
+          title: Text(
+            'Akun',
+            style: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 23.sp,
+                fontWeight: FontWeight.w600,
+                color: Colors.black),
           ),
         ),
         body: SafeArea(

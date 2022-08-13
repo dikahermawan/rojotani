@@ -310,7 +310,7 @@ class _lelangCardState extends State<lelangCard> {
                                             ),
                                             child: ClipRRect(
                                                 borderRadius:
-                                                    BorderRadius.circular(25),
+                                                    BorderRadius.circular(5),
                                                 child: Image.network(
                                                   'http://192.168.43.56:8000/imglelang/lelang/' +
                                                       snapshot.data[index][
