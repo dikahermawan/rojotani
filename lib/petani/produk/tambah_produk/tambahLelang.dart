@@ -18,7 +18,7 @@ class tambahLelangPage extends StatefulWidget {
 }
 
 class _tambahLelangPageState extends State<tambahLelangPage> {
-  var penjual_id;
+  var penjual_id, lelang_id;
   final _key = new GlobalKey<FormState>();
 
   File _imageFile;
@@ -46,6 +46,11 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
     setState(() {
       penjual_id = localdata.getString('penjual_id');
     });
+  }
+
+  Future getDataLelang() async {
+    SharedPreferences dataLelang = await SharedPreferences.getInstance();
+    dataLelang..setString('lelang_id', lelang_id.toString());
   }
 
   // fungsi membuat snackbar pemberitahuan
@@ -85,6 +90,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
       request.files.add(http.MultipartFile("gambar", stream, length,
           filename: path.basename(_imageFile.path)));
       var response = await request.send();
+
       if (response.statusCode > 2) {
         print("image upload");
         Navigator.push(
@@ -104,6 +110,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
     // TODO: implement initState
     super.initState();
     getPref();
+    getDataLelang();
   }
 
   @override
@@ -712,7 +719,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
                                       },
                                       child: Center(
                                         child: Text(
-                                          'Daftar',
+                                          'Tambah',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 18.sp,

@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rojotani/pelanggan/produk/tawar/tawar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class lelangCard extends StatefulWidget {
   @override
@@ -15,6 +17,11 @@ class _lelangCardState extends State<lelangCard> {
     var response = await http.get(url); //api menampilkan data produk
     print(json.decode(response.body));
     return json.decode(response.body);
+  }
+
+  Future getDataLelang(lelang_id) async {
+    SharedPreferences dataLelang = await SharedPreferences.getInstance();
+    dataLelang..setString('lelang_id', lelang_id.toString());
   }
 
   @override
@@ -296,7 +303,16 @@ class _lelangCardState extends State<lelangCard> {
                                               const EdgeInsets.only(bottom: 5),
                                           child: Material(
                                             child: InkWell(
-                                              onTap: () {},
+                                              onTap: () {
+                                                getDataLelang(snapshot
+                                                    .data['data'][index]['id']);
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          tawar()),
+                                                );
+                                              },
                                               child: Container(
                                                 width: size.width * 0.35,
                                                 height: size.height * 0.04,

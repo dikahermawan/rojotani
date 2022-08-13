@@ -102,7 +102,7 @@ class _cekoutPageState extends State<cekoutPage> {
     var value = data['success'];
     pesan = data['message'];
 
-    // menyimpan da menyediakan data id penjual secara local
+    // menyimpan dan menyediakan data id penjual secara local untuk digunakan berikutnya
     SharedPreferences cekoutdata = await SharedPreferences.getInstance();
     cekoutdata.setString('cekout_id', data['cekout_id']);
 
