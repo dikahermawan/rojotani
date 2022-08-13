@@ -59,7 +59,6 @@ class _daftarTawarState extends State<daftarTawar> {
                   child: Column(
                     children: [
                       Container(
-                        color: Colors.blue,
                         height: MediaQuery.of(context).size.height * 0.45,
                         child: Image.asset(
                           'asset/gambar/nangka.png',
@@ -175,8 +174,8 @@ class _daftarTawarState extends State<daftarTawar> {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
-                          right: MediaQueryWidth * 0.55,
-                          top: MediaQueryHeight * 0.007),
+                          right: MediaQueryWidth * 0.53,
+                          top: MediaQueryHeight * 0.008),
                       child: Text(
                         'Daftar Tawaran',
                         style: TextStyle(
@@ -187,12 +186,57 @@ class _daftarTawarState extends State<daftarTawar> {
                       ),
                     ),
                     SizedBox(
-                      height: 17.h,
+                      height: 5.h,
                     ),
-                    Card(
-                      child: Text('coba'),
-                      color: Colors.blue,
-                      elevation: 5,
+                    InkWell(
+                      onTap: (() {}),
+                      child: Container(
+                        width: MediaQueryWidth * 0.93,
+                        height: MediaQueryHeight * 0.08,
+                        child: Card(
+                          child: Row(
+                            children: [
+                              Icon(Icons.person),
+                              SizedBox(
+                                width: 5.sp,
+                              ),
+                              Container(
+                                width: MediaQueryWidth * 0.4,
+                                child: Text(
+                                  'Dika Hermawan',
+                                  style: TextStyle(
+                                      fontFamily: 'Mulish',
+                                      color: Colors.black,
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 65.sp,
+                              ),
+                              Container(
+                                width: MediaQueryWidth * 0.22,
+                                child: Text(
+                                  'Rp. 5000000',
+                                  style: TextStyle(
+                                      fontFamily: 'Mulish',
+                                      color: Color(0xFF53B175),
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 5.sp,
+                              ),
+                              Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Icon(Icons.arrow_forward_ios_rounded)
+                                  ]),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: 20,
