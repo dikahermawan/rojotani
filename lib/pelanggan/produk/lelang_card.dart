@@ -210,14 +210,14 @@ class _lelangCardState extends State<lelangCard> {
                                     Expanded(
                                       child: Padding(
                                         padding: EdgeInsets.all(10),
-                                        child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(5.r),
-                                            child: Image.network(
-                                              'http://192.168.43.56:8000/imglelang/lelang/' +
-                                                  snapshot.data['data'][index][
-                                                      'gambar'], // alamat untuk mengambil gambar
-                                            )),
+                                        // child: ClipRRect(
+                                        //     borderRadius:
+                                        //         BorderRadius.circular(5.r),
+                                        //     child: Image.network(
+                                        //       'http://192.168.43.56:8000/imglelang/lelang/' +
+                                        //           snapshot.data['data'][index][
+                                        //               'gambar'], // alamat untuk mengambil gambar
+                                        //     )),
                                       ),
                                     ),
                                     Row(

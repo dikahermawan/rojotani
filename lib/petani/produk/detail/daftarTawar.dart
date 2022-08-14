@@ -196,6 +196,9 @@ class _daftarTawarState extends State<daftarTawar> {
                         child: Card(
                           child: Row(
                             children: [
+                              SizedBox(
+                                width: 5.sp,
+                              ),
                               Icon(Icons.person),
                               SizedBox(
                                 width: 5.sp,
@@ -212,7 +215,7 @@ class _daftarTawarState extends State<daftarTawar> {
                                 ),
                               ),
                               SizedBox(
-                                width: 65.sp,
+                                width: 40.sp,
                               ),
                               Container(
                                 width: MediaQueryWidth * 0.22,

@@ -348,7 +348,6 @@ class _editProdukState extends State<editProduk> {
                                 child: InkWell(
                                   onTap: () {
                                     check();
-
                                     // print(penjual_id.toString());
                                   },
                                   child: Center(

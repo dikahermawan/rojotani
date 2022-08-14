@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rojotani/petani/produk/detail/daftarTawar.dart';
 import 'package:rojotani/petani/produk/tambah_produk/editLelang.dart';
 import 'package:rojotani/petani/produk/tambah_produk/tambahLelang.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,8 +16,8 @@ class _lelangCardState extends State<lelangCard> {
   var penjual_id;
   var _future;
 
-  //function menampilkan data produk
-  Future getProducts() async {
+  //function menampilkan data lelang
+  Future getLelangs() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
       penjual_id = localdata.getString('penjual_id');
@@ -30,7 +31,7 @@ class _lelangCardState extends State<lelangCard> {
     return jsonDecode(response.body);
   }
 
-  Future getDataBarang(lelang_id) async {
+  Future getData(lelang_id) async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     localdata..setString('lelang_id', lelang_id.toString());
   }
@@ -42,9 +43,9 @@ class _lelangCardState extends State<lelangCard> {
         id; //api menghapus data produk
     var response = await http.delete(Uri.parse(url));
     setState(() {
-      _future = getProducts();
+      _future = getLelangs();
     });
-    // print(json.decode(response.body));
+    print(json.decode(response.body));
     return json.decode(response.body);
   }
 
@@ -122,7 +123,7 @@ class _lelangCardState extends State<lelangCard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _future = getProducts();
+    _future = getLelangs();
   }
 
   @override
@@ -300,7 +301,11 @@ class _lelangCardState extends State<lelangCard> {
                                         width: 1.w, color: Colors.grey),
                                   ),
                                   child: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Route route = MaterialPageRoute(
+                                          builder: (context) => daftarTawar());
+                                      Navigator.push(context, route);
+                                    },
                                     child: Column(
                                       children: [
                                         Expanded(
@@ -392,8 +397,8 @@ class _lelangCardState extends State<lelangCard> {
                                           children: [
                                             IconButton(
                                                 onPressed: () {
-                                                  getDataBarang(snapshot
-                                                      .data[index]['id']);
+                                                  getData(snapshot.data[index]
+                                                      ['id']);
                                                   Route route =
                                                       MaterialPageRoute(
                                                           builder: (context) =>
