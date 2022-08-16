@@ -48,9 +48,7 @@ class _pesananBayarPageState extends State<pesananBayarPage> {
     final String url =
         'http://192.168.43.56:8000/api/bayar/ambildata'; //api menampilkan data  dari cekout id
     final response = await http.post(url, body: {
-      // mengirim  id sesuai data yag diminta
-
-      "pembeli_id": pembeli_id,
+      "pembeli_id": pembeli_id, // mengirim  id sesuai data yag diminta
     });
     return jsonDecode(response.body);
   }

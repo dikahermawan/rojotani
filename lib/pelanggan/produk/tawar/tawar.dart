@@ -75,7 +75,7 @@ class _tawarState extends State<tawar> {
 
     // menyimpan dan menyediakan data id penjual secara local untuk digunakan berikutnya
     SharedPreferences tawardata = await SharedPreferences.getInstance();
-    tawardata.setString('tawar_id', data['tawar_id']);
+    tawardata..setString('tawar_id', data['tawar_id']);
 
     if (value == 1) {
       print(pesan);

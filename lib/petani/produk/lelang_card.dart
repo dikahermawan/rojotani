@@ -31,13 +31,12 @@ class _lelangCardState extends State<lelangCard> {
     return jsonDecode(response.body);
   }
 
-  Future getData(lelang_id) async {
+  Future getLelangData(lelang_id) async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     localdata..setString('lelang_id', lelang_id.toString());
   }
 
   //function delete
-
   Future deleteLelang(id) async {
     String url = 'http://192.168.43.56:8000/api/deleteLelang/' +
         id; //api menghapus data produk
@@ -302,9 +301,13 @@ class _lelangCardState extends State<lelangCard> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
-                                      Route route = MaterialPageRoute(
-                                          builder: (context) => daftarTawar());
-                                      Navigator.push(context, route);
+                                      getLelangData(snapshot.data[index]['id']);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                daftarTawar()),
+                                      );
                                     },
                                     child: Column(
                                       children: [
@@ -397,8 +400,8 @@ class _lelangCardState extends State<lelangCard> {
                                           children: [
                                             IconButton(
                                                 onPressed: () {
-                                                  getData(snapshot.data[index]
-                                                      ['id']);
+                                                  getLelangData(snapshot
+                                                      .data[index]['id']);
                                                   Route route =
                                                       MaterialPageRoute(
                                                           builder: (context) =>
