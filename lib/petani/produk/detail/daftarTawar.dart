@@ -149,14 +149,15 @@ class _daftarTawarState extends State<daftarTawar> {
                           child: Column(
                             children: [
                               Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.45,
-                                  child: Image.network(
-                                    'http://192.168.43.56:8000/imglelang/lelang/' +
-                                        snapshot.data['lelang']['gambar'],
-                                    fit: BoxFit
-                                        .fill, // alamat untuk mengambil gambar
-                                  )),
+                                height:
+                                    MediaQuery.of(context).size.height * 0.45,
+                                // child: Image.network(
+                                //   'http://192.168.43.56:8000/imglelang/lelang/' +
+                                //       snapshot.data['lelang']['gambar'],
+                                //   fit: BoxFit
+                                //       .fill, // alamat untuk mengambil gambar
+                                // )
+                              ),
                               SizedBox(
                                 height: 10.h,
                               ),

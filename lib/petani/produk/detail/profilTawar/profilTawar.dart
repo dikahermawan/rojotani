@@ -26,6 +26,20 @@ class _profilTawarState extends State<profilTawar> {
     ));
   }
 
+  Future getDataTawar() async {
+    SharedPreferences localdata = await SharedPreferences.getInstance();
+    setState(() {
+      tawar_id = localdata.getString('tawar_id');
+    });
+    final String url =
+        'http://192.168.43.56:8000/api/datatawarid'; //api menampilkan data tawar
+    final response = await http.post(url, body: {
+      "tawar_id": tawar_id,
+      // "penjual_id": penjual_id,
+    });
+    return jsonDecode(response.body);
+  }
+
   update() async {
     SharedPreferences dataTawar = await SharedPreferences.getInstance();
     setState(() {
@@ -64,6 +78,7 @@ class _profilTawarState extends State<profilTawar> {
   void initState() {
     super.initState();
     getWar();
+    _future = getDataTawar();
   }
 
   @override
@@ -104,17 +119,150 @@ class _profilTawarState extends State<profilTawar> {
           ),
           centerTitle: true,
         ),
-        body: SafeArea(
-            child: Center(
-          child: InkWell(
-            onTap: () {
-              update();
-            },
-            child: Container(
-                color: Colors.blue,
-                height: MediaQueryHeight * 0.1,
-                width: MediaQueryWidth * 0.3),
-          ),
-        )));
+        body: FutureBuilder(
+            future: _future,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return SafeArea(
+                    child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32.w),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 40.h,
+                      ),
+                      Container(
+                        height: MediaQueryHeight * 0.45,
+                        width: MediaQueryWidth * 0.9,
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 204, 204, 204),
+                            borderRadius: BorderRadius.circular(10.r)),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            Container(
+                                width: 100,
+                                height: 100,
+                                decoration: ShapeDecoration(
+                                  color: Colors.blue,
+                                  shape: CircleBorder(),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(500.r),
+                                  child: Image.asset(
+                                    'asset/profil/kosong.png',
+                                    fit: BoxFit.cover,
+                                  ),
+
+                                  // alamat untuk mengambil gambar
+                                )),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            Text(
+                              snapshot.data['nama_pembeli'],
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 21.sp,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black),
+                            ),
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            Divider(
+                              thickness: 3,
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 70.w),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Alamat :',
+                                    style: TextStyle(
+                                        fontFamily: 'Mulish',
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black),
+                                  ),
+                                  SizedBox(
+                                    height: 5.h,
+                                  ),
+                                  Text(
+                                    'Grogol Giri Bayuwangi',
+                                    style: TextStyle(
+                                        fontFamily: 'Mulish',
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black),
+                                  ),
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
+                                  Text(
+                                    'Tawaran :',
+                                    style: TextStyle(
+                                        fontFamily: 'Mulish',
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black),
+                                  ),
+                                  SizedBox(
+                                    height: 5.h,
+                                  ),
+                                  Text(
+                                    'Rp. 5000',
+                                    style: TextStyle(
+                                        fontFamily: 'Mulish',
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color.fromARGB(255, 230, 97, 9)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: MediaQueryHeight * 0.28,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          update();
+                        },
+                        child: Container(
+                          height: MediaQueryHeight * 0.073,
+                          width: MediaQueryWidth * 0.38,
+                          decoration: BoxDecoration(
+                              color: Color(0xFF53B175),
+                              borderRadius: BorderRadius.circular(10.r)),
+                          child: Center(
+                            child: Text(
+                              'Terima',
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 23.sp,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ));
+              } else {
+                return Center(
+                  child: Text('Load...'),
+                );
+              }
+            }));
   }
 }

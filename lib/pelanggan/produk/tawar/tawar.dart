@@ -153,15 +153,16 @@ class _tawarState extends State<tawar> {
                             child: Column(
                               children: [
                                 Container(
-                                    color: Colors.blue,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.45,
-                                    child: Image.network(
-                                      'http://192.168.43.56:8000/imglelang/lelang/' +
-                                          snapshot.data['lelang']['gambar'],
-                                      fit: BoxFit
-                                          .fill, // alamat untuk mengambil gambar
-                                    )),
+                                  color: Colors.blue,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.45,
+                                  // child: Image.network(
+                                  //   'http://192.168.43.56:8000/imglelang/lelang/' +
+                                  //       snapshot.data['lelang']['gambar'],
+                                  //   fit: BoxFit
+                                  //       .fill, // alamat untuk mengambil gambar
+                                  // )
+                                ),
                                 SizedBox(
                                   height: 10.h,
                                 ),

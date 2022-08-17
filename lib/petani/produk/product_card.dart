@@ -297,13 +297,14 @@ class _productCardState extends State<productCard> {
                                               5,
                                             ),
                                             child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                child: Image.network(
-                                                  'http://192.168.43.56:8000/img/produk/' +
-                                                      snapshot.data[index][
-                                                          'gambar'], // alamat untuk mengambil gambar
-                                                )),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              // child: Image.network(
+                                              //   'http://192.168.43.56:8000/img/produk/' +
+                                              //       snapshot.data[index][
+                                              //           'gambar'], // alamat untuk mengambil gambar
+                                              // )
+                                            ),
                                           ),
                                         ),
                                         SizedBox(

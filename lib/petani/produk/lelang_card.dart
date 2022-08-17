@@ -110,14 +110,6 @@ class _lelangCardState extends State<lelangCard> {
         });
   }
 
-  // Future deleteProduct(String produk_id) async {
-  //   String url = 'http://192.168.0.105:8000/api/delete/' +
-  //       produk_id; //api menghapus data produk
-  //   var response = await http.delete(Uri.parse(url));
-  //   print(json.decode(response.body));
-  //   return json.decode(response.body);
-  // }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -317,13 +309,14 @@ class _lelangCardState extends State<lelangCard> {
                                               5,
                                             ),
                                             child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                child: Image.network(
-                                                  'http://192.168.43.56:8000/imglelang/lelang/' +
-                                                      snapshot.data[index][
-                                                          'gambar'], // alamat untuk mengambil gambar
-                                                )),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              // child: Image.network(
+                                              //   'http://192.168.43.56:8000/imglelang/lelang/' +
+                                              //       snapshot.data[index][
+                                              //           'gambar'], // alamat untuk mengambil gambar
+                                              // )
+                                            ),
                                           ),
                                         ),
                                         Row(
