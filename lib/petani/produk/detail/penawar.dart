@@ -53,6 +53,11 @@ class _penawarState extends State<penawar> {
     tawardata..setString('tawar_id', tawar_id.toString());
   }
 
+  Future getPembeliData(pembeli_id) async {
+    SharedPreferences pembelidata = await SharedPreferences.getInstance();
+    pembelidata..setString('pembeli_id', pembeli_id.toString());
+  }
+
   @override
   void initState() {
     super.initState();

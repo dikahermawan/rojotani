@@ -3,6 +3,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rojotani/pelanggan/produk/detail/detailProduk.dart';
+import 'package:rojotani/petani/navPetani.dart';
 import 'package:rojotani/petani/produk/detail/penawar.dart';
 import 'package:rojotani/petani/produk/detail/profilTawar/profilTawar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -122,7 +123,10 @@ class _daftarTawarState extends State<daftarTawar> {
               color: Colors.black,
             ),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => navPetani()),
+              );
             },
           ),
           title: Text(

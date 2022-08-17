@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:rojotani/pelanggan/produk/detail/detailProduk.dart';
+import 'package:rojotani/petani/produk/detail/daftarTawar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -15,7 +15,7 @@ class profilTawar extends StatefulWidget {
 }
 
 class _profilTawarState extends State<profilTawar> {
-  var lelang_id, tawar_id, status_tawar = 'terima', pesan, _future;
+  var lelang_id, pembeli_id, tawar_id, status_tawar = 'terima', pesan, _future;
   final _key = new GlobalKey<FormState>();
 
   errorSnackBar(BuildContext context, String text) {
@@ -35,7 +35,7 @@ class _profilTawarState extends State<profilTawar> {
         'http://192.168.43.56:8000/api/datatawarid'; //api menampilkan data tawar
     final response = await http.post(url, body: {
       "tawar_id": tawar_id,
-      // "penjual_id": penjual_id,
+      // "pembeli_id": pembeli_id,
     });
     return jsonDecode(response.body);
   }
@@ -59,7 +59,7 @@ class _profilTawarState extends State<profilTawar> {
       setState(() {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => detailProduk()),
+          MaterialPageRoute(builder: (context) => daftarTawar()),
         );
       });
     } else {
@@ -74,10 +74,18 @@ class _profilTawarState extends State<profilTawar> {
     });
   }
 
+  // getPem() async {
+  //   SharedPreferences localId = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     pembeli_id = localId.getString('pembeli_id');
+  //   });
+  // }
+
   @override
   void initState() {
     super.initState();
     getWar();
+    // getPem();
     _future = getDataTawar();
   }
 
@@ -150,14 +158,16 @@ class _profilTawarState extends State<profilTawar> {
                                   shape: CircleBorder(),
                                 ),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(500.r),
-                                  child: Image.asset(
-                                    'asset/profil/kosong.png',
-                                    fit: BoxFit.cover,
-                                  ),
+                                    borderRadius: BorderRadius.circular(500.r),
+                                    child: Image.network(
+                                      'http://192.168.43.56:8000/img/userpembeli/' +
+                                          snapshot.data['gambar'],
+                                      fit: BoxFit
+                                          .fill, // alamat untuk mengambil gambar
+                                    )
 
-                                  // alamat untuk mengambil gambar
-                                )),
+                                    // alamat untuk mengambil gambar
+                                    )),
                             SizedBox(
                               height: 5.h,
                             ),
@@ -179,52 +189,57 @@ class _profilTawarState extends State<profilTawar> {
                               height: 20.h,
                             ),
                             Padding(
-                              padding: EdgeInsets.only(right: 70.w),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Alamat :',
-                                    style: TextStyle(
-                                        fontFamily: 'Mulish',
-                                        fontSize: 20.sp,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black),
-                                  ),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  Text(
-                                    'Grogol Giri Bayuwangi',
-                                    style: TextStyle(
-                                        fontFamily: 'Mulish',
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black),
-                                  ),
-                                  SizedBox(
-                                    height: 20.h,
-                                  ),
-                                  Text(
-                                    'Tawaran :',
-                                    style: TextStyle(
-                                        fontFamily: 'Mulish',
-                                        fontSize: 20.sp,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black),
-                                  ),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  Text(
-                                    'Rp. 5000',
-                                    style: TextStyle(
-                                        fontFamily: 'Mulish',
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.w500,
-                                        color: Color.fromARGB(255, 230, 97, 9)),
-                                  ),
-                                ],
+                              padding: EdgeInsets.only(right: 150.w),
+                              child: Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Alamat :',
+                                      style: TextStyle(
+                                          fontFamily: 'Mulish',
+                                          fontSize: 20.sp,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(
+                                      height: 5.h,
+                                    ),
+                                    Text(
+                                      snapshot.data['alamat'],
+                                      style: TextStyle(
+                                          fontFamily: 'Mulish',
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    Text(
+                                      'Tawaran :',
+                                      style: TextStyle(
+                                          fontFamily: 'Mulish',
+                                          fontSize: 20.sp,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(
+                                      height: 5.h,
+                                    ),
+                                    Text(
+                                      'Rp. ' +
+                                          snapshot.data['harga_tawar']
+                                              .toString(),
+                                      style: TextStyle(
+                                          fontFamily: 'Mulish',
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color:
+                                              Color.fromARGB(255, 230, 97, 9)),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
