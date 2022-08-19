@@ -46,7 +46,7 @@ class _pesananBayarPageState extends State<pesananBayarPage> {
       pembeli_id = localId.getString('pembeli_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/bayar/ambildata'; //api menampilkan data  dari cekout id
+        'http://192.168.43.56:8000/api/status/belum'; //api menampilkan data  dari cekout id
     final response = await http.post(url, body: {
       "pembeli_id": pembeli_id, // mengirim  id sesuai data yag diminta
     });
