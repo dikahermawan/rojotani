@@ -188,8 +188,15 @@ class _tawarState extends State<tawar> {
                                   child: Align(
                                     alignment: Alignment.bottomLeft,
                                     child: Text(
-                                      'Minimal harga Rp. ' +
-                                          snapshot.data['lelang']['harga'],
+                                      'Minimal Rp. ' +
+                                          snapshot.data['lelang']['harga']
+                                              .toString() +
+                                          '  |  ' +
+                                          'jumlah ' +
+                                          snapshot.data['lelang']['jumlah']
+                                              .toString() +
+                                          ' ' +
+                                          snapshot.data['lelang']['satuan'],
                                       style: TextStyle(
                                         color: Color(0xFF53B175),
                                         fontFamily: 'Mulish',

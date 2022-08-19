@@ -34,7 +34,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
 
   TextEditingController namaController = TextEditingController();
   TextEditingController hargaController = TextEditingController();
-  TextEditingController stokController = TextEditingController();
+  TextEditingController jumlahController = TextEditingController();
   TextEditingController satuanController = TextEditingController();
   TextEditingController jenisController = TextEditingController();
   TextEditingController deskripsiController = TextEditingController();
@@ -82,6 +82,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
       request.fields['penjual_id'] = penjual_id;
       request.fields['nama'] = namaController.text;
       request.fields['harga'] = hargaController.text;
+      request.fields['jumlah'] = hargaController.text;
       request.fields['satuan'] = satuanController.text;
       request.fields['jenis'] = jenisController.text;
       request.fields['deskripsi'] = deskripsiController.text;
@@ -275,6 +276,25 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
                               enabledBorder: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               hintText: 'masukkan harga',
+                              hintStyle: TextStyle(
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ),
+                          Divider(
+                            thickness: 1,
+                          ),
+                          TextFormField(
+                            validator: (jumlahController) {
+                              if (jumlahController.isEmpty) {
+                                return 'masukkan jumlah';
+                              }
+                            },
+                            controller: jumlahController,
+                            decoration: InputDecoration(
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              hintText: 'masukkan jumlah',
                               hintStyle: TextStyle(
                                 fontSize: 16.sp,
                               ),
@@ -592,6 +612,30 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
                                             enabledBorder: InputBorder.none,
                                             focusedBorder: InputBorder.none,
                                             hintText: 'masukkan harga',
+                                            hintStyle: TextStyle(
+                                              fontSize: 16.sp,
+                                            ),
+                                          ),
+                                        ),
+                                        Divider(
+                                          thickness: 1,
+                                        ),
+                                        Text('Jumlah Produk',
+                                            style: TextStyle(
+                                                fontFamily: 'Mulish',
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w600)),
+                                        TextFormField(
+                                          validator: (jumlahController) {
+                                            if (jumlahController.isEmpty) {
+                                              return 'masukkan jumlah';
+                                            }
+                                          },
+                                          controller: jumlahController,
+                                          decoration: InputDecoration(
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            hintText: 'masukkan jumlah',
                                             hintStyle: TextStyle(
                                               fontSize: 16.sp,
                                             ),

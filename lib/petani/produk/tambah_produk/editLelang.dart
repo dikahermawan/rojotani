@@ -19,8 +19,8 @@ class editLelang extends StatefulWidget {
 
 class _editLelangState extends State<editLelang> {
   bool isHiddenPassword = true;
-  String nama, satuan, jenis, deskripsi, status;
-  var namaL, hargaL, stokL, satuanL, jenisL, deskripsiL, statusL;
+  String nama, satuan, jumlah, jenis, deskripsi, status;
+  var namaL, hargaL, jumlahL, satuanL, jenisL, deskripsiL, statusL;
   var harga, stok, penjual_id, lelang_id, dataLelang;
   final _key = new GlobalKey<FormState>();
 
@@ -45,6 +45,7 @@ class _editLelangState extends State<editLelang> {
     setState(() {
       namaL = dataLelang['nama'];
       hargaL = dataLelang['harga'].toString();
+      jumlahL = dataLelang['jumlah'].toString();
       satuanL = dataLelang['satuan'];
       jenisL = dataLelang['jenis'];
       deskripsiL = dataLelang['deskripsi'];
@@ -66,6 +67,7 @@ class _editLelangState extends State<editLelang> {
       "lelang_id": lelang_id,
       'nama': nama,
       'harga': harga,
+      'jumlah': jumlah,
       'satuan': satuan,
       'jenis': jenis,
       'deskripsi': deskripsi,
@@ -231,7 +233,35 @@ class _editLelangState extends State<editLelang> {
                                       decoration: InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
-                                        hintText: 'masukkan harga',
+                                        hintText: 'masukkan satuan',
+                                        hintStyle: TextStyle(
+                                          // <-- Change this
+                                          fontSize: 16.sp,
+                                        ),
+                                        // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    Text('jumlah Produk',
+                                        style: TextStyle(
+                                            fontFamily: 'Mulish',
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w600)),
+                                    TextFormField(
+                                      validator: (e) {
+                                        if (e.isEmpty) {
+                                          return 'masukkan jumlah';
+                                        }
+                                      },
+                                      onSaved: (e) => jumlah = e,
+                                      controller:
+                                          TextEditingController(text: jumlahL),
+                                      decoration: InputDecoration(
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        hintText: 'masukkan jumlah',
                                         hintStyle: TextStyle(
                                           // <-- Change this
                                           fontSize: 16.sp,

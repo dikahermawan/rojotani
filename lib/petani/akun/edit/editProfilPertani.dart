@@ -299,7 +299,7 @@ class _editProfilPetaniState extends State<editProfilPetani> {
                                             ),
                                           ),
                                     SizedBox(
-                                      height: 20.h,
+                                      height: 50.h,
                                     ),
                                     Text('Nama',
                                         style: TextStyle(
@@ -365,34 +365,8 @@ class _editProfilPetaniState extends State<editProfilPetani> {
                                     SizedBox(
                                       height: 20.h,
                                     ),
-                                    Text('No. Rekening',
-                                        style: TextStyle(
-                                            fontFamily: 'Mulish',
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w600)),
-                                    TextFormField(
-                                      validator: (rekeningController) {
-                                        if (rekeningController.isEmpty) {
-                                          return 'masukkan rekening';
-                                        }
-                                      },
-                                      controller: rekeningController,
-                                      decoration: InputDecoration(
-                                        enabledBorder: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        hintText: 'masukkan nomor rekening',
-                                        hintStyle: TextStyle(
-                                          // <-- Change this
-                                          fontSize: 16.sp,
-                                        ),
-                                        // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
-                                      ),
-                                    ),
                                     SizedBox(
                                       height: 2.h,
-                                    ),
-                                    Divider(
-                                      thickness: 2,
                                     ),
                                     SizedBox(
                                       height: 10.h,

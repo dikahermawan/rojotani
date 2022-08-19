@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,6 +15,7 @@ class akunPetani extends StatefulWidget {
 }
 
 class _akunPetaniState extends State<akunPetani> {
+  var penjual_id, _future;
   File _image;
 
   Future getImage() async {
@@ -29,6 +31,33 @@ class _akunPetaniState extends State<akunPetani> {
     preferences.clear();
     Route route = MaterialPageRoute(builder: (context) => loginPetaniPage());
     Navigator.push(context, route);
+  }
+
+  Future getDataPenjual() async {
+    SharedPreferences localdata = await SharedPreferences.getInstance();
+    setState(() {
+      penjual_id = localdata.getString('penjual_id');
+    });
+    final String url =
+        'http://192.168.43.56:8000/api/datapenjual'; //api menampilkan data produk
+    final response = await http.post(url, body: {
+      "penjual_id": penjual_id,
+    });
+    print(jsonDecode(response.body));
+    return jsonDecode(response.body);
+  }
+
+  // getPref() async {
+  //   SharedPreferences localdata = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     penjual_id = localdata.getString('penjual_id');
+  //   });
+  // }
+
+  @override
+  void initState() {
+    // getPref();
+    _future = getDataPenjual();
   }
 
   @override
@@ -53,7 +82,7 @@ class _akunPetaniState extends State<akunPetani> {
           elevation: 1,
           centerTitle: true,
           title: Text(
-            'Akun',
+            'Akun ',
             style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 23.sp,
@@ -61,266 +90,318 @@ class _akunPetaniState extends State<akunPetani> {
                 color: Colors.black),
           ),
         ),
-        body: SafeArea(
-            child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 23.w),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 40.h),
-                _image == null
-                    ? Center(
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.22,
-                          width: MediaQuery.of(context).size.width * 0.45,
-                          child: Stack(
-                            children: [
-                              Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.22,
-                                width: MediaQuery.of(context).size.width * 0.42,
-                                decoration: BoxDecoration(
-                                  //color: Colors.grey,
-                                  borderRadius: BorderRadius.circular(100.r),
-                                  image: DecorationImage(
-                                    image:
-                                        AssetImage('asset/profil/kosong.png'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: FloatingActionButton(
-                                  onPressed: getImage,
-                                  backgroundColor: Color(0xFF53B175),
-                                  child: Icon(Icons.camera_alt),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : Center(
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.22,
-                          width: MediaQuery.of(context).size.width * 0.42,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100.r),
-                          ),
-                          child: Stack(
-                            children: [
-                              Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.22,
-                                width: MediaQuery.of(context).size.width * 0.42,
-                                child: ClipOval(
-                                  child: Image.file(
-                                    _image,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: FloatingActionButton(
-                                  onPressed: getImage,
-                                  backgroundColor: Color(0xFF53B175),
-                                  child: Icon(Icons.camera_alt),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                Center(
-                  child: Text('Dika Hermawan'
-                      //  snapshot.data[index]['nama'],
-                      // style: TextStyle(
-                      // fontFamily: 'Mulish',
-                      // fontSize: 23.sp,
-                      // fontWeight:
-                      // FontWeight.w600),
-                      ),
-                ),
-                SizedBox(
-                  height: 60.h,
-                ),
-                Center(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.32,
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 223, 220, 220),
-                      borderRadius: BorderRadius.circular(15.r),
-                    ),
+        body: FutureBuilder(
+            future: _future,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return SafeArea(
+                    child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 23.w),
+                  child: SingleChildScrollView(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(height: 40.h),
+                        _image == null
+                            ? Center(
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.22,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.22,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.42,
+                                          decoration: ShapeDecoration(
+                                            color: Colors.blue,
+                                            shape: CircleBorder(),
+                                          ),
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(500.r),
+                                              child: Image.asset(
+                                                // 'http://192.168.43.56:8000/img/userpembeli/' +
+                                                //     snapshot.data['gambar'],
+                                                'asset/profil/kosong.png',
+                                                fit: BoxFit
+                                                    .fill, // alamat untuk mengambil gambar
+                                              )
+
+                                              // alamat untuk mengambil gambar
+                                              )),
+                                      Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: FloatingActionButton(
+                                          onPressed: getImage,
+                                          backgroundColor: Color(0xFF53B175),
+                                          child: Icon(Icons.camera_alt),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : Center(
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.22,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.42,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100.r),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.22,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.42,
+                                        child: ClipOval(
+                                          child: Image.file(
+                                            _image,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: FloatingActionButton(
+                                          onPressed: getImage,
+                                          backgroundColor: Color(0xFF53B175),
+                                          child: Icon(Icons.camera_alt),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                         SizedBox(
-                          height: 10.sp,
+                          height: 10.h,
                         ),
-                        InkWell(
-                          onTap: () {
-                            Route route = MaterialPageRoute(
-                                builder: (context) => editProfilPetani());
-                            Navigator.push(context, route);
-                          },
+                        Center(
+                          child: Text(
+                            snapshot.data['nama'],
+                            style: TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 23.sp,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 60.h,
+                        ),
+                        Center(
                           child: Container(
-                            height: MediaQuery.of(context).size.height * 0.08,
+                            height: MediaQuery.of(context).size.height * 0.32,
                             width: MediaQuery.of(context).size.width * 0.8,
                             decoration: BoxDecoration(
                               color: Color.fromARGB(255, 223, 220, 220),
                               borderRadius: BorderRadius.circular(15.r),
                             ),
-                            child: Row(
+                            child: Column(
                               children: [
                                 SizedBox(
-                                  width: 15.w,
+                                  height: 10.sp,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Route route = MaterialPageRoute(
+                                        builder: (context) =>
+                                            editProfilPetani());
+                                    Navigator.push(context, route);
+                                  },
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.08,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 223, 220, 220),
+                                      borderRadius: BorderRadius.circular(15.r),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 15.w,
+                                        ),
+                                        Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.07,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.14,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF53B175),
+                                            borderRadius:
+                                                BorderRadius.circular(15.r),
+                                          ),
+                                          child: Icon(
+                                            Icons.person_outline_rounded,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 20.w,
+                                        ),
+                                        Text(
+                                          'Profil',
+                                          style: TextStyle(
+                                              fontFamily: 'Mulish',
+                                              fontSize: 22.sp,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        SizedBox(
+                                          width: 120.w,
+                                        ),
+                                        Icon(
+                                          Icons.arrow_forward_ios_rounded,
+                                          size: 35.sp,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Divider(
+                                  thickness: 3,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Route route = MaterialPageRoute(
+                                        builder: (context) =>
+                                            katasandiPetani());
+                                    Navigator.push(context, route);
+                                  },
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.08,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 223, 220, 220),
+                                      borderRadius: BorderRadius.circular(15.r),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 15.w,
+                                        ),
+                                        Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.07,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.14,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF53B175),
+                                            borderRadius:
+                                                BorderRadius.circular(15.r),
+                                          ),
+                                          child: Icon(
+                                            Icons.password_rounded,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 20.w,
+                                        ),
+                                        Text(
+                                          'Password',
+                                          style: TextStyle(
+                                              fontFamily: 'Mulish',
+                                              fontSize: 22.sp,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        SizedBox(
+                                          width: 80.w,
+                                        ),
+                                        Icon(
+                                          Icons.arrow_forward_ios_rounded,
+                                          size: 35.sp,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Divider(
+                                  thickness: 3,
                                 ),
                                 Container(
                                   height:
-                                      MediaQuery.of(context).size.height * 0.07,
+                                      MediaQuery.of(context).size.height * 0.08,
                                   width:
-                                      MediaQuery.of(context).size.width * 0.14,
+                                      MediaQuery.of(context).size.width * 0.8,
                                   decoration: BoxDecoration(
-                                    color: Color(0xFF53B175),
+                                    color: Color.fromARGB(255, 223, 220, 220),
                                     borderRadius: BorderRadius.circular(15.r),
                                   ),
-                                  child: Icon(
-                                    Icons.person_outline_rounded,
-                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  child: InkWell(
+                                    onTap: () {
+                                      signOut();
+                                    },
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 15.w,
+                                        ),
+                                        Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.07,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.14,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF53B175),
+                                            borderRadius:
+                                                BorderRadius.circular(15.r),
+                                          ),
+                                          child: Icon(
+                                            Icons.logout_outlined,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 20.w,
+                                        ),
+                                        Text(
+                                          'Keluar',
+                                          style: TextStyle(
+                                              fontFamily: 'Mulish',
+                                              fontSize: 22.sp,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        SizedBox(
+                                          width: 110.w,
+                                        ),
+                                        Icon(
+                                          Icons.arrow_forward_ios_rounded,
+                                          size: 35.sp,
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 20.w,
-                                ),
-                                Text(
-                                  'Profil',
-                                  style: TextStyle(
-                                      fontFamily: 'Mulish',
-                                      fontSize: 22.sp,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                SizedBox(
-                                  width: 120.w,
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  size: 35.sp,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Divider(
-                          thickness: 3,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Route route = MaterialPageRoute(
-                                builder: (context) => katasandiPetani());
-                            Navigator.push(context, route);
-                          },
-                          child: Container(
-                            height: MediaQuery.of(context).size.height * 0.08,
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 223, 220, 220),
-                              borderRadius: BorderRadius.circular(15.r),
-                            ),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 15.w,
-                                ),
-                                Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.07,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.14,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFF53B175),
-                                    borderRadius: BorderRadius.circular(15.r),
-                                  ),
-                                  child: Icon(
-                                    Icons.password_rounded,
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 20.w,
-                                ),
-                                Text(
-                                  'Password',
-                                  style: TextStyle(
-                                      fontFamily: 'Mulish',
-                                      fontSize: 22.sp,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                SizedBox(
-                                  width: 80.w,
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  size: 35.sp,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Divider(
-                          thickness: 3,
-                        ),
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 223, 220, 220),
-                            borderRadius: BorderRadius.circular(15.r),
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              signOut();
-                            },
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 15.w,
-                                ),
-                                Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.07,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.14,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFF53B175),
-                                    borderRadius: BorderRadius.circular(15.r),
-                                  ),
-                                  child: Icon(
-                                    Icons.logout_outlined,
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 20.w,
-                                ),
-                                Text(
-                                  'Keluar',
-                                  style: TextStyle(
-                                      fontFamily: 'Mulish',
-                                      fontSize: 22.sp,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                SizedBox(
-                                  width: 110.w,
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  size: 35.sp,
                                 )
                               ],
                             ),
@@ -329,10 +410,12 @@ class _akunPetaniState extends State<akunPetani> {
                       ],
                     ),
                   ),
-                )
-              ],
-            ),
-          ),
-        )));
+                ));
+              } else {
+                return Center(
+                  child: Text('Load...'),
+                );
+              }
+            }));
   }
 }
