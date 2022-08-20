@@ -19,7 +19,6 @@ import 'package:rojotani/petani/produk/tambah_produk/tambahProduk.dart';
 import 'Awal/registerPelanggan.dart';
 import 'pelanggan/produk/home.dart';
 import 'petani/produk/detail/profilTawar/profilTawar.dart';
-import 'petani/transaksi/keranjang.dart';
 import 'SplashScreen.dart';
 import 'Awal/loginPelanggan.dart';
 

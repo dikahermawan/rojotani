@@ -15,7 +15,7 @@ class terimaPage extends StatefulWidget {
 }
 
 class _terimaPageState extends State<terimaPage> {
-  var cekout_id, pembeli_id, produk_id, data, _future, textbtn = 'bayar';
+  var cekout_id, pembeli_id, produk_id, data, _future;
 
   final _key = new GlobalKey<FormState>();
 

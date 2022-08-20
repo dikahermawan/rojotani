@@ -16,15 +16,6 @@ class akunPetani extends StatefulWidget {
 
 class _akunPetaniState extends State<akunPetani> {
   var penjual_id, _future;
-  File _image;
-
-  Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      _image = image;
-    });
-  }
 
   signOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -102,90 +93,27 @@ class _akunPetaniState extends State<akunPetani> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 40.h),
-                        _image == null
-                            ? Center(
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.22,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.45,
-                                  child: Stack(
-                                    children: [
-                                      Container(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.22,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.42,
-                                          decoration: ShapeDecoration(
-                                            color: Colors.blue,
-                                            shape: CircleBorder(),
-                                          ),
-                                          child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(500.r),
-                                              child: Image.asset(
-                                                // 'http://192.168.43.56:8000/img/userpembeli/' +
-                                                //     snapshot.data['gambar'],
-                                                'asset/profil/kosong.png',
-                                                fit: BoxFit
-                                                    .fill, // alamat untuk mengambil gambar
-                                              )
-
-                                              // alamat untuk mengambil gambar
-                                              )),
-                                      Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: FloatingActionButton(
-                                          onPressed: getImage,
-                                          backgroundColor: Color(0xFF53B175),
-                                          child: Icon(Icons.camera_alt),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : Center(
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.22,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.42,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100.r),
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.22,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.42,
-                                        child: ClipOval(
-                                          child: Image.file(
-                                            _image,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: FloatingActionButton(
-                                          onPressed: getImage,
-                                          backgroundColor: Color(0xFF53B175),
-                                          child: Icon(Icons.camera_alt),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                        Center(
+                          child: Container(
+                              height: MediaQuery.of(context).size.height * 0.22,
+                              width: MediaQuery.of(context).size.width * 0.46,
+                              decoration: ShapeDecoration(
+                                color: Colors.blue,
+                                shape: CircleBorder(),
                               ),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(500.r),
+                                  child: Image.network(
+                                    'http://192.168.43.56:8000/img/userpenjual/' +
+                                        snapshot.data['gambar'],
+                                    // 'asset/profil/kosong.png',
+                                    fit: BoxFit
+                                        .fill, // alamat untuk mengambil gambar
+                                  )
+
+                                  // alamat untuk mengambil gambar
+                                  )),
+                        ),
                         SizedBox(
                           height: 10.h,
                         ),

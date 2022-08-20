@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:ui';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:rojotani/layout.dart';
 import 'package:rojotani/pelanggan/produk/product_card.dart';
 import 'package:rojotani/pelanggan/produk/lelang_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class homePage extends StatefulWidget {
   @override
@@ -13,6 +16,35 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
+  var pembeli_id, _future;
+
+  Future getDataPenjual() async {
+    SharedPreferences localdata = await SharedPreferences.getInstance();
+    setState(() {
+      pembeli_id = localdata.getString('pembeli_id');
+    });
+    final String url =
+        'http://192.168.43.56:8000/api/datapembeli'; //api menampilkan data produk
+    final response = await http.post(url, body: {
+      "pembeli_id": pembeli_id,
+    });
+    print(jsonDecode(response.body));
+    return jsonDecode(response.body);
+  }
+
+  // getPref() async {
+  //   SharedPreferences localdata = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     penjual_id = localdata.getString('penjual_id');
+  //   });
+  // }
+
+  @override
+  void initState() {
+    // getPref();
+    _future = getDataPenjual();
+  }
+
   Future<void> _refresh() {
     setState(() {
       productCard();
@@ -92,61 +124,67 @@ class _homePageState extends State<homePage> {
             )
           ///////////////////
           //Potrait
-          : Row(
-              children: [
-                SizedBox(
-                  width: 25.w,
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 50.h),
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  height: MediaQuery.of(context).size.height * 0.061,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(15)),
-                  child: TextField(
-                    style: TextStyle(fontFamily: 'Mulish'),
-                    decoration: InputDecoration(
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      hintText: 'Cari produk',
-                      prefixIcon: Icon(Icons.search),
-                      // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
-                    ),
-                  ),
-                ),
-                SizedBox(width: 6.w),
-                Container(
-                  margin: EdgeInsets.only(top: 50.h),
-                  child: IconButton(
-                    icon: Icon(Icons.shopping_cart_rounded),
-                    onPressed: () {
-                      // Route route =
-                      //     MaterialPageRoute(builder: (context) => ());
-                      // Navigator.push(context, route);
-                    },
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.12,
-                  height: MediaQuery.of(context).size.height * 0.062,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(25)),
-                ),
-                SizedBox(width: 6.w),
-                Container(
-                  margin: EdgeInsets.only(top: 50.h),
-                  child: IconButton(
-                    icon: Icon(Icons.notifications),
-                    onPressed: () {},
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.12,
-                  height: MediaQuery.of(context).size.height * 0.062,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(25.r)),
-                ),
-              ],
-            );
+          : FutureBuilder(
+              future: _future,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  return Row(
+                    children: [
+                      SizedBox(
+                        width: 40.w,
+                      ),
+                      Container(
+                        width: MediaQueryWidth * 0.3,
+                        margin: EdgeInsets.only(top: 70.h),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Hai, ',
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w800,
+                                  color: Color(0xFF53B175)),
+                            ),
+                            Text(
+                              snapshot.data['nama'],
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w800,
+                                  color: Color(0xFF53B175)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: MediaQueryWidth * 0.4),
+                      Container(
+                          margin: EdgeInsets.only(top: 40.h),
+                          width: 40,
+                          height: 40,
+                          decoration: ShapeDecoration(
+                            color: Colors.blue,
+                            shape: CircleBorder(),
+                          ),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(500.r),
+                              child: Image.network(
+                                'http://192.168.43.56:8000/img/userpembeli/' +
+                                    snapshot.data['gambar'],
+                                fit: BoxFit.fill,
+                              )
+
+                              // alamat untuk mengambil gambar
+                              )),
+                    ],
+                  );
+                } else {
+                  return Center(
+                    child: Text('Load...'),
+                  );
+                }
+              });
     }
 
     return Scaffold(

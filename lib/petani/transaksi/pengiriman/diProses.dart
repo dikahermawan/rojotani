@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
-//import 'proses/belumBayar.dart' as belumBayar;
-import 'proses/belumBayar/pesananBayar.dart' as belumBayar;
+
 import 'proses/kemas.dart' as diKemas;
 import 'proses/kirim.dart' as diKirim;
 import 'proses/terima.dart' as diTerima;
@@ -19,7 +18,7 @@ class _diProsesPageState extends State<diProsesPage>
   @override
   void initState() {
     super.initState();
-    controller = TabController(vsync: this, length: 4);
+    controller = TabController(vsync: this, length: 3);
   }
 
   @override
@@ -27,47 +26,6 @@ class _diProsesPageState extends State<diProsesPage>
     controller.dispose();
     super.dispose();
   }
-
-  // Widget tabar(){
-  //   return Column(
-  //     children: [
-  //       SizedBox(height: 20.h,),
-  //       TabBar(
-  //             controller: controller,
-  //             labelColor: Color(0xFF53B175),
-  //             unselectedLabelColor: Colors.grey,
-  //             indicatorColor: Color(0xFF53B175),
-  //             indicatorWeight: 0.001,
-  //             tabs: <Widget>[
-  //               Tab( icon: new Icon(Icons.payments),
-  //                   child: Text('Belum Bayar',
-  //                       style: TextStyle(
-  //                           fontFamily: 'Mulish',
-  //                           fontWeight: FontWeight.w500,
-  //                           fontSize: 12.sp))),
-  //               Tab( icon: new Icon(Icons.table_chart_rounded),
-  //                   child: Text('Di Kemas',
-  //                       style: TextStyle(
-  //                           fontFamily: 'Mulish',
-  //                           fontWeight: FontWeight.w500,
-  //                           fontSize: 13.sp))),
-  //               Tab( icon: new Icon(Icons.local_shipping),
-  //                   child: Text('Di Kirim',
-  //                       style: TextStyle(
-  //                           fontFamily: 'Mulish',
-  //                           fontWeight: FontWeight.w500,
-  //                           fontSize: 13.sp))),
-  //               Tab(icon: new Icon(Icons.check_circle),
-  //                   child: Text('Di Terima',
-  //                       style: TextStyle(
-  //                           fontFamily: 'Mulish',
-  //                           fontWeight: FontWeight.w500,
-  //                           fontSize: 13.sp))),
-  //             ],
-  //           ),
-  //     ],
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -91,13 +49,6 @@ class _diProsesPageState extends State<diProsesPage>
             indicatorColor: Color(0xFF53B175),
             indicatorWeight: 0.001,
             tabs: <Widget>[
-              Tab(
-                  icon: new Icon(Icons.payments),
-                  child: Text('Belum Bayar',
-                      style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12.sp))),
               Tab(
                   icon: new Icon(Icons.table_chart_rounded),
                   child: Text('Di Kemas',
@@ -126,11 +77,9 @@ class _diProsesPageState extends State<diProsesPage>
       body: TabBarView(
         controller: controller,
         children: <Widget>[
-         // belumBayar.belumBayarPage(controller),
-          belumBayar.pesananBayarPage(controller),
-          diKemas.kemasPage(),
-          diKirim.kirimPage(),
-          diTerima.terimaPage(),
+          diKemas.kemasPetani(controller),
+          diKirim.kirimPetani(),
+          diTerima.terimaPetani(),
         ],
       ),
     );

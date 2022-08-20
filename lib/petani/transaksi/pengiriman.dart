@@ -24,23 +24,27 @@ class _pengirimanPageState extends State<pengirimanPage>
     super.dispose();
   }
 
-  Widget Title (){
-    return Column(
-      children: [
-        Text(
-          'Transaksi',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Mulish',
-            color: Colors.black,
-            fontSize: 22.sp,
+  Widget Title() {
+    return Padding(
+      padding: EdgeInsets.only(right: 60.0),
+      child: Column(
+        children: [
+          Center(
+            child: Text(
+              'Transaksi',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Mulish',
+                color: Colors.black,
+                fontSize: 22.sp,
+              ),
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(0),
-          child: Divider(thickness: 1, ),
-        ),
-      ],
+          Divider(
+            thickness: 1,
+          ),
+        ],
+      ),
     );
   }
 

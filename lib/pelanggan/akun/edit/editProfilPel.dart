@@ -10,22 +10,22 @@ import 'package:rojotani/Awal/dataDiri.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:async/src/delegate/stream.dart';
+import 'package:rojotani/pelanggan/produk/navPembeli.dart';
 
-import 'package:rojotani/petani/navPetani.dart';
 import 'package:rojotani/petani/produk/katalog.dart';
 import 'package:rojotani/petani/produk/product_card.dart';
 import 'package:rojotani/petani/produk/tambah_produk/editLelang.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rojotani/Awal/loginPetani.dart';
 
-class editProfilPetani extends StatefulWidget {
+class editProfilPel extends StatefulWidget {
   @override
-  State<editProfilPetani> createState() => _editProfilPetaniState();
+  State<editProfilPel> createState() => _editProfilPelState();
 }
 
-class _editProfilPetaniState extends State<editProfilPetani> {
+class _editProfilPelState extends State<editProfilPel> {
   String nama, alamat;
-  var rekening, penjual_id, dataProduk;
+  var pembeli_id, dataProduk;
   final _key = new GlobalKey<FormState>();
 
   File _imageFile;
@@ -53,7 +53,7 @@ class _editProfilPetaniState extends State<editProfilPetani> {
   getPref() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
-      penjual_id = localdata.getString('penjual_id');
+      pembeli_id = localdata.getString('pembeli_id');
     });
   }
 
@@ -87,9 +87,9 @@ class _editProfilPetaniState extends State<editProfilPetani> {
       var stream =
           http.ByteStream(DelegatingStream.typed(_imageFile.openRead()));
       var length = await _imageFile.length();
-      var uri = Uri.parse("http://192.168.43.56:8000/api/profilPenjual");
+      var uri = Uri.parse("http://192.168.43.56:8000/api/profilPembeli");
       var request = http.MultipartRequest("POST", uri);
-      request.fields['penjual_id'] = penjual_id;
+      request.fields['penjual_id'] = pembeli_id;
       request.fields['nama'] = namaController.text;
       request.fields['alamat'] = alamatController.text;
 
@@ -100,7 +100,7 @@ class _editProfilPetaniState extends State<editProfilPetani> {
         print("image upload");
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => navPetani()),
+          MaterialPageRoute(builder: (context) => navPembeli()),
         );
       } else {
         errorSnackBar(context, 'Data telah tersedia');
