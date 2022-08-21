@@ -15,7 +15,7 @@ class terimaPage extends StatefulWidget {
 }
 
 class _terimaPageState extends State<terimaPage> {
-  var cekout_id, pembeli_id, produk_id, data, _future;
+  var pembeli_id, data, _future;
 
   final _key = new GlobalKey<FormState>();
 
@@ -27,21 +27,19 @@ class _terimaPageState extends State<terimaPage> {
     ));
   }
 
-// fungsi utuk memaggil data dari tabel cekout dan pembeli
+// fungsi utuk memaggil data dari tabel pembeli
   Future getCekout() async {
     SharedPreferences localId = await SharedPreferences.getInstance();
     setState(() {
       pembeli_id = localId.getString('pembeli_id');
     });
-    final String url =
-        'http://192.168.43.56:8000/api/status/terima'; //api menampilkan data  dari cekout id
+    final String url = 'http://192.168.43.56:8000/api/status/terima';
     final response = await http.post(url, body: {
       "pembeli_id": pembeli_id, // mengirim  id sesuai data yag diminta
     });
     return jsonDecode(response.body);
   }
 
-// mengatasi perubahan yang terjadi
   @override
   void initState() {
     super.initState();

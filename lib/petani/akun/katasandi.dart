@@ -20,15 +20,7 @@ class _katasandiPetaniState extends State<katasandiPetani> {
   final _key = new GlobalKey<FormState>();
   var penjual_id, katasandi, konfirmasi;
 
-  // void _togglePasswordView1() {
-  // if (isHiddenPassword1 == true) {
-  // isHiddenPassword1 = false;
-  // } else {
-  // isHiddenPassword1 = true;
-  // }
-  // setState(() {});
-  // }
-
+  // fungsi buka tutup password
   void _togglePasswordView2() {
     if (isHiddenPassword2 == true) {
       isHiddenPassword2 = false;
@@ -65,6 +57,7 @@ class _katasandiPetaniState extends State<katasandiPetani> {
     }
   }
 
+  // fungsi untuk mengirim password dan mengupdate pada db
   updatePassword() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
@@ -150,30 +143,6 @@ class _katasandiPetaniState extends State<katasandiPetani> {
                   SizedBox(
                     height: 60.h,
                   ),
-                  // TextFormField(
-
-                  // validator: (e) {
-                  //   if (e.isEmpty) {
-                  //     return error;
-                  //   }
-                  // },
-                  // onSaved: (e) => nilai = e,
-                  // obscureText: isHiddenPassword1,
-                  // decoration: InputDecoration(
-                  // suffixIcon: IconButton(
-                  // icon: Icon(Icons.visibility),
-                  // onPressed: _togglePasswordView1),
-                  // hintText: 'Katasandi Lama',
-                  // hintStyle: TextStyle(
-                  // fontSize: 16.sp,
-                  // ),
-                  // enabledBorder: UnderlineInputBorder(
-                  // borderSide: BorderSide(color: Colors.grey),
-                  // ),
-                  // focusedBorder: UnderlineInputBorder(
-                  // borderSide: BorderSide(color: Color(0xFF53B175)),
-                  // ),
-                  // )),
                   SizedBox(
                     height: 20.h,
                   ),

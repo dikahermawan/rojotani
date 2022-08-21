@@ -6,7 +6,6 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:rojotani/Awal/loginPelanggan.dart';
 import 'package:rojotani/Awal/registerAs.dart';
-import 'package:rojotani/Awal/dataDiri.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:async/src/delegate/stream.dart';
@@ -24,12 +23,12 @@ class editProfilPetani extends StatefulWidget {
 }
 
 class _editProfilPetaniState extends State<editProfilPetani> {
-  String nama, alamat;
-  var rekening, penjual_id, dataProduk;
+  var penjual_id, dataProduk;
   final _key = new GlobalKey<FormState>();
 
   File _imageFile;
 
+  // fungsi menagmbil gambar dari galeri
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
@@ -50,6 +49,7 @@ class _editProfilPetaniState extends State<editProfilPetani> {
     ));
   }
 
+  // mengambil id pejual dari penyimpanan lokal
   getPref() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
@@ -57,23 +57,7 @@ class _editProfilPetaniState extends State<editProfilPetani> {
     });
   }
 
-  // getDataPenjual() async {
-  //   SharedPreferences localdata = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     penjual_id = localdata.getString('penjual_id');
-  //   });
-  //   Uri url = Uri.parse("http://192.168.43.56:8000/api/editProfilPjl");
-  //   final response = await http.post(url, body: {
-  //     "penjual_id": penjual_id,
-  //   });
-  //   dataProduk = jsonDecode(response.body);
-  //   setState(() {
-  //     namaA = dataProduk['nama'];
-  //     alamatA = dataProduk['alamat'];
-  //     rekeningA = dataProduk['no_rekening'];
-  //   });
-  // }
-
+  // fungsi validasi value
   check() {
     final form = _key.currentState;
     if (form.validate()) {
@@ -82,6 +66,7 @@ class _editProfilPetaniState extends State<editProfilPetani> {
     }
   }
 
+  // fungsi tambah data text dan gambar
   update() async {
     try {
       var stream =
@@ -109,30 +94,6 @@ class _editProfilPetaniState extends State<editProfilPetani> {
       debugPrint("Error $e");
     }
   }
-
-  // update() async {
-  //   Uri url = Uri.parse("http://192.168.43.56:8000/api/profilPenjual");
-  //   final response = await http.post(url, body: {
-  //     "penjual_id": penjual_id,
-  //     'nama': nama,
-  //     'alamat': alamat,
-  //     'no_rekening': rekening,
-  //   });
-  //   final data = jsonDecode(response.body);
-  //   int value = data['success'];
-  //   var pesan = data['message'];
-  //   if (value == 1) {
-  //     print(pesan);
-  //     setState(() {
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => navPetani()),
-  //       );
-  //     });
-  //   } else {
-  //     errorSnackBar(context, 'Produk telah tersedia');
-  //   }
-  // }
 
   @override
   void initState() {
@@ -360,13 +321,7 @@ class _editProfilPetaniState extends State<editProfilPetani> {
                                       thickness: 2,
                                     ),
                                     SizedBox(
-                                      height: 20.h,
-                                    ),
-                                    SizedBox(
-                                      height: 2.h,
-                                    ),
-                                    SizedBox(
-                                      height: 10.h,
+                                      height: 32.h,
                                     ),
                                   ],
                                 ),
@@ -386,8 +341,6 @@ class _editProfilPetaniState extends State<editProfilPetani> {
                                 child: InkWell(
                                   onTap: () {
                                     check();
-
-                                    // print(penjual_id.toString());
                                   },
                                   child: Center(
                                     child: Text(

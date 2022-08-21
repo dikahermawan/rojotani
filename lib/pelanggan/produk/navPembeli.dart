@@ -9,8 +9,12 @@ class navPembeli extends StatefulWidget {
 }
 
 class _navPembeliState extends State<navPembeli> {
-  int currentIndex = 0;
-  final List<Widget> body = [homePage(), pengirimanPage(), akunPelanggan()];
+  int currentIndex = 0; //  index halaman awal yang ditampilkan
+  final List<Widget> body = [
+    homePage(),
+    pengirimanPage(),
+    akunPelanggan()
+  ]; // list halaman yang dituju
 
   @override
   Widget build(BuildContext context) {

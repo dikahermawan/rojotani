@@ -13,12 +13,14 @@ class lelangCard extends StatefulWidget {
 class _lelangCardState extends State<lelangCard> {
   final String url = 'http://192.168.43.56:8000/api/getlelangall';
 
+  // fungsi untuk meambil dan menampilkan data lelang secara keseluruhan
   Future getLelang() async {
     var response = await http.get(url); //api menampilkan data produk
     print(json.decode(response.body));
     return json.decode(response.body);
   }
 
+  // fugsi untuk mengambil id lelag dari penyimpanan lokal
   Future getDataLelang(lelang_id) async {
     SharedPreferences dataLelang = await SharedPreferences.getInstance();
     dataLelang..setString('lelang_id', lelang_id.toString());
@@ -210,14 +212,14 @@ class _lelangCardState extends State<lelangCard> {
                                     Expanded(
                                       child: Padding(
                                         padding: EdgeInsets.all(10),
-                                        // child: ClipRRect(
-                                        //     borderRadius:
-                                        //         BorderRadius.circular(5.r),
-                                        //     child: Image.network(
-                                        //       'http://192.168.43.56:8000/imglelang/lelang/' +
-                                        //           snapshot.data['data'][index][
-                                        //               'gambar'], // alamat untuk mengambil gambar
-                                        //     )),
+                                        child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(5.r),
+                                            child: Image.network(
+                                              'http://192.168.43.56:8000/imglelang/lelang/' +
+                                                  snapshot.data['data'][index][
+                                                      'gambar'], // alamat untuk mengambil gambar
+                                            )),
                                       ),
                                     ),
                                     Row(

@@ -19,7 +19,7 @@ class selesaiPage extends StatefulWidget {
 }
 
 class _selesaiPageState extends State<selesaiPage> {
-  var cekout_id, pembeli_id, produk_id, data, _future;
+  var pembeli_id, data, _future;
 
   final _key = new GlobalKey<FormState>();
 
@@ -31,7 +31,7 @@ class _selesaiPageState extends State<selesaiPage> {
     ));
   }
 
-// fungsi utuk memaggil data dari tabel cekout dan pembeli
+// fungsi utuk memaggil data
   Future getCekout() async {
     SharedPreferences localId = await SharedPreferences.getInstance();
     setState(() {
@@ -45,7 +45,6 @@ class _selesaiPageState extends State<selesaiPage> {
     return jsonDecode(response.body);
   }
 
-// mengatasi perubahan yang terjadi
   @override
   void initState() {
     super.initState();

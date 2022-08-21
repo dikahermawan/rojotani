@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
-import 'package:rojotani/layout.dart';
 import 'package:rojotani/pelanggan/produk/navPembeli.dart';
 import 'package:rojotani/pelanggan/transaksi/pengiriman/diProses.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,6 +34,7 @@ class _cekoutPageState extends State<cekoutPage> {
     ));
   }
 
+  // fugsi mengambil dan menampilkan data dari tabel produk dan pembeli
   Future getProducts() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
@@ -49,24 +49,7 @@ class _cekoutPageState extends State<cekoutPage> {
     return jsonDecode(response.body);
   }
 
-//  Future getPem() async {
-  //  SharedPreferences localdata = await SharedPreferences.getInstance();
-  //  setState(() {
-  //  pembeli_id = localdata.getString('pembeli_id');
-  //  });
-  //  final String url =
-  //  'http://192.168.43.56:8000/api/getpembeli'; //api menampilkan data produk
-  //  final response = await http.post(url, body: {
-  //  "pembeli_id": pembeli_id,
-  //  });
-  //  return jsonDecode(response.body);
-//  }
-
-  // Future getDataBarang(produk_id) async {
-  // SharedPreferences localdata = await SharedPreferences.getInstance();
-  // localdata..setString('produk_id', produk_id.toString());
-  // }
-
+  //fungsi mengambil id pembeli pada penyimpanan lokal
   getPembeli() async {
     SharedPreferences localId = await SharedPreferences.getInstance();
     setState(() {
@@ -74,6 +57,7 @@ class _cekoutPageState extends State<cekoutPage> {
     });
   }
 
+  //fungsi mengambil id pembeli pada penyimpanan lokal
   getProduk() async {
     SharedPreferences dataProduk = await SharedPreferences.getInstance();
     setState(() {
@@ -81,6 +65,7 @@ class _cekoutPageState extends State<cekoutPage> {
     });
   }
 
+  // fungsi validasi value yang di input
   check() {
     final form = _key.currentState;
     if (form.validate()) {
@@ -89,6 +74,7 @@ class _cekoutPageState extends State<cekoutPage> {
     }
   }
 
+  // fungsi mengirim ke backend dan ditambahkan pada db
   cekout() async {
     Uri url = Uri.parse("http://192.168.43.56:8000/api/cekout");
     final response = await http.post(url, body: {
@@ -102,7 +88,7 @@ class _cekoutPageState extends State<cekoutPage> {
     var value = data['success'];
     pesan = data['message'];
 
-    // menyimpan dan menyediakan data id penjual secara local untuk digunakan berikutnya
+    // menyimpan dan menyediakan data id cekout secara local untuk digunakan berikutnya
     SharedPreferences cekoutdata = await SharedPreferences.getInstance();
     cekoutdata.setString('cekout_id', data['cekout_id']);
 
@@ -364,59 +350,6 @@ class _cekoutPageState extends State<cekoutPage> {
                         SizedBox(
                           height: 22.h,
                         ),
-                        // Text('Pembayaran',
-                        // style: TextStyle(
-                        // fontFamily: 'Mulish',
-                        // fontSize: 16.sp,
-                        // fontWeight: FontWeight.w600)),
-                        // SizedBox(
-                        // height: 20.h,
-                        // ),
-                        // Row(
-                        // children: [
-                        // text('Subtotal'),
-                        // Container(
-                        // width: MediaQuery.of(context).size.width * 0.42,
-                        // alignment: Alignment.bottomRight,
-                        // child: Text('Rp 42.000',
-                        // style: TextStyle(
-                        // fontFamily: 'Mulish',
-                        // fontSize: 15.sp,
-                        // fontWeight: FontWeight.w800)),
-                        // ),
-                        // ],
-                        // ),
-                        // space(),
-                        // Row(
-                        // children: [
-                        // text('Ongkos Kirim'),
-                        // Container(
-                        // width: MediaQuery.of(context).size.width * 0.42,
-                        // alignment: Alignment.bottomRight,
-                        // child: Text('Ongkir',
-                        // style: TextStyle(
-                        // fontFamily: 'Mulish',
-                        // fontSize: 15.sp,
-                        // fontWeight: FontWeight.w700)),
-                        // ),
-                        // ],
-                        // ),
-                        // space(),
-                        // Row(
-                        // children: [
-                        // text('Total Pembayaran'),
-                        // Container(
-                        // width: MediaQuery.of(context).size.width * 0.42,
-                        // alignment: Alignment.bottomRight,
-                        // child: Text('byarrrrrrrr',
-                        // style: TextStyle(
-                        // color: Colors.orangeAccent,
-                        // fontFamily: 'Mulish',
-                        // fontSize: 15.sp,
-                        // fontWeight: FontWeight.w800)),
-                        // ),
-                        // ],
-                        // ),
                         SizedBox(
                           height: 30.h,
                         ),

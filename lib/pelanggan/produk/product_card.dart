@@ -13,23 +13,18 @@ class productCard extends StatefulWidget {
 class _productCardState extends State<productCard> {
   final String url = 'http://192.168.43.56:8000/api/getprodukall';
 
+  // mengambil dan menampilkan data produk
   Future getProduk() async {
     var response = await http.get(url); //api menampilkan data produk
     print(json.decode(response.body));
     return json.decode(response.body);
   }
 
+  // mengambil id produk dari penyimpana lokal
   Future getDataProduk(produk_id) async {
     SharedPreferences dataProduk = await SharedPreferences.getInstance();
     dataProduk..setString('produk_id', produk_id.toString());
   }
-
-  // @override
-  // void initState() {
-  //TODO: implement ini
-  // super.initState();
-  // refresh();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -190,13 +185,13 @@ class _productCardState extends State<productCard> {
                                 Expanded(
                                   child: Padding(
                                     padding: EdgeInsets.only(top: 8),
-                                    // child: ClipRRect(
-                                    //     borderRadius: BorderRadius.circular(5),
-                                    //     child: Image.network(
-                                    //       'http://192.168.43.56:8000/img/produk/' +
-                                    //           snapshot.data['data'][index][
-                                    //               'gambar'], // alamat untuk mengambil gambar
-                                    //     )),
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: Image.network(
+                                          'http://192.168.43.56:8000/img/produk/' +
+                                              snapshot.data['data'][index][
+                                                  'gambar'], // alamat untuk mengambil gambar
+                                        )),
                                   ),
                                 ),
                                 SizedBox(

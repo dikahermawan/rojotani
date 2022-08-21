@@ -6,7 +6,6 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:rojotani/Awal/loginPelanggan.dart';
 import 'package:rojotani/Awal/registerAs.dart';
-import 'package:rojotani/Awal/dataDiri.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:async/src/delegate/stream.dart';

@@ -18,6 +18,7 @@ class _tawarState extends State<tawar> {
   var lelang_id, pembeli_id, harga_tawar, pesan, _future;
   final _key = new GlobalKey<FormState>();
 
+  // fungsi untuk menampilkan snackbar
   errorSnackBar(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Color.fromARGB(255, 184, 15, 3),
@@ -26,6 +27,7 @@ class _tawarState extends State<tawar> {
     ));
   }
 
+  // fungsi untuk mengambil data dan ditampilkan
   Future getDataLelang() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
@@ -40,6 +42,7 @@ class _tawarState extends State<tawar> {
     return jsonDecode(response.body);
   }
 
+  // fungsi untuk mengambil id pembeli dari penyimpaan lokal
   getPembeli() async {
     SharedPreferences localId = await SharedPreferences.getInstance();
     setState(() {
@@ -47,6 +50,7 @@ class _tawarState extends State<tawar> {
     });
   }
 
+  // fungsi untuk mengambil id lelang dari penyimpaan lokal
   getLelang() async {
     SharedPreferences dataLelang = await SharedPreferences.getInstance();
     setState(() {
@@ -54,6 +58,7 @@ class _tawarState extends State<tawar> {
     });
   }
 
+  // fungsi untuk validasi value yang diinputkan
   check() {
     final form = _key.currentState;
     if (form.validate()) {
@@ -62,6 +67,7 @@ class _tawarState extends State<tawar> {
     }
   }
 
+  // fungsi untuk meegirim data tawar ke backend yang kemudian di tambahkan
   tawar() async {
     Uri url = Uri.parse("http://192.168.43.56:8000/api/tawar");
     final response = await http.post(url, body: {
@@ -73,7 +79,7 @@ class _tawarState extends State<tawar> {
     var value = data['success'];
     pesan = data['message'];
 
-    // menyimpan dan menyediakan data id penjual secara local untuk digunakan berikutnya
+    // menyimpan dan menyediakan data id tawar secara local untuk digunakan berikutnya
     SharedPreferences tawardata = await SharedPreferences.getInstance();
     tawardata..setString('tawar_id', data['tawar_id']);
 
@@ -153,16 +159,15 @@ class _tawarState extends State<tawar> {
                             child: Column(
                               children: [
                                 Container(
-                                  color: Colors.blue,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.45,
-                                  // child: Image.network(
-                                  //   'http://192.168.43.56:8000/imglelang/lelang/' +
-                                  //       snapshot.data['lelang']['gambar'],
-                                  //   fit: BoxFit
-                                  //       .fill, // alamat untuk mengambil gambar
-                                  // )
-                                ),
+                                    color: Colors.blue,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.45,
+                                    child: Image.network(
+                                      'http://192.168.43.56:8000/imglelang/lelang/' +
+                                          snapshot.data['lelang']['gambar'],
+                                      fit: BoxFit
+                                          .fill, // alamat untuk mengambil gambar
+                                    )),
                                 SizedBox(
                                   height: 10.h,
                                 ),

@@ -19,7 +19,6 @@ class kirimPage extends StatefulWidget {
 class _kirimPageState extends State<kirimPage> {
   var cekout_id,
       pembeli_id,
-      produk_id,
       data,
       _future,
       status_pesanan = 'diterima',
@@ -61,6 +60,7 @@ class _kirimPageState extends State<kirimPage> {
     });
   }
 
+  //fungsi megambil id cekout dari penyimpanan lokal
   Future getDataCekout(cekout_id) async {
     SharedPreferences cekout = await SharedPreferences.getInstance();
     cekout..setString('cekout_id', cekout_id.toString());
@@ -94,7 +94,6 @@ class _kirimPageState extends State<kirimPage> {
     }
   }
 
-// mengatasi perubahan yang terjadi
   @override
   void initState() {
     super.initState();
@@ -228,10 +227,7 @@ class _kirimPageState extends State<kirimPage> {
                                 thickness: 1,
                               ),
                               SizedBox(
-                                height: 6.h,
-                              ),
-                              SizedBox(
-                                height: 28.h,
+                                height: 34.h,
                               ),
                               Padding(
                                 padding: EdgeInsets.only(left: 40.w),

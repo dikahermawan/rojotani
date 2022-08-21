@@ -21,7 +21,6 @@ class pesananBayarPage extends StatefulWidget {
 class _pesananBayarPageState extends State<pesananBayarPage> {
   var cekout_id,
       pembeli_id,
-      produk_id,
       data,
       _future,
       textbtn = 'bayar',
@@ -39,14 +38,13 @@ class _pesananBayarPageState extends State<pesananBayarPage> {
 
   File _imageFile;
 
-// fungsi utuk memaggil data dari tabel cekout dan pembeli
+  // fungsi utuk memaggil data dari tabel cekout dan pembeli
   Future getCekout() async {
     SharedPreferences localId = await SharedPreferences.getInstance();
     setState(() {
       pembeli_id = localId.getString('pembeli_id');
     });
-    final String url =
-        'http://192.168.43.56:8000/api/status/belum'; //api menampilkan data  dari cekout id
+    final String url = 'http://192.168.43.56:8000/api/status/belum';
     final response = await http.post(url, body: {
       "pembeli_id": pembeli_id, // mengirim  id sesuai data yag diminta
     });
@@ -71,7 +69,7 @@ class _pesananBayarPageState extends State<pesananBayarPage> {
     }
   }
 
-  //fungsi untuk meambahka data berupa gambar dan beberapa data dari pembeli id
+  //fungsi untuk meambahkan data berupa gambar dan beberapa data dari pembeli id
   submit() async {
     try {
       var stream =
@@ -100,7 +98,6 @@ class _pesananBayarPageState extends State<pesananBayarPage> {
     }
   }
 
-// mengatasi perubahan yang terjadi
   @override
   void initState() {
     super.initState();

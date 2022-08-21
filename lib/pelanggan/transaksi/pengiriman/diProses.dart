@@ -19,7 +19,8 @@ class _diProsesPageState extends State<diProsesPage>
   @override
   void initState() {
     super.initState();
-    controller = TabController(vsync: this, length: 4);
+    controller =
+        TabController(vsync: this, length: 4); // jumlah pidah halaman tab bar
   }
 
   @override
@@ -85,11 +86,10 @@ class _diProsesPageState extends State<diProsesPage>
       body: TabBarView(
         controller: controller,
         children: <Widget>[
-          // belumBayar.belumBayarPage(controller),
           belumBayar.pesananBayarPage(controller),
           diKemas.kemasPage(),
           diKirim.kirimPage(),
-          diTerima.terimaPage(),
+          diTerima.terimaPage(), // daftar halaman yang dituju
         ],
       ),
     );

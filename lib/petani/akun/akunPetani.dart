@@ -17,6 +17,7 @@ class akunPetani extends StatefulWidget {
 class _akunPetaniState extends State<akunPetani> {
   var penjual_id, _future;
 
+  // fugsi untuk keluar
   signOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.clear();
@@ -24,6 +25,7 @@ class _akunPetaniState extends State<akunPetani> {
     Navigator.push(context, route);
   }
 
+  // fungsi untuk megambil dan menampilkan data penjual
   Future getDataPenjual() async {
     SharedPreferences localdata = await SharedPreferences.getInstance();
     setState(() {
@@ -37,13 +39,6 @@ class _akunPetaniState extends State<akunPetani> {
     print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
-
-  // getPref() async {
-  //   SharedPreferences localdata = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     penjual_id = localdata.getString('penjual_id');
-  //   });
-  // }
 
   @override
   void initState() {
