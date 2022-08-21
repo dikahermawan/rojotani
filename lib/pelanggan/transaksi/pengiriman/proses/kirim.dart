@@ -7,17 +7,25 @@ import 'package:async/async.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:rojotani/pelanggan/produk/navPembeli.dart';
 import 'package:rojotani/petani/navPetani.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class kirimPetani extends StatefulWidget {
+class kirimPage extends StatefulWidget {
   @override
-  State<kirimPetani> createState() => _kirimPetaniState();
+  State<kirimPage> createState() => _kirimPageState();
 }
 
-class _kirimPetaniState extends State<kirimPetani> {
-  var cekout_id, penjual_id, produk_id, data, _future, pesan;
-
+class _kirimPageState extends State<kirimPage> {
+  var cekout_id,
+      pembeli_id,
+      produk_id,
+      data,
+      _future,
+      status_pesanan = 'diterima',
+      pesan,
+      btnCol = Color(0xFF53B175),
+      fontCol = Colors.white;
   final _key = new GlobalKey<FormState>();
 
   errorSnackBar(BuildContext context, String text) {
@@ -28,23 +36,62 @@ class _kirimPetaniState extends State<kirimPetani> {
     ));
   }
 
-// fungsi utuk memaggil data dari tabel cekout dan penjual
+  File _imageFile;
+
+// fungsi utuk memaggil data dari tabel cekout dan pembeli
   Future getCekout() async {
     SharedPreferences localId = await SharedPreferences.getInstance();
     setState(() {
-      penjual_id = localId.getString('penjual_id');
+      pembeli_id = localId.getString('pembeli_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/kirim'; //api menampilkan data  dari cekout id
+        'http://192.168.43.56:8000/api/status/kirim'; //api menampilkan data  dari cekout id
     final response = await http.post(url, body: {
-      "penjual_id": penjual_id, // mengirim  id sesuai data yag diminta
+      "pembeli_id": pembeli_id, // mengirim  id sesuai data yag diminta
     });
     return jsonDecode(response.body);
+  }
+
+// fungsi mengambil gambar dari galeri
+  _pilihGallery() async {
+    var image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, maxHeight: 1920.0, maxWidth: 1080.0);
+    setState(() {
+      _imageFile = image;
+    });
   }
 
   Future getDataCekout(cekout_id) async {
     SharedPreferences cekout = await SharedPreferences.getInstance();
     cekout..setString('cekout_id', cekout_id.toString());
+  }
+
+  //fungsi untuk meambahka data berupa gambar dan beberapa data dari pembeli id
+  update() async {
+    SharedPreferences cekoutdata = await SharedPreferences.getInstance();
+    setState(() {
+      cekout_id = cekoutdata.getString('cekout_id');
+    });
+    Uri url = Uri.parse("http://192.168.43.56:8000/api/cekout/status");
+    final response = await http.post(url, body: {
+      'cekout_id': cekout_id,
+      'status_pesanan': status_pesanan,
+    });
+    final data = jsonDecode(response.body);
+    var value = data['success'];
+    pesan = data['message'];
+
+    if (value == 1) {
+      print(pesan);
+      setState(() {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => navPembeli()),
+        );
+      });
+    } else {
+      errorSnackBar(context, 'Data sudah di input');
+    }
   }
 
 // mengatasi perubahan yang terjadi
@@ -177,14 +224,54 @@ class _kirimPetaniState extends State<kirimPetani> {
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.w400),
                               ),
+                              Divider(
+                                thickness: 1,
+                              ),
+                              SizedBox(
+                                height: 6.h,
+                              ),
                               SizedBox(
                                 height: 28.h,
                               ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 40.w),
+                                child: InkWell(
+                                  onTap: () {
+                                    getDataCekout(snapshot.data[index]['id']);
+                                    update();
+                                  },
+                                  child: Container(
+                                    height: 45.h,
+                                    width: 251.w,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Color(0xFF53B175), width: 1),
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: btnCol),
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Terima',
+                                            style: TextStyle(
+                                                fontFamily: 'Mulish',
+                                                fontSize: 16.sp,
+                                                fontWeight: FontWeight.w800,
+                                                color: fontCol),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 54.h),
                               Divider(
                                 thickness: 5,
                                 color: Colors.black,
-                              ),
-                              SizedBox(height: 54.h),
+                              )
                             ],
                           );
                         }),

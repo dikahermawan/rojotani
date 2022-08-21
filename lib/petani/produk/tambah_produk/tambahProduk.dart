@@ -1,108 +1,115 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/layout.dart';
+import 'package:rojotani/petani/navPetani.dart';
+import 'package:rojotani/petani/produk/katalog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart' as path;
+import 'package:async/src/delegate/stream.dart';
 
-class tambahProdukPage extends StatefulWidget {
+class tambahProduk extends StatefulWidget {
   @override
-  _tambahProdukPageState createState() => _tambahProdukPageState();
+  _tambahProdukState createState() => _tambahProdukState();
 }
 
-class _tambahProdukPageState extends State<tambahProdukPage> {
-  File _image;
-  String gambar, nama, satuan, jenis, deskripsi;
-  int harga, stok;
+class _tambahProdukState extends State<tambahProduk> {
+  String nama, satuan, jenis, deskripsi;
+  var penjual_id, produk_id;
   final _key = new GlobalKey<FormState>();
+  File _imageFile;
 
+  //fungsi megambil gambar dari galeri
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     setState(() {
-      _image = image;
+      _imageFile = image;
     });
   }
 
-  Widget title(String text) {
-    return Padding(
-      padding: EdgeInsets.only(left: 15.w),
-      child: Text(text,
-          style: TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w700)),
-    );
+  TextEditingController namaController = TextEditingController();
+  TextEditingController hargaController = TextEditingController();
+  TextEditingController stokController = TextEditingController();
+  TextEditingController satuanController = TextEditingController();
+  TextEditingController jenisController = TextEditingController();
+  TextEditingController deskripsiController = TextEditingController();
+
+  //fungsi mengambil id pejual dari penyimpaan lokal
+  getPref() async {
+    SharedPreferences localdata = await SharedPreferences.getInstance();
+    setState(() {
+      penjual_id = localdata.getString('penjual_id');
+    });
   }
 
-  Widget titleLandscape(String text) {
-    return Padding(
-      padding: EdgeInsets.only(left: 16.w),
-      child: Text(text,
-          style: TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 35.sp,
-              fontWeight: FontWeight.w700)),
-    );
+  // fungsi membuat snackbar pemberitahuan
+  errorSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Color.fromARGB(255, 184, 15, 3),
+      content: Text(text),
+      duration: const Duration(seconds: 3),
+    ));
   }
 
-  Widget Input(input, eror, nilai) {
-    return Padding(
-      padding: EdgeInsets.only(left: 15.w),
-      child: TextFormField(
-        validator: (e) {
-          if (e.isEmpty) {
-            return eror;
-          }
-        },
-        onSaved: (e) => nilai = e,
-        decoration: InputDecoration(
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          hintText: input,
-          hintStyle: TextStyle(
-            // <-- Change this
-            fontSize: 16.sp,
-          ),
-          // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
-        ),
-      ),
-    );
+  Future getDataProduk() async {
+    SharedPreferences dataProduk = await SharedPreferences.getInstance();
+    dataProduk..setString('produk_id', produk_id.toString());
   }
 
+  // fungsi untuk validasi data
   check() {
     final form = _key.currentState;
     if (form.validate()) {
       form.save();
+      tambahProduk();
     }
   }
 
-  Widget InputLandscape(String input) {
-    return Padding(
-      padding: EdgeInsets.only(left: 16.w),
-      child: TextField(
-        decoration: InputDecoration(
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          hintText: input,
-          hintStyle: TextStyle(
-            // <-- Change this
-            fontSize: 30.sp,
-          ),
-          // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
-        ),
-      ),
-    );
+  // fungsi mengirim input data ke database
+  tambahProduk() async {
+    try {
+      var stream =
+          http.ByteStream(DelegatingStream.typed(_imageFile.openRead()));
+      var length = await _imageFile.length();
+      var uri = Uri.parse("http://192.168.43.56:8000/api/produk");
+      var request = http.MultipartRequest("POST", uri);
+      request.fields['penjual_id'] = penjual_id;
+      request.fields['nama'] = namaController.text;
+      request.fields['harga'] = hargaController.text;
+      request.fields['stok'] = stokController.text;
+      request.fields['satuan'] = satuanController.text;
+      request.fields['jenis'] = jenisController.text;
+      request.fields['deskripsi'] = deskripsiController.text;
+
+      request.files.add(http.MultipartFile("gambar", stream, length,
+          filename: path.basename(_imageFile.path)));
+      var response = await request.send();
+      if (response.statusCode > 2) {
+        print("image upload");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => navPetani()),
+        );
+      } else {
+        errorSnackBar(context, 'Produk telah tersedia');
+      }
+    } catch (e) {
+      debugPrint("Error $e");
+    }
   }
 
-  Widget space() {
-    return Column(
-      children: [
-        Divider(
-          thickness: 1,
-        ),
-      ],
-    );
+//
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPref();
+    getDataProduk();
   }
 
   @override
@@ -131,9 +138,7 @@ class _tambahProdukPageState extends State<tambahProdukPage> {
                   color: Colors.black,
                 ),
                 onPressed: () {
-                  // Route route =
-                  //     MaterialPageRoute(builder: (context) => ());
-                  // Navigator.push(context, route);
+                  Navigator.of(context).pop();
                 },
               ),
               title: Text(
@@ -147,183 +152,294 @@ class _tambahProdukPageState extends State<tambahProdukPage> {
               ),
               centerTitle: true,
             ),
-            body: Form(
-              key: _key,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 22.w),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      Container(
-                        color: Colors.grey[200],
-                        height: MediaQuery.of(context).size.height * 1.58,
-                        width: MediaQuery.of(context).size.width * 0.99,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 20.h,
-                            ),
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 15.w),
-                                  child: InkWell(
-                                    onTap: getImage,
-                                    child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.2,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.15,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              width: 1.w,
-                                              color: Color(0xFF53B175)),
-                                          borderRadius:
-                                              BorderRadius.circular(5.r)),
-                                      child: _image == null
-                                          ? Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
-                                                Icon(
-                                                  Icons.add,
-                                                  size: 70.sp,
-                                                  color: Color(0xFF53B175),
-                                                ),
-                                                Text("Gambar",
-                                                    style: TextStyle(
-                                                        fontFamily: 'Mulish',
-                                                        fontSize: 30.sp,
-                                                        fontWeight:
-                                                            FontWeight.w500)),
-                                              ],
-                                            )
-                                          : Center(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(
-                                                    height: 20.h,
-                                                  ),
-                                                  Icon(
-                                                    Icons.image,
-                                                    size: 85.h,
-                                                  ),
-                                                  Text("Diunggah",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontFamily: 'Mulish',
-                                                          fontSize: 25.sp,
-                                                          fontWeight:
-                                                              FontWeight.w500)),
-                                                ],
-                                              ),
+            body: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 22.w),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 30.h,
+                    ),
+                    Container(
+                      color: Colors.grey[200],
+                      height: MediaQuery.of(context).size.height * 1.55,
+                      width: MediaQuery.of(context).size.width * 0.99,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          //GAMBAR
+                          Row(
+                            children: [
+                              InkWell(
+                                onTap: getImage,
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.1,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.2,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                          width: 1.w, color: Color(0xFF53B175)),
+                                      borderRadius: BorderRadius.circular(5.r)),
+                                  child: _imageFile == null
+                                      ? Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 10.h,
                                             ),
-                                      // Image.file(_image),
-                                    ),
-                                  ),
+                                            Icon(
+                                              Icons.add,
+                                              size: 45.sp,
+                                              color: Color(0xFF53B175),
+                                            ),
+                                            Text("Gambar",
+                                                style: TextStyle(
+                                                    fontFamily: 'Mulish',
+                                                    fontSize: 18.sp,
+                                                    fontWeight:
+                                                        FontWeight.w500)),
+                                          ],
+                                        )
+                                      : Center(
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 20.h,
+                                              ),
+                                              Icon(
+                                                Icons.image,
+                                                size: 85.h,
+                                              ),
+                                              Text("Diunggah",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontFamily: 'Mulish',
+                                                      fontSize: 16.sp,
+                                                      fontWeight:
+                                                          FontWeight.w500)),
+                                            ],
+                                          ),
+                                        ),
                                 ),
-                              ],
+                              ),
+                            ],
+                          ),
+                          Text('Nama Produk',
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600)),
+                          TextFormField(
+                            validator: (namaController) {
+                              if (namaController.isEmpty) {
+                                return 'masukkan nama';
+                              }
+                            },
+                            controller: namaController,
+                            decoration: InputDecoration(
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              hintText: 'masukkan nama',
+                              hintStyle: TextStyle(
+                                // <-- Change this
+                                fontSize: 16.sp,
+                              ),
+                              // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
                             ),
-                            TextField(
+                          ),
+                          Divider(
+                            thickness: 1,
+                          ),
+                          Text('harga Produk',
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600)),
+                          TextFormField(
+                            validator: (hargaController) {
+                              if (hargaController.isEmpty) {
+                                return 'masukkan harga';
+                              }
+                            },
+                            controller: hargaController,
+                            decoration: InputDecoration(
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              hintText: 'masukkan harga',
+                              hintStyle: TextStyle(
+                                // <-- Change this
+                                fontSize: 16.sp,
+                              ),
+                              // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
+                            ),
+                          ),
+                          Divider(
+                            thickness: 1,
+                          ),
+
+                          Text('satuan Produk',
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600)),
+                          TextFormField(
+                            validator: (satuanController) {
+                              if (satuanController.isEmpty) {
+                                return 'masukkan satuan';
+                              }
+                            },
+                            controller: satuanController,
+                            decoration: InputDecoration(
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              hintText: 'masukkan satuan',
+                              hintStyle: TextStyle(
+                                // <-- Change this
+                                fontSize: 16.sp,
+                              ),
+                              // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
+                            ),
+                          ),
+                          Divider(
+                            thickness: 1,
+                          ),
+
+                          Text('stok Produk',
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600)),
+                          TextFormField(
+                            validator: (stokController) {
+                              if (stokController.isEmpty) {
+                                return 'masukkan stok';
+                              }
+                            },
+                            controller: stokController,
+                            decoration: InputDecoration(
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              hintText: 'masukkan stok',
+                              hintStyle: TextStyle(
+                                // <-- Change this
+                                fontSize: 16.sp,
+                              ),
+                              // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
+                            ),
+                          ),
+                          Divider(
+                            thickness: 1,
+                          ),
+
+                          Text('jenis Produk',
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600)),
+                          TextFormField(
+                            validator: (jenisController) {
+                              if (jenisController.isEmpty) {
+                                return 'masukkan jenis';
+                              }
+                            },
+                            controller: jenisController,
+                            decoration: InputDecoration(
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              hintText: 'masukkan jenis',
+                              hintStyle: TextStyle(
+                                // <-- Change this
+                                fontSize: 16.sp,
+                              ),
+                              // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
+                            ),
+                          ),
+                          Divider(
+                            thickness: 1,
+                          ),
+
+                          Text('deskripsi Produk',
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600)),
+                          TextFormField(
+                              validator: (deskripsiController) {
+                                if (deskripsiController.isEmpty) {
+                                  return 'masukkan deskripsi';
+                                }
+                              },
+                              controller: deskripsiController,
                               decoration: InputDecoration(
                                 enabledBorder: InputBorder.none,
                                 focusedBorder: InputBorder.none,
-                                hintText: 'coba',
+                                hintText: 'masukkan deskripsi',
                                 hintStyle: TextStyle(
                                   // <-- Change this
                                   fontSize: 16.sp,
                                 ),
-                                // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
-                              ),
-                            ),
-                            space(),
-                            titleLandscape('Nama Produk'),
-                            InputLandscape('Masukkan Nama Produk'),
-                            space(),
-                            titleLandscape('Harga Produk'),
-                            InputLandscape(
-                              'Masukkan Harga Produk',
-                            ),
-                            space(),
-                            titleLandscape('Satuan Produk'),
-                            InputLandscape('Masukkan Satuan Produk'),
-                            space(),
-                            titleLandscape('Stok Produk'),
-                            InputLandscape('Masukkan Stok Produk'),
-                            space(),
-                            titleLandscape('Jenis Produk'),
-                            InputLandscape('Masukkan Jenis Produk'),
-                            space(),
-                            titleLandscape('Deskripsi Produk'),
-                            InputLandscape('Masukkan Deskripsi Produk'),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 50.h,
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 75.w,
-                          ),
-                          Container(
-                            width: 200.w,
-                            height: 100.h,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: Color(0xFF53B175),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.r),
-                                ),
-                              ),
-                              onPressed: () {},
-                              child: Text(
-                                "Simpan",
-                                style: TextStyle(
-                                  fontFamily: "Mulish",
-                                  fontSize: 40.sp,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
+                              ))
                         ],
                       ),
-                      SizedBox(
-                        height: 50.h,
-                      ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      height: 50.h,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 75.w,
+                        ),
+                        Container(
+                          width: 200.w,
+                          height: 100.h,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Color(0xFF53B175),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: Text(
+                              "Simpan",
+                              style: TextStyle(
+                                fontFamily: "Mulish",
+                                fontSize: 40.sp,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 50.h,
+                    ),
+                  ],
                 ),
               ),
             ))
         :
         ///////////
         //Potrait
-        new Scaffold(
-            appBar: new AppBar(
-              elevation: 3,
+        Scaffold(
+            appBar: AppBar(
               backgroundColor: Colors.white,
+              elevation: 1,
               leading: IconButton(
                 icon: Icon(
                   Icons.arrow_back,
                   color: Colors.black,
                 ),
                 onPressed: () {
-                  // Route route =
-                  //     MaterialPageRoute(builder: (context) => ());
-                  // Navigator.push(context, route);
+                  Navigator.pop(context);
                 },
               ),
               title: Text(
@@ -332,67 +448,63 @@ class _tambahProdukPageState extends State<tambahProdukPage> {
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Mulish',
                   color: Colors.black,
-                  fontSize: 22.sp,
+                  fontSize: 23,
                 ),
               ),
               centerTitle: true,
             ),
             body: Form(
               key: _key,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 22.w),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      Container(
-                        color: Colors.grey[200],
-                        height: MediaQuery.of(context).size.height * 0.83,
-                        width: MediaQuery.of(context).size.width * 0.99,
-                        child: SingleChildScrollView(
-                          child: Column(
+              child: SafeArea(
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: SingleChildScrollView(
+                        child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: 10.h,
+                                height: 15.h,
                               ),
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 15.w),
-                                    child: InkWell(
-                                      onTap: getImage,
-                                      child: _image == null
-                                          ? Column(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 18.w),
-                                                  child: Container(
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.1,
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.2,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          border: Border.all(
-                                                              width: 1.w,
-                                                              color: Color(
-                                                                  0xFF53B175)),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      5.r)),
-                                                      child: Column(
+                              Container(
+                                color: Colors.grey[200],
+                                height:
+                                    MediaQuery.of(context).size.height * 0.85,
+                                //width: MediaQuery.of(context).size.width * 0.6,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 26.w),
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: 20.h,
+                                        ),
+                                        //GAMBAR
+                                        Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: getImage,
+                                              child: Container(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.1,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.2,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    border: Border.all(
+                                                        width: 1.w,
+                                                        color:
+                                                            Color(0xFF53B175)),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.r)),
+                                                child: _imageFile == null
+                                                    ? Column(
                                                         children: [
                                                           SizedBox(
                                                             height: 10.h,
@@ -414,137 +526,230 @@ class _tambahProdukPageState extends State<tambahProdukPage> {
                                                                           .w500)),
                                                         ],
                                                       )
-                                                      // : Image.file(_image),
+                                                    : Center(
+                                                        child: Column(
+                                                          children: [
+                                                            SizedBox(
+                                                              height: 20.h,
+                                                            ),
+                                                            Icon(
+                                                              Icons.image,
+                                                              // size: 45.sp,
+                                                            ),
+                                                            Text("Diunggah",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    fontFamily:
+                                                                        'Mulish',
+                                                                    fontSize:
+                                                                        16.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500)),
+                                                          ],
+                                                        ),
                                                       ),
-                                                ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
-                                                Text(
-                                                  'Gambar harus diisi',
-                                                  style: TextStyle(
-                                                      color: Color.fromARGB(
-                                                          255, 206, 23, 10),
-                                                      fontFamily: 'Mulish',
-                                                      fontSize: 13.sp),
-                                                )
-                                              ],
-                                            )
-                                          : Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.1,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.2,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  border: Border.all(
-                                                      width: 1.w,
-                                                      color: Color(0xFF53B175)),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          5.r)),
-                                              child: Center(
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 20.h,
-                                                    ),
-                                                    Icon(
-                                                      Icons.image,
-                                                      // size: 45.sp,
-                                                    ),
-                                                    Text("Diunggah",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                'Mulish',
-                                                            fontSize: 16.sp,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500)),
-                                                  ],
-                                                ),
+                                                // : Image.file(_image),
                                               ),
-                                              // : Image.file(_image),
                                             ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 20.h,
+                                        ),
+
+                                        Text('nama Produk',
+                                            style: TextStyle(
+                                                fontFamily: 'Mulish',
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w600)),
+                                        TextFormField(
+                                          validator: (namaController) {
+                                            if (namaController.isEmpty) {
+                                              return 'masukkan nama';
+                                            }
+                                          },
+                                          controller: namaController,
+                                          decoration: InputDecoration(
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            hintText: 'masukkan nama',
+                                            hintStyle: TextStyle(
+                                              fontSize: 16.sp,
+                                            ),
+                                          ),
+                                        ),
+                                        Divider(
+                                          thickness: 1,
+                                        ),
+                                        Text('harga Produk',
+                                            style: TextStyle(
+                                                fontFamily: 'Mulish',
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w600)),
+                                        TextFormField(
+                                          validator: (hargaController) {
+                                            if (hargaController.isEmpty) {
+                                              return 'masukkan harga';
+                                            }
+                                          },
+                                          controller: hargaController,
+                                          decoration: InputDecoration(
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            hintText: 'masukkan harga',
+                                            hintStyle: TextStyle(
+                                              fontSize: 16.sp,
+                                            ),
+                                          ),
+                                        ),
+                                        Divider(
+                                          thickness: 1,
+                                        ),
+                                        Text('jenis Produk',
+                                            style: TextStyle(
+                                                fontFamily: 'Mulish',
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w600)),
+                                        TextFormField(
+                                          validator: (jenisController) {
+                                            if (jenisController.isEmpty) {
+                                              return 'masukkan jenis';
+                                            }
+                                          },
+                                          controller: jenisController,
+                                          decoration: InputDecoration(
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            hintText: 'masukkan jenis',
+                                            hintStyle: TextStyle(
+                                              // <-- Change this
+                                              fontSize: 16.sp,
+                                            ),
+                                            // contentPadding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height/4)
+                                          ),
+                                        ),
+                                        Divider(
+                                          thickness: 1,
+                                        ),
+
+                                        Text('satuan Produk',
+                                            style: TextStyle(
+                                                fontFamily: 'Mulish',
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w600)),
+                                        TextFormField(
+                                          validator: (satuanController) {
+                                            if (satuanController.isEmpty) {
+                                              return 'masukkan satuan';
+                                            }
+                                          },
+                                          controller: satuanController,
+                                          decoration: InputDecoration(
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            hintText: 'masukkan satuan',
+                                            hintStyle: TextStyle(
+                                              fontSize: 16.sp,
+                                            ),
+                                          ),
+                                        ),
+                                        Divider(
+                                          thickness: 1,
+                                        ),
+                                        Text('stok Produk',
+                                            style: TextStyle(
+                                                fontFamily: 'Mulish',
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w600)),
+                                        TextFormField(
+                                          validator: (stokController) {
+                                            if (stokController.isEmpty) {
+                                              return 'masukkan stok';
+                                            }
+                                          },
+                                          controller: stokController,
+                                          decoration: InputDecoration(
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            hintText: 'masukkan stok',
+                                            hintStyle: TextStyle(
+                                              fontSize: 16.sp,
+                                            ),
+                                          ),
+                                        ),
+                                        Divider(
+                                          thickness: 1,
+                                        ),
+                                        Text('deskripsi Produk',
+                                            style: TextStyle(
+                                                fontFamily: 'Mulish',
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w600)),
+                                        TextFormField(
+                                          validator: (deskripsiController) {
+                                            if (deskripsiController.isEmpty) {
+                                              return 'masukkan deskripsi';
+                                            }
+                                          },
+                                          controller: deskripsiController,
+                                          decoration: InputDecoration(
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            hintText: 'masukkan deskripsi',
+                                            hintStyle: TextStyle(
+                                              fontSize: 16.sp,
+                                            ),
+                                          ),
+                                        ),
+                                        Divider(
+                                          thickness: 1,
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
-                              space(),
-                              title('Nama Produk'),
-                              Input('Masukkan Nama Produk',
-                                  'Masukkan Nama Produk', nama),
-                              space(),
-                              title('Harga Produk'),
-                              Input('Masukkan Harga Produk',
-                                  'Masukkan Harga Produk', harga),
-                              space(),
-                              title('Satuan Produk'),
-                              Input('Masukkan Satuan Produk',
-                                  'Masukkan Satuan Produk', satuan),
-                              space(),
-                              title('Stok Produk'),
-                              Input('Masukkan Stok Produk',
-                                  'Masukkan Stok Produk', stok),
-                              space(),
-                              title('Jenis Produk'),
-                              Input('Masukkan Jenis Produk',
-                                  'Masukkan Jenis Produk', jenis),
-                              space(),
-                              title('Deskripsi Produk'),
-                              Input('Masukkan Deskripsi Produk',
-                                  'Masukkan Deskripsi Produk', deskripsi),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 50.h,
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 75.w,
-                          ),
-                          Container(
-                            width: 200.w,
-                            height: 55.h,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: Color(0xFF53B175),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.r),
                                 ),
                               ),
-                              onPressed: () {
-                                check();
-                              },
-                              child: Text(
-                                "Simpan",
-                                style: TextStyle(
-                                  fontFamily: "Mulish",
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
+                              SizedBox(
+                                height: 29.h,
+                              ),
+                              Center(
+                                child: Container(
+                                  width: 317.w,
+                                  height: 51.h,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.r),
+                                    color: Color(0xFF53B175),
+                                  ),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        check();
+
+                                        // print(penjual_id.toString());
+                                      },
+                                      child: Center(
+                                        child: Text(
+                                          'Tambah',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18.sp,
+                                              fontFamily: 'Mulish',
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 50.h,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                              SizedBox(
+                                height: 30.h,
+                              ),
+                            ]),
+                      ))),
             ));
   }
 }

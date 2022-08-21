@@ -7,16 +7,19 @@ import 'package:async/async.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:rojotani/petani/navPetani.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class kirimPetani extends StatefulWidget {
+class selesaiPage extends StatefulWidget {
+  TabController controller;
+
+  selesaiPage(this.controller);
+
   @override
-  State<kirimPetani> createState() => _kirimPetaniState();
+  State<selesaiPage> createState() => _selesaiPageState();
 }
 
-class _kirimPetaniState extends State<kirimPetani> {
-  var cekout_id, penjual_id, produk_id, data, _future, pesan;
+class _selesaiPageState extends State<selesaiPage> {
+  var cekout_id, pembeli_id, produk_id, data, _future;
 
   final _key = new GlobalKey<FormState>();
 
@@ -28,23 +31,18 @@ class _kirimPetaniState extends State<kirimPetani> {
     ));
   }
 
-// fungsi utuk memaggil data dari tabel cekout dan penjual
+// fungsi utuk memaggil data dari tabel cekout dan pembeli
   Future getCekout() async {
     SharedPreferences localId = await SharedPreferences.getInstance();
     setState(() {
-      penjual_id = localId.getString('penjual_id');
+      pembeli_id = localId.getString('pembeli_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/kirim'; //api menampilkan data  dari cekout id
+        'http://192.168.43.56:8000/api/status/terima'; //api menampilkan data  dari cekout id
     final response = await http.post(url, body: {
-      "penjual_id": penjual_id, // mengirim  id sesuai data yag diminta
+      "pembeli_id": pembeli_id, // mengirim  id sesuai data yag diminta
     });
     return jsonDecode(response.body);
-  }
-
-  Future getDataCekout(cekout_id) async {
-    SharedPreferences cekout = await SharedPreferences.getInstance();
-    cekout..setString('cekout_id', cekout_id.toString());
   }
 
 // mengatasi perubahan yang terjadi
@@ -66,7 +64,7 @@ class _kirimPetaniState extends State<kirimPetani> {
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-                  margin: EdgeInsets.only(top: 17.sp),
+                  margin: EdgeInsets.only(top: 17),
                   decoration: BoxDecoration(
                       //color: Colors.blue,
                       border: Border.all(color: Colors.grey[300], width: 1),
@@ -76,7 +74,7 @@ class _kirimPetaniState extends State<kirimPetani> {
                           ),
                           topRight: Radius.circular(10))),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    padding: EdgeInsets.symmetric(horizontal: 24),
                     child: ListView.builder(
                         itemCount: snapshot.data.length,
                         itemBuilder: (context, index) {
@@ -88,14 +86,14 @@ class _kirimPetaniState extends State<kirimPetani> {
                                   Column(
                                     children: [
                                       SizedBox(
-                                        height: 20.h,
+                                        height: 20,
                                       ),
                                       Container(
                                         width: 95,
                                         height: 95,
                                         child: ClipRRect(
                                             borderRadius:
-                                                BorderRadius.circular(5.r),
+                                                BorderRadius.circular(5),
                                             child: Image.network(
                                               'http://192.168.43.56:8000/img/produk/' +
                                                   snapshot.data[index]
@@ -107,25 +105,25 @@ class _kirimPetaniState extends State<kirimPetani> {
                                     ],
                                   ),
                                   SizedBox(
-                                    width: 15.w,
+                                    width: 15,
                                   ),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
-                                        height: 10.h,
+                                        height: 10,
                                       ),
                                       Text(
                                         snapshot.data[index]['nama_produk'],
                                         style: TextStyle(
                                             fontFamily: 'Mulish',
-                                            fontSize: 20.sp,
+                                            fontSize: 20,
                                             color: Colors.black,
                                             fontWeight: FontWeight.w700),
                                       ),
                                       SizedBox(
-                                        height: 10.h,
+                                        height: 10,
                                       ),
                                       Text(
                                         'Jumlah : ' +
@@ -133,12 +131,12 @@ class _kirimPetaniState extends State<kirimPetani> {
                                                 .toString(),
                                         style: TextStyle(
                                             fontFamily: 'Mulish',
-                                            fontSize: 18.sp,
+                                            fontSize: 18,
                                             color: Colors.black,
                                             fontWeight: FontWeight.w600),
                                       ),
                                       SizedBox(
-                                        height: 10.h,
+                                        height: 10,
                                       ),
                                       Text(
                                         'Total : Rp. ' +
@@ -146,7 +144,7 @@ class _kirimPetaniState extends State<kirimPetani> {
                                                 .toString(),
                                         style: TextStyle(
                                             fontFamily: 'Mulish',
-                                            fontSize: 18.sp,
+                                            fontSize: 18,
                                             color: Color(0xFF53B175),
                                             fontWeight: FontWeight.w600),
                                       )
@@ -155,7 +153,7 @@ class _kirimPetaniState extends State<kirimPetani> {
                                 ],
                               ),
                               SizedBox(
-                                height: 15.h,
+                                height: 15,
                               ),
                               Divider(
                                 thickness: 1,
@@ -164,27 +162,29 @@ class _kirimPetaniState extends State<kirimPetani> {
                                 'alamat : ' + snapshot.data[index]['alamat'],
                                 style: TextStyle(
                                     fontFamily: 'Mulish',
-                                    fontSize: 18.sp,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w400),
                               ),
                               SizedBox(
-                                height: 10.h,
+                                height: 10,
                               ),
                               Text(
                                 'catatan: ' + snapshot.data[index]['catatan'],
                                 style: TextStyle(
                                     fontFamily: 'Mulish',
-                                    fontSize: 18.sp,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w400),
                               ),
                               SizedBox(
-                                height: 28.h,
+                                height: 28,
                               ),
                               Divider(
                                 thickness: 5,
                                 color: Colors.black,
                               ),
-                              SizedBox(height: 54.h),
+                              SizedBox(
+                                height: 40,
+                              ),
                             ],
                           );
                         }),

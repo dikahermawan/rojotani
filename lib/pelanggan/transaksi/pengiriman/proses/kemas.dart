@@ -7,17 +7,22 @@ import 'package:async/async.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:rojotani/petani/navPetani.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class kirimPetani extends StatefulWidget {
+class kemasPage extends StatefulWidget {
   @override
-  State<kirimPetani> createState() => _kirimPetaniState();
+  State<kemasPage> createState() => _kemasPageState();
 }
 
-class _kirimPetaniState extends State<kirimPetani> {
-  var cekout_id, penjual_id, produk_id, data, _future, pesan;
-
+class _kemasPageState extends State<kemasPage> {
+  var cekout_id,
+      pembeli_id,
+      produk_id,
+      data,
+      _future,
+      textbtn = 'bayar',
+      btnCol = Color(0xFF53B175),
+      fontCol = Colors.white;
   final _key = new GlobalKey<FormState>();
 
   errorSnackBar(BuildContext context, String text) {
@@ -28,23 +33,67 @@ class _kirimPetaniState extends State<kirimPetani> {
     ));
   }
 
-// fungsi utuk memaggil data dari tabel cekout dan penjual
+  File _imageFile;
+
+// fungsi utuk memaggil data dari tabel cekout dan pembeli
   Future getCekout() async {
     SharedPreferences localId = await SharedPreferences.getInstance();
     setState(() {
-      penjual_id = localId.getString('penjual_id');
+      pembeli_id = localId.getString('pembeli_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/kirim'; //api menampilkan data  dari cekout id
+        'http://192.168.43.56:8000/api/status/kemas'; //api menampilkan data  dari cekout id
     final response = await http.post(url, body: {
-      "penjual_id": penjual_id, // mengirim  id sesuai data yag diminta
+      "pembeli_id": pembeli_id, // mengirim  id sesuai data yag diminta
     });
     return jsonDecode(response.body);
   }
 
-  Future getDataCekout(cekout_id) async {
-    SharedPreferences cekout = await SharedPreferences.getInstance();
-    cekout..setString('cekout_id', cekout_id.toString());
+// fungsi mengambil gambar dari galeri
+  _pilihGallery() async {
+    var image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, maxHeight: 1920.0, maxWidth: 1080.0);
+    setState(() {
+      _imageFile = image;
+    });
+  }
+
+//fungsi utuk mevalidasi value yang diiputkan
+  check() {
+    final form = _key.currentState;
+    if (form.validate()) {
+      form.save();
+      submit();
+    }
+  }
+
+  //fungsi untuk meambahka data berupa gambar dan beberapa data dari pembeli id
+  submit() async {
+    try {
+      var stream =
+          http.ByteStream(DelegatingStream.typed(_imageFile.openRead()));
+      var length = await _imageFile.length();
+      var uri = Uri.parse("http://192.168.43.56:8000/api/bayar");
+      var request = http.MultipartRequest("POST", uri);
+      request.fields['cekout_id'] = cekout_id;
+      request.fields['pembeli_id'] = pembeli_id;
+
+      request.files.add(http.MultipartFile("gambar", stream, length,
+          filename: path.basename(_imageFile.path)));
+      var response = await request.send();
+      if (response.statusCode > 2) {
+        print("image upload");
+        setState(() {
+          textbtn = 'Menunggu Validasi';
+          btnCol = Color(0xFFFFFFF);
+          fontCol = Colors.black;
+        });
+      } else {
+        print("image failed");
+      }
+    } catch (e) {
+      debugPrint("Error $e");
+    }
   }
 
 // mengatasi perubahan yang terjadi
@@ -177,14 +226,53 @@ class _kirimPetaniState extends State<kirimPetani> {
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.w400),
                               ),
+                              Divider(
+                                thickness: 1,
+                              ),
+                              SizedBox(
+                                height: 6.h,
+                              ),
                               SizedBox(
                                 height: 28.h,
                               ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 40.w),
+                                child: InkWell(
+                                  onTap: () {
+                                    check();
+                                  },
+                                  child: Container(
+                                    height: 45.h,
+                                    width: 251.w,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Color(0xFF53B175), width: 1),
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: btnCol),
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            textbtn,
+                                            style: TextStyle(
+                                                fontFamily: 'Mulish',
+                                                fontSize: 16.sp,
+                                                fontWeight: FontWeight.w800,
+                                                color: fontCol),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 54.h),
                               Divider(
                                 thickness: 5,
                                 color: Colors.black,
-                              ),
-                              SizedBox(height: 54.h),
+                              )
                             ],
                           );
                         }),

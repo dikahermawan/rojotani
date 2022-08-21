@@ -7,16 +7,15 @@ import 'package:async/async.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:rojotani/petani/navPetani.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class kirimPetani extends StatefulWidget {
+class terimaPage extends StatefulWidget {
   @override
-  State<kirimPetani> createState() => _kirimPetaniState();
+  State<terimaPage> createState() => _terimaPageState();
 }
 
-class _kirimPetaniState extends State<kirimPetani> {
-  var cekout_id, penjual_id, produk_id, data, _future, pesan;
+class _terimaPageState extends State<terimaPage> {
+  var cekout_id, pembeli_id, produk_id, data, _future;
 
   final _key = new GlobalKey<FormState>();
 
@@ -28,23 +27,18 @@ class _kirimPetaniState extends State<kirimPetani> {
     ));
   }
 
-// fungsi utuk memaggil data dari tabel cekout dan penjual
+// fungsi utuk memaggil data dari tabel cekout dan pembeli
   Future getCekout() async {
     SharedPreferences localId = await SharedPreferences.getInstance();
     setState(() {
-      penjual_id = localId.getString('penjual_id');
+      pembeli_id = localId.getString('pembeli_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/kirim'; //api menampilkan data  dari cekout id
+        'http://192.168.43.56:8000/api/status/terima'; //api menampilkan data  dari cekout id
     final response = await http.post(url, body: {
-      "penjual_id": penjual_id, // mengirim  id sesuai data yag diminta
+      "pembeli_id": pembeli_id, // mengirim  id sesuai data yag diminta
     });
     return jsonDecode(response.body);
-  }
-
-  Future getDataCekout(cekout_id) async {
-    SharedPreferences cekout = await SharedPreferences.getInstance();
-    cekout..setString('cekout_id', cekout_id.toString());
   }
 
 // mengatasi perubahan yang terjadi
@@ -184,7 +178,9 @@ class _kirimPetaniState extends State<kirimPetani> {
                                 thickness: 5,
                                 color: Colors.black,
                               ),
-                              SizedBox(height: 54.h),
+                              SizedBox(
+                                height: 40.h,
+                              ),
                             ],
                           );
                         }),

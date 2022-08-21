@@ -54,6 +54,7 @@ flutter:
     - asset/slider/
     - asset/icon/
     - asset/images/vector.svg
+    - asset/profil/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

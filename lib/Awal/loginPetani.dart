@@ -1,24 +1,28 @@
 import 'dart:convert';
+import 'package:rojotani/Awal/registerPetani.dart';
 import 'package:rojotani/pelanggan/produk/home.dart';
-import 'package:rojotani/pelanggan/produk/navPembeli.dart';
+import 'package:rojotani/petani/akun/akunPetani.dart';
+import 'package:rojotani/petani/navPetani.dart';
+import 'package:rojotani/petani/produk/katalog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/registerPelanggan.dart';
 import 'package:rojotani/Awal/loginAs.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class loginPelangganPage extends StatefulWidget {
+class loginPetaniPage extends StatefulWidget {
   @override
-  State<loginPelangganPage> createState() => _loginPelangganPageState();
+  State<loginPetaniPage> createState() => _loginPetaniPageState();
 }
 
-enum LoginStatus { notSignIn, SignIn }
+enum LoginStatus { notSignIn, SignIn } //inisialisasi status login
 
-class _loginPelangganPageState extends State<loginPelangganPage> {
+class _loginPetaniPageState extends State<loginPetaniPage> {
   LoginStatus _loginStatus = LoginStatus.notSignIn;
   String email, password;
   bool isHiddenPassword = true;
+  String pesan;
   final _key = new GlobalKey<FormState>();
 
   errorSnackBar(BuildContext context, String text) {
@@ -29,6 +33,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     ));
   }
 
+// fungsi untu validasi data dan mengarahkan ke fungsi login
   check() {
     final form = _key.currentState;
     if (form.validate()) {
@@ -37,16 +42,20 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     }
   }
 
+// fugsi untuk proses login
   Future<Map<String, dynamic>> login() async {
-    final response = await http.post("http://192.168.43.56:8000/api/logpembeli",
-        body: {'email': email, 'password': password});
+    Uri url = Uri.parse("http://192.168.43.56:8000/api/logpenjual");
+    final response = await http.post(url, body: {
+      'email': email,
+      'password': password,
+    });
     final data = jsonDecode(response.body) as Map<String, dynamic>;
     var value = data['success'];
-    String pesan = data['message'];
-    // var user = data['user'];
+    pesan = data['message'];
 
-    SharedPreferences localId = await SharedPreferences.getInstance();
-    localId.setString('pembeli_id', data['pembeli_id']);
+    //menyimpan da menyediakan data id penjual secara local
+    SharedPreferences localdata = await SharedPreferences.getInstance();
+    localdata..setString('penjual_id', data['penjual_id']);
 
     if (value == 1) {
       setState(() {
@@ -59,14 +68,18 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     }
   }
 
+// menyimpan value status login atau tidak, ketika reload tetap pada status terakhr signout atau logout
   savePref(int value) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt('value', value);
+      // preferences.setString('penjual_id', penjual_id);
+      // preferences.setString('id', id);
       preferences.commit();
     });
   }
 
+// mengambil value dari set pref / penyimpanan local
   var value;
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -76,6 +89,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     });
   }
 
+//fungsi mejalankan perubahan
   @override
   void initState() {
     // TODO: implement initState
@@ -151,7 +165,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
                                 height: 47.h,
                               ),
                               Text(
-                                'Masukkan Akun Pembeli',
+                                'Masukkan Akun Penjual',
                                 style: TextStyle(
                                     fontFamily: 'Mulish',
                                     fontSize: 20.sp,
@@ -190,6 +204,11 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
                                 height: 19.h,
                               ),
                               TextFormField(
+                                validator: (e) {
+                                  if (e.isEmpty) {
+                                    return 'masukkan password';
+                                  }
+                                },
                                 onSaved: (e) => password = e,
                                 obscureText: isHiddenPassword,
                                 decoration: InputDecoration(
@@ -238,7 +257,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
                               ),
                               // Center(
                               //   child: Text(
-                              //     pesan,
+
                               //     style: TextStyle(
                               //       color: Colors.red,
                               //       fontFamily: 'Mulish',
@@ -260,7 +279,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
                                   color: Colors.transparent,
                                   child: InkWell(
                                     onTap: () {
-                                      check();
+                                      check(); // menjalankan fungsi cek pada button
                                     },
                                     child: Center(
                                       child: Text(
@@ -294,7 +313,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (cotext) =>
-                                                    registerPelangganPage()));
+                                                    registerPetaniPage()));
                                       },
                                       child: Text(
                                         'Daftar',
@@ -310,7 +329,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
             ));
         break;
       case LoginStatus.SignIn:
-        return navPembeli();
+        return navPetani();
     }
   }
 
