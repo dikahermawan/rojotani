@@ -25,6 +25,7 @@ class _loginPetaniPageState extends State<loginPetaniPage> {
   String pesan;
   final _key = new GlobalKey<FormState>();
 
+  // fugsi untuk menampilkan snackbar
   errorSnackBar(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Color.fromARGB(255, 184, 15, 3),
@@ -53,7 +54,7 @@ class _loginPetaniPageState extends State<loginPetaniPage> {
     var value = data['success'];
     pesan = data['message'];
 
-    //menyimpan da menyediakan data id penjual secara local
+    //menyimpan dan menyediakan data id penjual yang login secara local
     SharedPreferences localdata = await SharedPreferences.getInstance();
     localdata..setString('penjual_id', data['penjual_id']);
 
@@ -68,13 +69,11 @@ class _loginPetaniPageState extends State<loginPetaniPage> {
     }
   }
 
-// menyimpan value status login atau tidak, ketika reload tetap pada status terakhr signout atau logout
+  // menyimpan value status login atau tidak, ketika reload tetap pada status terakhr signout atau logout
   savePref(int value) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt('value', value);
-      // preferences.setString('penjual_id', penjual_id);
-      // preferences.setString('id', id);
       preferences.commit();
     });
   }
@@ -89,7 +88,7 @@ class _loginPetaniPageState extends State<loginPetaniPage> {
     });
   }
 
-//fungsi mejalankan perubahan
+  //fungsi mejalankan fungsi yag aka digunakan atau dijalankan
   @override
   void initState() {
     // TODO: implement initState
@@ -234,39 +233,7 @@ class _loginPetaniPageState extends State<loginPetaniPage> {
                                         fontWeight: FontWeight.w400)),
                               ),
                               SizedBox(
-                                height: 12.h,
-                              ),
-                              new Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: Text(
-                                      'Lupa Katasandi ?',
-                                      style: TextStyle(
-                                          fontSize: 12.sp,
-                                          color: Colors.grey,
-                                          fontFamily: 'Mulish',
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              // Center(
-                              //   child: Text(
-
-                              //     style: TextStyle(
-                              //       color: Colors.red,
-                              //       fontFamily: 'Mulish',
-                              //     ),
-                              //     textAlign: TextAlign.center,
-                              //   ),
-                              // ),
-                              SizedBox(
-                                height: 10.h,
+                                height: 36.h,
                               ),
                               new Container(
                                 width: 317.w,
@@ -333,6 +300,7 @@ class _loginPetaniPageState extends State<loginPetaniPage> {
     }
   }
 
+  // fungsi buka tutup pasword
   void _togglePasswordView() {
     if (isHiddenPassword) {
       isHiddenPassword = false;

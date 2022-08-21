@@ -12,6 +12,7 @@ class loginAsPage extends StatefulWidget {
 class _loginAsPageState extends State<loginAsPage> {
   @override
   Widget build(BuildContext context) {
+    //responsive dengan package sreenutil
     ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/loginPelanggan.dart';
 import 'package:rojotani/Awal/loginPetani.dart';
 import 'package:rojotani/Awal/registerAs.dart';
-import 'package:rojotani/Awal/dataDiri.dart';
 import 'package:http/http.dart' as http;
 
 class registerPetaniPage extends StatefulWidget {
@@ -20,7 +19,7 @@ class _registerPetaniPageState extends State<registerPetaniPage> {
   final _key =
       new GlobalKey<FormState>(); // inisialisasi key membaca data pada form
 
-  //fungsi untuk menampilkan eror
+  //fungsi untuk menampilkan snackbar
   errorSnackBar(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Color.fromARGB(255, 184, 15, 3),
@@ -97,7 +96,7 @@ class _registerPetaniPageState extends State<registerPetaniPage> {
           centerTitle: true,
         ),
         body: Form(
-          key: _key,
+          key: _key, // mendefinisikan agar apat merekam data berdasarkan key
           child: SafeArea(
               child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 36.w),
@@ -167,7 +166,8 @@ class _registerPetaniPageState extends State<registerPetaniPage> {
                                 return 'masukkan alamat';
                               }
                             },
-                            onSaved: (e) => alamat = e,
+                            onSaved: (e) =>
+                                alamat = e, //merekam data berupa text
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
@@ -195,7 +195,8 @@ class _registerPetaniPageState extends State<registerPetaniPage> {
                                 return 'masukkan email';
                               }
                             },
-                            onSaved: (e) => email = e,
+                            onSaved: (e) =>
+                                email = e, //merekam data berupa text
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
@@ -223,7 +224,8 @@ class _registerPetaniPageState extends State<registerPetaniPage> {
                                 return 'masukkan password';
                               }
                             },
-                            onSaved: (e) => password = e,
+                            onSaved: (e) =>
+                                password = e, //merekam data berupa text
                             obscureText: isHiddenPassword1,
                             decoration: InputDecoration(
                                 suffixIcon: IconButton(
@@ -256,7 +258,7 @@ class _registerPetaniPageState extends State<registerPetaniPage> {
                                 return 'Masukkan nomer rekening';
                               }
                             },
-                            onSaved: (e) => no_rekening = e,
+                            onSaved: (e) => no_rekening = e, //merekam data
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
@@ -276,10 +278,7 @@ class _registerPetaniPageState extends State<registerPetaniPage> {
                                     fontWeight: FontWeight.w400)),
                           ),
                           SizedBox(
-                            height: 12.h,
-                          ),
-                          SizedBox(
-                            height: 33.h,
+                            height: 45.h,
                           ),
                           new Container(
                             width: 317.w,

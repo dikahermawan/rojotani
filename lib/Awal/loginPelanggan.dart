@@ -13,7 +13,7 @@ class loginPelangganPage extends StatefulWidget {
   State<loginPelangganPage> createState() => _loginPelangganPageState();
 }
 
-enum LoginStatus { notSignIn, SignIn }
+enum LoginStatus { notSignIn, SignIn } //inisialisasi status login
 
 class _loginPelangganPageState extends State<loginPelangganPage> {
   LoginStatus _loginStatus = LoginStatus.notSignIn;
@@ -21,6 +21,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
   bool isHiddenPassword = true;
   final _key = new GlobalKey<FormState>();
 
+  // fugsi untuk menampilkan snackbar
   errorSnackBar(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Color.fromARGB(255, 184, 15, 3),
@@ -29,6 +30,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     ));
   }
 
+// fungsi untu validasi data dan mengarahkan ke fungsi login
   check() {
     final form = _key.currentState;
     if (form.validate()) {
@@ -37,13 +39,15 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     }
   }
 
+// fugsi untuk proses login
   Future<Map<String, dynamic>> login() async {
     final response = await http.post("http://192.168.43.56:8000/api/logpembeli",
         body: {'email': email, 'password': password});
     final data = jsonDecode(response.body) as Map<String, dynamic>;
     var value = data['success'];
     String pesan = data['message'];
-    // var user = data['user'];
+
+    //menyimpan dan menyediakan data id pembeli yang login secara local
 
     SharedPreferences localId = await SharedPreferences.getInstance();
     localId.setString('pembeli_id', data['pembeli_id']);
@@ -59,6 +63,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     }
   }
 
+  // menyimpan value status login atau tidak, ketika reload tetap pada status terakhr signout atau logout
   savePref(int value) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
@@ -67,6 +72,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     });
   }
 
+// mengambil value dari set pref / penyimpanan local
   var value;
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -76,6 +82,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     });
   }
 
+  //fungsi mejalankan fungsi yag aka digunakan atau dijalankan
   @override
   void initState() {
     // TODO: implement initState
@@ -215,39 +222,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
                                         fontWeight: FontWeight.w400)),
                               ),
                               SizedBox(
-                                height: 12.h,
-                              ),
-                              new Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: Text(
-                                      'Lupa Katasandi ?',
-                                      style: TextStyle(
-                                          fontSize: 12.sp,
-                                          color: Colors.grey,
-                                          fontFamily: 'Mulish',
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              // Center(
-                              //   child: Text(
-                              //     pesan,
-                              //     style: TextStyle(
-                              //       color: Colors.red,
-                              //       fontFamily: 'Mulish',
-                              //     ),
-                              //     textAlign: TextAlign.center,
-                              //   ),
-                              // ),
-                              SizedBox(
-                                height: 10.h,
+                                height: 35.h,
                               ),
                               new Container(
                                 width: 317.w,
@@ -314,6 +289,7 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
     }
   }
 
+  // fungsi buka tutup pasword
   void _togglePasswordView() {
     if (isHiddenPassword) {
       isHiddenPassword = false;

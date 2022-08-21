@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/gestures.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
-import 'package:rojotani/layout.dart';
 import 'package:rojotani/pelanggan/produk/product_card.dart';
 import 'package:rojotani/pelanggan/produk/lelang_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';

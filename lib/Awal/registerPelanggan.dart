@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:rojotani/Awal/loginPelanggan.dart';
 import 'package:rojotani/Awal/registerAs.dart';
-import 'package:rojotani/Awal/dataDiri.dart';
 import 'package:http/http.dart' as http;
 
 class registerPelangganPage extends StatefulWidget {
@@ -17,6 +16,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
   String nama, alamat, email, password;
   final _key = new GlobalKey<FormState>();
 
+  // fugsi memunculkan snackbar
   errorSnackBar(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Color.fromARGB(255, 184, 15, 3),
@@ -25,6 +25,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
     ));
   }
 
+  // fungsi untuk validasi apakah data sudah terisi atau tidak
   check() {
     final form = _key.currentState;
     if (form.validate()) {
@@ -33,6 +34,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
     }
   }
 
+  // fungsi untuk mengirim data ke backend untuk menambah data
   save() async {
     final response =
         await http.post("http://192.168.43.56:8000/api/regpembeli", body: {
@@ -90,7 +92,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
           centerTitle: true,
         ),
         body: Form(
-          key: _key,
+          key: _key, // mendefinisikan agar apat merekam data berdasarkan key
           child: SafeArea(
               child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 36.w),
@@ -133,7 +135,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                                 return 'masukkan username';
                               }
                             },
-                            onSaved: (e) => nama = e,
+                            onSaved: (e) => nama = e, // untuk merekam value
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderRadius: new BorderRadius.circular(10.r),
@@ -160,7 +162,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                                 return 'masukkan alamat';
                               }
                             },
-                            onSaved: (e) => alamat = e,
+                            onSaved: (e) => alamat = e, // untuk merekam value
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
@@ -188,7 +190,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                                 return 'masukkan email';
                               }
                             },
-                            onSaved: (e) => email = e,
+                            onSaved: (e) => email = e, // untuk merekam value
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
@@ -216,12 +218,14 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                                 return 'masukkan password';
                               }
                             },
-                            onSaved: (e) => password = e,
-                            obscureText: isHiddenPassword,
+                            onSaved: (e) => password = e, // untuk merekam value
+                            obscureText:
+                                isHiddenPassword, // menyembunyikan password
                             decoration: InputDecoration(
                                 suffixIcon: IconButton(
                                   icon: Icon(Icons.remove_red_eye),
-                                  onPressed: _togglePasswordView,
+                                  onPressed:
+                                      _togglePasswordView, // berubah ketika di klik
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: new BorderRadius.circular(10.r),
@@ -240,42 +244,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                                     fontWeight: FontWeight.w400)),
                           ),
                           SizedBox(
-                            height: 19.h,
-                          ),
-                          // TextFormField(
-                          //   validator: (e) {
-                          //     if (e.isEmpty) {
-                          //       return 'Konfirmasi password';
-                          //     }
-                          //   },
-                          //   onSaved: (e) => password = e,
-                          //   obscureText: isHiddenPassword2,
-                          //   decoration: InputDecoration(
-                          //       suffixIcon: IconButton(
-                          //         icon: Icon(Icons.remove_red_eye),
-                          //         onPressed: _togglePasswordView2,
-                          //       ),
-                          //       border: OutlineInputBorder(
-                          //         borderRadius: new BorderRadius.circular(10.r),
-                          //       ),
-                          //       focusedBorder: OutlineInputBorder(
-                          //           borderRadius:
-                          //               new BorderRadius.circular(10.r),
-                          //           borderSide: BorderSide(
-                          //               color: Color(0xFF53B175), width: 2.w)),
-                          //       contentPadding: EdgeInsets.symmetric(
-                          //           horizontal: 14.w, vertical: 14.h),
-                          //       hintText: 'Ulangi Katasandi',
-                          //       hintStyle: TextStyle(
-                          //           color: Colors.grey,
-                          //           fontFamily: 'Mulish',
-                          //           fontWeight: FontWeight.w400)),
-                          // ),
-                          SizedBox(
-                            height: 12.h,
-                          ),
-                          SizedBox(
-                            height: 33.h,
+                            height: 64.h,
                           ),
                           new Container(
                             width: 317.w,
@@ -288,7 +257,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
                               color: Colors.transparent,
                               child: InkWell(
                                 onTap: () {
-                                  check();
+                                  check(); // menjalankan fungsi cek ketika di klik
                                 },
                                 child: Center(
                                   child: Text(
@@ -339,6 +308,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
         ));
   }
 
+  // fungsi menampilkan dan menyembuyikan password
   void _togglePasswordView() {
     if (isHiddenPassword == true) {
       isHiddenPassword = false;
