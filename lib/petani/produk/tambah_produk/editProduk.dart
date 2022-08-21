@@ -37,7 +37,7 @@ class _editProdukState extends State<editProduk> {
     setState(() {
       produk_id = localdata.getString('produk_id');
     });
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/produk/edit");
+    Uri url = Uri.parse("http://192.168.27.135:8080/api/produk/edit");
     final response = await http.post(url, body: {
       "produk_id": produk_id,
     });
@@ -61,7 +61,7 @@ class _editProdukState extends State<editProduk> {
   }
 
   update() async {
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/produk/update");
+    Uri url = Uri.parse("http://192.168.27.135:8080/api/produk/update");
     final response = await http.post(url, body: {
       "produk_id": produk_id,
       'nama': nama,

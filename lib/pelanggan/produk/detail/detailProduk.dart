@@ -1,7 +1,9 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rojotani/pelanggan/produk/navPembeli.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class detailProduk extends StatefulWidget {
   const detailProduk({Key key}) : super(key: key);
@@ -11,6 +13,56 @@ class detailProduk extends StatefulWidget {
 }
 
 class _detailProdukState extends State<detailProduk> {
+  var produk_id, pembeli_id, _future;
+
+  // fungsi untuk menampilkan snackbar
+  errorSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Color.fromARGB(255, 184, 15, 3),
+      content: Text(text),
+      duration: const Duration(seconds: 3),
+    ));
+  }
+
+  // fungsi untuk mengambil data dan ditampilkan
+  Future getDataProduk() async {
+    SharedPreferences localdata = await SharedPreferences.getInstance();
+    setState(() {
+      produk_id = localdata.getString('produk_id');
+    });
+    final String url =
+        'http://192.168.27.135:8080/api/detaildata'; //api menampilkan data produk
+    final response = await http.post(url, body: {
+      "produk_id": produk_id,
+    });
+    return jsonDecode(response.body);
+  }
+
+  // fungsi untuk mengambil id pembeli dari penyimpaan lokal
+  getPembeli() async {
+    SharedPreferences localId = await SharedPreferences.getInstance();
+    setState(() {
+      pembeli_id = localId.getString('pembeli_id');
+    });
+  }
+
+  // fungsi untuk mengambil id lelang dari penyimpaan lokal
+  getProduk() async {
+    SharedPreferences dataLelang = await SharedPreferences.getInstance();
+    setState(() {
+      produk_id = dataLelang.getString('produk_id');
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getPembeli();
+    getProduk();
+    _future = getDataProduk();
+  }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(
@@ -49,146 +101,160 @@ class _detailProdukState extends State<detailProduk> {
           ),
           centerTitle: true,
         ),
-        body: SafeArea(
-            child: Column(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height * 0.787,
-              child: SingleChildScrollView(
-                child: Column(
+        body: FutureBuilder(
+            future: _future,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return SafeArea(
+                    child: Column(
                   children: [
                     Container(
-                      color: Colors.blue,
-                      height: MediaQuery.of(context).size.height * 0.45,
-                      child: Image.asset(
-                        'asset/gambar/nangka.png',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20.w),
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Text(
-                          'Nama Produk',
-                          style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 22.sp,
-                            fontWeight: FontWeight.w700,
-                          ),
+                      height: MediaQuery.of(context).size.height * 0.787,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Container(
+                              color: Colors.blue,
+                              height: MediaQuery.of(context).size.height * 0.45,
+                              child: Image.network(
+                                'http://192.168.27.135:8080/img/produk/' +
+                                    snapshot.data['gambar'],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 20.w),
+                              child: Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  snapshot.data['nama'],
+                                  style: TextStyle(
+                                    fontFamily: 'Mulish',
+                                    fontSize: 22.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 20.w),
+                              child: Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  'Rp. ' + snapshot.data['harga'].toString(),
+                                  style: TextStyle(
+                                    color: Color(0xFF53B175),
+                                    fontFamily: 'Mulish',
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 20.w),
+                              child: Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  'Sisa ' +
+                                      snapshot.data['stok'].toString() +
+                                      ' ' +
+                                      snapshot.data['satuan'],
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontFamily: 'Mulish',
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Divider(
+                                thickness: 2,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 20.w),
+                              child: Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  'Deskripsi Produk',
+                                  style: TextStyle(
+                                    fontFamily: 'Mulish',
+                                    fontSize: 21.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  snapshot.data['deskripsi'],
+                                  style: TextStyle(
+                                    fontFamily: 'Mulish',
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20.w),
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Text(
-                          'Rp. harga',
-                          style: TextStyle(
-                            color: Color(0xFF53B175),
-                            fontFamily: 'Mulish',
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w500,
+                    InkWell(
+                      onTap: () {
+                        print('beli produk');
+                      },
+                      child: Container(
+                        color: Color(0xFF53B175),
+                        height: MediaQuery.of(context).size.height * 0.081,
+                        width: MediaQuery.of(context).size.width * 1,
+                        child: Center(
+                          child: Text(
+                            'Beli Produk',
+                            style: TextStyle(
+                                fontFamily: 'Mulish',
+                                color: Colors.white,
+                                fontSize: 23.sp,
+                                fontWeight: FontWeight.w800),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20.w),
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Text(
-                          'Tersisa 60 kg',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontFamily: 'Mulish',
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Divider(
-                        thickness: 2,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20.w),
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Text(
-                          'Deskripsi Produk',
-                          style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 21.sp,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Text(
-                          'angka terutama dipanen buahnya. "Daging buah" yang matang sering kali dimakan dalam keadaan segar, dicampur dalam es, dihaluskan menjadi minuman (jus), atau diolah menjadi aneka jenis makanan daerah: dodol nangka, kolak nangka, selai nangka, nangka-goreng-tepung, keripik nangka, dan lain-lain. Nangka juga digunakan sebagai pengharum es krim dan minuman, dijadikan madu-nangka, konsentrat atau tepung. Biji nangka, dikenal sebagai "beton", dapat direbus dan dimakan sebagai sumber karbohidrat tambahan.Biji nangka juga bisa dijadikan satu dengan masakan kolak nangka. Nangka maupun biji nangka juga bisa digabung dengan masakan kolak pisang atau buah sukun. Biji nangka juga bisa dijadikan tepung. Biji nangka yang direbus secara terpisah atau tidak diikutkan dalam masakan kolak, dapat dimakan seperti halnya kita makan singkong. Biji nangka bisa juga dimasak dengan cara digoreng.Buah nangka muda sangat digemari sebagai bahan sayuran. Di Sumatra, terutama di Minangkabau, dikenal masakan gulai cubadak (gulai nangka). Di Jawa Barat buah nangka muda antara lain dimasak sebagai salah satu bahan sayur asam. Di Jawa Tengah dikenal berbagai macam masakan dengan bahan dasar buah nangka muda (disebut gori), seperti sayur lodeh, masakan megono, oseng-oseng gori, dan jangan gori (sayur nangka muda). Di Jogyakarta nangka muda terutama dimasak sebagai gudeg. Sementara di seputaran Jakarta dan Jawa Barat, bongkol bunga jantan (disebut babal atau tongtolang) kerap dijadikan bahan rujak.',
-                          style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
+                    )
                   ],
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                print('beli produk');
-              },
-              child: Container(
-                color: Color(0xFF53B175),
-                height: MediaQuery.of(context).size.height * 0.081,
-                width: MediaQuery.of(context).size.width * 1,
-                child: Center(
-                  child: Text(
-                    'Beli Produk',
-                    style: TextStyle(
-                        fontFamily: 'Mulish',
-                        color: Colors.white,
-                        fontSize: 23.sp,
-                        fontWeight: FontWeight.w800),
-                  ),
-                ),
-              ),
-            )
-          ],
-        )));
+                ));
+              } else {
+                return Center(
+                  child: Text('Load...'),
+                );
+              }
+            }));
   }
 }

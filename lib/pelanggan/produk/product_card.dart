@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rojotani/pelanggan/produk/detail/detailProduk.dart';
 import 'package:rojotani/pelanggan/transaksi/cekOut.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,7 +12,7 @@ class productCard extends StatefulWidget {
 }
 
 class _productCardState extends State<productCard> {
-  final String url = 'http://192.168.43.56:8000/api/getprodukall';
+  final String url = 'http://192.168.27.135:8080/api/getprodukall';
 
   // mengambil dan menampilkan data produk
   Future getProduk() async {
@@ -179,7 +180,14 @@ class _productCardState extends State<productCard> {
                             border: Border.all(width: 1.w, color: Colors.grey),
                           ),
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              getDataProduk(snapshot.data['data'][index]['id']);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => detailProduk()),
+                              );
+                            },
                             child: Column(
                               children: [
                                 Expanded(
@@ -188,7 +196,7 @@ class _productCardState extends State<productCard> {
                                     child: ClipRRect(
                                         borderRadius: BorderRadius.circular(5),
                                         child: Image.network(
-                                          'http://192.168.43.56:8000/img/produk/' +
+                                          'http://192.168.27.135:8080/img/produk/' +
                                               snapshot.data['data'][index][
                                                   'gambar'], // alamat untuk mengambil gambar
                                         )),

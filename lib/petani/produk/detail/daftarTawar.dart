@@ -35,7 +35,7 @@ class _daftarTawarState extends State<daftarTawar> {
       lelang_id = localdata.getString('lelang_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/lelang/ambildata'; //api menampilkan data produk
+        'http://192.168.27.135:8080/api/lelang/ambildata'; //api menampilkan data produk
     final response = await http.post(url, body: {
       "lelang_id": lelang_id,
       // "penjual_id": penjual_id,
@@ -67,7 +67,7 @@ class _daftarTawarState extends State<daftarTawar> {
   //   setState(() {
   //     tawar_id = dataTawar.getString('tawar_id');
   //   });
-  //   Uri url = Uri.parse("http://192.168.43.56:8000/api/status/update");
+  //   Uri url = Uri.parse("http://192.168.27.135:8080/api/status/update");
   //   final response = await http.post(url, body: {
   //     'tawar_id': tawar_id,
   //     'status_tawar': status_tawar,
@@ -153,15 +153,14 @@ class _daftarTawarState extends State<daftarTawar> {
                           child: Column(
                             children: [
                               Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.45,
-                                // child: Image.network(
-                                //   'http://192.168.43.56:8000/imglelang/lelang/' +
-                                //       snapshot.data['lelang']['gambar'],
-                                //   fit: BoxFit
-                                //       .fill, // alamat untuk mengambil gambar
-                                // )
-                              ),
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.45,
+                                  child: Image.network(
+                                    'http://192.168.27.135:8080/imglelang/lelang/' +
+                                        snapshot.data['lelang']['gambar'],
+                                    fit: BoxFit
+                                        .fill, // alamat untuk mengambil gambar
+                                  )),
                               SizedBox(
                                 height: 10.h,
                               ),

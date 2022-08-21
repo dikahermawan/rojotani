@@ -41,7 +41,8 @@ class _loginPelangganPageState extends State<loginPelangganPage> {
 
 // fugsi untuk proses login
   Future<Map<String, dynamic>> login() async {
-    final response = await http.post("http://192.168.43.56:8000/api/logpembeli",
+    final response = await http.post(
+        "http://192.168.27.135:8080/api/logpembeli",
         body: {'email': email, 'password': password});
     final data = jsonDecode(response.body) as Map<String, dynamic>;
     var value = data['success'];

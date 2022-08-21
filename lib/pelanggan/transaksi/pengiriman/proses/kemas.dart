@@ -40,7 +40,7 @@ class _kemasPageState extends State<kemasPage> {
     setState(() {
       pembeli_id = localId.getString('pembeli_id');
     });
-    final String url = 'http://192.168.43.56:8000/api/status/kemas';
+    final String url = 'http://192.168.27.135:8080/api/status/kemas';
     final response = await http.post(url, body: {
       "pembeli_id": pembeli_id, // mengirim  id sesuai data yag diminta
     });
@@ -71,7 +71,7 @@ class _kemasPageState extends State<kemasPage> {
       var stream =
           http.ByteStream(DelegatingStream.typed(_imageFile.openRead()));
       var length = await _imageFile.length();
-      var uri = Uri.parse("http://192.168.43.56:8000/api/bayar");
+      var uri = Uri.parse("http://192.168.27.135:8080/api/bayar");
       var request = http.MultipartRequest("POST", uri);
       request.fields['cekout_id'] = cekout_id;
       request.fields['pembeli_id'] = pembeli_id;
@@ -143,7 +143,7 @@ class _kemasPageState extends State<kemasPage> {
                                             borderRadius:
                                                 BorderRadius.circular(5.r),
                                             child: Image.network(
-                                              'http://192.168.43.56:8000/img/produk/' +
+                                              'http://192.168.27.135:8080/img/produk/' +
                                                   snapshot.data[index]
                                                       ['gambar'],
                                               fit: BoxFit
@@ -225,45 +225,6 @@ class _kemasPageState extends State<kemasPage> {
                               ),
                               Divider(
                                 thickness: 1,
-                              ),
-                              SizedBox(
-                                height: 6.h,
-                              ),
-                              SizedBox(
-                                height: 28.h,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 40.w),
-                                child: InkWell(
-                                  onTap: () {
-                                    check();
-                                  },
-                                  child: Container(
-                                    height: 45.h,
-                                    width: 251.w,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Color(0xFF53B175), width: 1),
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: btnCol),
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            textbtn,
-                                            style: TextStyle(
-                                                fontFamily: 'Mulish',
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w800,
-                                                color: fontCol),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
                               ),
                               SizedBox(height: 54.h),
                               Divider(

@@ -33,7 +33,7 @@ class _penawarState extends State<penawar> {
       lelang_id = localdata.getString('lelang_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/ambildatatawar'; //api menampilkan data produk
+        'http://192.168.27.135:8080/api/ambildatatawar'; //api menampilkan data produk
     final response = await http.post(url, body: {
       "lelang_id": lelang_id,
       // "penjual_id": penjual_id,

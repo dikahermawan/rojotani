@@ -32,7 +32,7 @@ class _profilTawarState extends State<profilTawar> {
       tawar_id = localdata.getString('tawar_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/datatawarid'; //api menampilkan data tawar
+        'http://192.168.27.135:8080/api/datatawarid'; //api menampilkan data tawar
     final response = await http.post(url, body: {
       "tawar_id": tawar_id,
       // "pembeli_id": pembeli_id,
@@ -45,7 +45,7 @@ class _profilTawarState extends State<profilTawar> {
     setState(() {
       tawar_id = dataTawar.getString('tawar_id');
     });
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/status/update");
+    Uri url = Uri.parse("http://192.168.27.135:8080/api/status/update");
     final response = await http.post(url, body: {
       'tawar_id': tawar_id,
       'status_tawar': status_tawar,
@@ -118,7 +118,7 @@ class _profilTawarState extends State<profilTawar> {
             },
           ),
           title: Text(
-            'Profil Penawar + $tawar_id',
+            'Profil Penawar ',
             style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 23.sp,
@@ -160,7 +160,7 @@ class _profilTawarState extends State<profilTawar> {
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(500.r),
                                     child: Image.network(
-                                      'http://192.168.43.56:8000/img/userpembeli/' +
+                                      'http://192.168.27.135:8080/public/gambar/userpembeli/' +
                                           snapshot.data['gambar'],
                                       fit: BoxFit
                                           .fill, // alamat untuk mengambil gambar

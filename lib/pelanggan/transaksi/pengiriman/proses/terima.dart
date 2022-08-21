@@ -33,7 +33,7 @@ class _terimaPageState extends State<terimaPage> {
     setState(() {
       pembeli_id = localId.getString('pembeli_id');
     });
-    final String url = 'http://192.168.43.56:8000/api/status/terima';
+    final String url = 'http://192.168.27.135:8080/api/status/terima';
     final response = await http.post(url, body: {
       "pembeli_id": pembeli_id, // mengirim  id sesuai data yag diminta
     });
@@ -89,7 +89,7 @@ class _terimaPageState extends State<terimaPage> {
                                             borderRadius:
                                                 BorderRadius.circular(5.r),
                                             child: Image.network(
-                                              'http://192.168.43.56:8000/img/produk/' +
+                                              'http://192.168.27.135:8080/img/produk/' +
                                                   snapshot.data[index]
                                                       ['gambar'],
                                               fit: BoxFit

@@ -11,7 +11,7 @@ class lelangCard extends StatefulWidget {
 }
 
 class _lelangCardState extends State<lelangCard> {
-  final String url = 'http://192.168.43.56:8000/api/getlelangall';
+  final String url = 'http://192.168.27.135:8080/api/getlelangall';
 
   // fungsi untuk meambil dan menampilkan data lelang secara keseluruhan
   Future getLelang() async {
@@ -216,7 +216,7 @@ class _lelangCardState extends State<lelangCard> {
                                             borderRadius:
                                                 BorderRadius.circular(5.r),
                                             child: Image.network(
-                                              'http://192.168.43.56:8000/imglelang/lelang/' +
+                                              'http://192.168.27.135:8080/imglelang/lelang/' +
                                                   snapshot.data['data'][index][
                                                       'gambar'], // alamat untuk mengambil gambar
                                             )),

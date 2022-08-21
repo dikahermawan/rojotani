@@ -35,7 +35,7 @@ class _terimaPetaniState extends State<terimaPetani> {
       penjual_id = localId.getString('penjual_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/terima'; //api menampilkan data  dari cekout id
+        'http://192.168.27.135:8080/api/terima'; //api menampilkan data  dari cekout id
     final response = await http.post(url, body: {
       "penjual_id": penjual_id, // mengirim  id sesuai data yag diminta
     });
@@ -97,7 +97,7 @@ class _terimaPetaniState extends State<terimaPetani> {
                                             borderRadius:
                                                 BorderRadius.circular(5.r),
                                             child: Image.network(
-                                              'http://192.168.43.56:8000/img/produk/' +
+                                              'http://192.168.27.135:8080/img/produk/' +
                                                   snapshot.data[index]
                                                       ['gambar'],
                                               fit: BoxFit

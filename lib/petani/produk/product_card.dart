@@ -25,7 +25,7 @@ class _productCardState extends State<productCard> {
       penjual_id = localdata.getString('penjual_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/getproduk'; //api menampilkan data produk
+        'http://192.168.27.135:8080/api/getproduk'; //api menampilkan data produk
     final response = await http.post(url, body: {
       "penjual_id": penjual_id,
     });
@@ -40,7 +40,7 @@ class _productCardState extends State<productCard> {
   //function delete
 
   Future deleteProduct(id) async {
-    String url = 'http://192.168.43.56:8000/api/deleteProduk/' +
+    String url = 'http://192.168.27.135:8080/api/deleteProduk/' +
         id; //api menghapus data produk
     var response = await http.delete(Uri.parse(url));
     setState(() {
@@ -113,7 +113,7 @@ class _productCardState extends State<productCard> {
   }
 
   // Future deleteProduct(String produk_id) async {
-  //   String url = 'http://192.168.43.56:8000/api/delete/' +
+  //   String url = 'http://192.168.27.135:8080/api/delete/' +
   //       produk_id; //api menghapus data produk
   //   var response = await http.delete(Uri.parse(url));
   //   print(json.decode(response.body));
@@ -297,14 +297,13 @@ class _productCardState extends State<productCard> {
                                               5,
                                             ),
                                             child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              // child: Image.network(
-                                              //   'http://192.168.43.56:8000/img/produk/' +
-                                              //       snapshot.data[index][
-                                              //           'gambar'], // alamat untuk mengambil gambar
-                                              // )
-                                            ),
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                child: Image.network(
+                                                  'http://192.168.27.135:8080/img/produk/' +
+                                                      snapshot.data[index][
+                                                          'gambar'], // alamat untuk mengambil gambar
+                                                )),
                                           ),
                                         ),
                                         SizedBox(

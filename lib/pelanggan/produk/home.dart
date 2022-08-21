@@ -22,7 +22,7 @@ class _homePageState extends State<homePage> {
       pembeli_id = localdata.getString('pembeli_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/datapembeli'; //api menampilkan data produk
+        'http://192.168.27.135:8080/api/datapembeli'; //api menampilkan data produk
     final response = await http.post(url, body: {
       "pembeli_id": pembeli_id,
     });
@@ -116,7 +116,7 @@ class _homePageState extends State<homePage> {
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(500.r),
                           child: Image.network(
-                            'http://192.168.43.56:8000/img/userpembeli/' +
+                            'http://192.168.27.135:8080/public/gambar/userpembeli/' +
                                 snapshot.data['gambar'],
                             fit: BoxFit.fill,
                           )

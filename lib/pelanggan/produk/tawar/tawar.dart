@@ -34,7 +34,7 @@ class _tawarState extends State<tawar> {
       lelang_id = localdata.getString('lelang_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/tawar/ambildata'; //api menampilkan data produk
+        'http://192.168.27.135:8080/api/tawar/ambildata'; //api menampilkan data produk
     final response = await http.post(url, body: {
       "lelang_id": lelang_id,
       "pembeli_id": pembeli_id,
@@ -69,7 +69,7 @@ class _tawarState extends State<tawar> {
 
   // fungsi untuk meegirim data tawar ke backend yang kemudian di tambahkan
   tawar() async {
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/tawar");
+    Uri url = Uri.parse("http://192.168.27.135:8080/api/tawar");
     final response = await http.post(url, body: {
       'lelang_id': lelang_id,
       'pembeli_id': pembeli_id,
@@ -163,7 +163,7 @@ class _tawarState extends State<tawar> {
                                     height: MediaQuery.of(context).size.height *
                                         0.45,
                                     child: Image.network(
-                                      'http://192.168.43.56:8000/imglelang/lelang/' +
+                                      'http://192.168.27.135:8080/imglelang/lelang/' +
                                           snapshot.data['lelang']['gambar'],
                                       fit: BoxFit
                                           .fill, // alamat untuk mengambil gambar

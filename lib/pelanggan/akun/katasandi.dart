@@ -70,9 +70,9 @@ class _katasandiPelangganState extends State<katasandiPelanggan> {
     setState(() {
       pembeli_id = localId.getString('pembeli_id');
     });
-    // Uri url = Uri.parse("http://192.168.43.56:8000/api/updatepembeli");
+    // Uri url = Uri.parse("http://192.168.27.135:8080/api/updatepembeli");
     final response =
-        await http.post("http://192.168.43.56:8000/api/updatepembeli", body: {
+        await http.post("http://192.168.27.135:8080/api/updatepembeli", body: {
       'pembeli_id': pembeli_id,
       'password': katasandi,
       'password_confirmation': konfirmasi,

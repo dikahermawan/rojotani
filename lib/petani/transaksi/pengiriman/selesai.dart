@@ -20,7 +20,7 @@ class selesaiPage extends StatefulWidget {
 }
 
 class _selesaiPageState extends State<selesaiPage> {
-  var cekout_id, pembeli_id, produk_id, data, _future, pesan;
+  var cekout_id, penjual_id, produk_id, data, _future, pesan;
 
   final _key = new GlobalKey<FormState>();
 
@@ -32,16 +32,16 @@ class _selesaiPageState extends State<selesaiPage> {
     ));
   }
 
-// fungsi utuk memaggil data dari tabel cekout dan pembeli
+// fungsi utuk memaggil data dari tabel cekout dan penjual
   Future getCekout() async {
     SharedPreferences localId = await SharedPreferences.getInstance();
     setState(() {
-      pembeli_id = localId.getString('pembeli_id');
+      penjual_id = localId.getString('penjual_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/status/kirim'; //api menampilkan data  dari cekout id
+        'http://192.168.27.135:8080/api/terima'; //api menampilkan data  dari cekout id
     final response = await http.post(url, body: {
-      "pembeli_id": pembeli_id, // mengirim  id sesuai data yag diminta
+      "penjual_id": penjual_id, // mengirim  id sesuai data yag diminta
     });
     return jsonDecode(response.body);
   }
@@ -60,6 +60,14 @@ class _selesaiPageState extends State<selesaiPage> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+      BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width,
+          maxHeight: MediaQuery.of(context).size.height),
+      designSize: Size(390, 844),
+      context: context,
+      minTextAdapt: true,
+    );
     return Scaffold(
       body: FutureBuilder(
           future: _future,
@@ -101,7 +109,7 @@ class _selesaiPageState extends State<selesaiPage> {
                                             borderRadius:
                                                 BorderRadius.circular(5.r),
                                             child: Image.network(
-                                              'http://192.168.43.56:8000/img/produk/' +
+                                              'http://192.168.27.135:8080/img/produk/' +
                                                   snapshot.data[index]
                                                       ['gambar'],
                                               fit: BoxFit

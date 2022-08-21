@@ -76,7 +76,7 @@ class _tambahLelangPageState extends State<tambahLelangPage> {
       var stream =
           http.ByteStream(DelegatingStream.typed(_imageFile.openRead()));
       var length = await _imageFile.length();
-      var uri = Uri.parse("http://192.168.43.56:8000/api/lelang");
+      var uri = Uri.parse("http://192.168.27.135:8080/api/lelang");
       var request = http.MultipartRequest("POST", uri);
       request.fields['penjual_id'] = penjual_id;
       request.fields['nama'] = namaController.text;

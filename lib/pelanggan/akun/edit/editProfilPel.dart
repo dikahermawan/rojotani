@@ -39,7 +39,6 @@ class _editProfilPelState extends State<editProfilPel> {
 
   TextEditingController namaController = TextEditingController();
   TextEditingController alamatController = TextEditingController();
-  TextEditingController rekeningController = TextEditingController();
 
   errorSnackBar(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -61,7 +60,7 @@ class _editProfilPelState extends State<editProfilPel> {
   //   setState(() {
   //     penjual_id = localdata.getString('penjual_id');
   //   });
-  //   Uri url = Uri.parse("http://192.168.43.56:8000/api/editProfilPjl");
+  //   Uri url = Uri.parse("http://192.168.27.135:8080/api/editProfilPjl");
   //   final response = await http.post(url, body: {
   //     "penjual_id": penjual_id,
   //   });
@@ -86,9 +85,9 @@ class _editProfilPelState extends State<editProfilPel> {
       var stream =
           http.ByteStream(DelegatingStream.typed(_imageFile.openRead()));
       var length = await _imageFile.length();
-      var uri = Uri.parse("http://192.168.43.56:8000/api/profilPembeli");
+      var uri = Uri.parse("http://192.168.27.135:8080/api/profilPembeli");
       var request = http.MultipartRequest("POST", uri);
-      request.fields['penjual_id'] = pembeli_id;
+      request.fields['pembeli_id'] = pembeli_id;
       request.fields['nama'] = namaController.text;
       request.fields['alamat'] = alamatController.text;
 
@@ -110,7 +109,7 @@ class _editProfilPelState extends State<editProfilPel> {
   }
 
   // update() async {
-  //   Uri url = Uri.parse("http://192.168.43.56:8000/api/profilPenjual");
+  //   Uri url = Uri.parse("http://192.168.27.135:8080/api/profilPenjual");
   //   final response = await http.post(url, body: {
   //     "penjual_id": penjual_id,
   //     'nama': nama,

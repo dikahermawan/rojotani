@@ -44,7 +44,7 @@ class _pesananBayarPageState extends State<pesananBayarPage> {
     setState(() {
       pembeli_id = localId.getString('pembeli_id');
     });
-    final String url = 'http://192.168.43.56:8000/api/status/belum';
+    final String url = 'http://192.168.27.135:8080/api/status/belum';
     final response = await http.post(url, body: {
       "pembeli_id": pembeli_id, // mengirim  id sesuai data yag diminta
     });
@@ -57,6 +57,13 @@ class _pesananBayarPageState extends State<pesananBayarPage> {
         source: ImageSource.gallery, maxHeight: 1920.0, maxWidth: 1080.0);
     setState(() {
       _imageFile = image;
+    });
+  }
+
+  getCek() async {
+    SharedPreferences localdata = await SharedPreferences.getInstance();
+    setState(() {
+      cekout_id = localdata.getString('cekout_id');
     });
   }
 
@@ -75,7 +82,7 @@ class _pesananBayarPageState extends State<pesananBayarPage> {
       var stream =
           http.ByteStream(DelegatingStream.typed(_imageFile.openRead()));
       var length = await _imageFile.length();
-      var uri = Uri.parse("http://192.168.43.56:8000/api/bayar");
+      var uri = Uri.parse("http://192.168.27.135:8080/api/bayar");
       var request = http.MultipartRequest("POST", uri);
       request.fields['cekout_id'] = cekout_id;
       request.fields['pembeli_id'] = pembeli_id;
@@ -101,6 +108,7 @@ class _pesananBayarPageState extends State<pesananBayarPage> {
   @override
   void initState() {
     super.initState();
+    getCek();
     _future = getCekout();
   }
 
@@ -137,7 +145,7 @@ class _pesananBayarPageState extends State<pesananBayarPage> {
                                 height: 15.h,
                               ),
                               Text(
-                                'Rincian',
+                                'Rincian + $cekout_id',
                                 style: TextStyle(
                                     fontFamily: 'Mulish',
                                     fontSize: 18.sp,

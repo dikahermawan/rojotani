@@ -41,7 +41,7 @@ class _cekoutPageState extends State<cekoutPage> {
       produk_id = localdata.getString('produk_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/cekout/ambilproduk'; //api menampilkan data produk
+        'http://192.168.27.135:8080/api/cekout/ambilproduk'; //api menampilkan data produk
     final response = await http.post(url, body: {
       "produk_id": produk_id,
       "pembeli_id": pembeli_id,
@@ -74,9 +74,14 @@ class _cekoutPageState extends State<cekoutPage> {
     }
   }
 
+  Future getDataCekout(cekout_id) async {
+    SharedPreferences dataCekout = await SharedPreferences.getInstance();
+    dataCekout..setString('cekout_id', cekout_id.toString());
+  }
+
   // fungsi mengirim ke backend dan ditambahkan pada db
   cekout() async {
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/cekout");
+    Uri url = Uri.parse("http://192.168.27.135:8080/api/cekout");
     final response = await http.post(url, body: {
       'produk_id': produk_id,
       'pembeli_id': pembeli_id,
@@ -206,7 +211,7 @@ class _cekoutPageState extends State<cekoutPage> {
                                       borderRadius:
                                           BorderRadius.circular(500.r),
                                       child: Image.network(
-                                        'http://192.168.43.56:8000/img/produk/' +
+                                        'http://192.168.27.135:8080/img/produk/' +
                                             snapshot.data['produk']['gambar'],
                                         fit: BoxFit
                                             .fill, // alamat untuk mengambil gambar

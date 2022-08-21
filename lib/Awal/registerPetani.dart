@@ -40,7 +40,7 @@ class _registerPetaniPageState extends State<registerPetaniPage> {
   // untuk memproses data yang dikirim melalui api ke backend
   register() async {
     final response =
-        await http.post("http://192.168.43.56:8000/api/regpenjual", body: {
+        await http.post("http://192.168.27.135:8080/api/regpenjual", body: {
       'nama': nama,
       'alamat': alamat,
       'email': email,

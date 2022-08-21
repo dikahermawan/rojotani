@@ -75,7 +75,7 @@ class _tambahProdukState extends State<tambahProduk> {
       var stream =
           http.ByteStream(DelegatingStream.typed(_imageFile.openRead()));
       var length = await _imageFile.length();
-      var uri = Uri.parse("http://192.168.43.56:8000/api/produk");
+      var uri = Uri.parse("http://192.168.27.135:8080/api/produk");
       var request = http.MultipartRequest("POST", uri);
       request.fields['penjual_id'] = penjual_id;
       request.fields['nama'] = namaController.text;

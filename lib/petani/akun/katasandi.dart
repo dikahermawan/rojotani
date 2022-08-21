@@ -63,7 +63,7 @@ class _katasandiPetaniState extends State<katasandiPetani> {
     setState(() {
       penjual_id = localdata.getString('penjual_id');
     });
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/updatepenjual");
+    Uri url = Uri.parse("http://192.168.27.135:8080/api/updatepenjual");
     final response = await http.post(url, body: {
       "penjual_id": penjual_id,
       'password': katasandi,

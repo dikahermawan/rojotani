@@ -44,7 +44,7 @@ class _kirimPageState extends State<kirimPage> {
       pembeli_id = localId.getString('pembeli_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/status/kirim'; //api menampilkan data  dari cekout id
+        'http://192.168.27.135:8080/api/status/kirim'; //api menampilkan data  dari cekout id
     final response = await http.post(url, body: {
       "pembeli_id": pembeli_id, // mengirim  id sesuai data yag diminta
     });
@@ -72,7 +72,7 @@ class _kirimPageState extends State<kirimPage> {
     setState(() {
       cekout_id = cekoutdata.getString('cekout_id');
     });
-    Uri url = Uri.parse("http://192.168.43.56:8000/api/cekout/status");
+    Uri url = Uri.parse("http://192.168.27.135:8080/api/cekout/status");
     final response = await http.post(url, body: {
       'cekout_id': cekout_id,
       'status_pesanan': status_pesanan,
@@ -143,7 +143,7 @@ class _kirimPageState extends State<kirimPage> {
                                             borderRadius:
                                                 BorderRadius.circular(5.r),
                                             child: Image.network(
-                                              'http://192.168.43.56:8000/img/produk/' +
+                                              'http://192.168.27.135:8080/img/produk/' +
                                                   snapshot.data[index]
                                                       ['gambar'],
                                               fit: BoxFit

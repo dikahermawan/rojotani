@@ -23,7 +23,7 @@ class _lelangCardState extends State<lelangCard> {
       penjual_id = localdata.getString('penjual_id');
     });
     final String url =
-        'http://192.168.43.56:8000/api/getlelang'; //api menampilkan data produk
+        'http://192.168.27.135:8080/api/getlelang'; //api menampilkan data produk
 
     final response = await http.post(url, body: {
       "penjual_id": penjual_id,
@@ -38,7 +38,7 @@ class _lelangCardState extends State<lelangCard> {
 
   //function delete
   Future deleteLelang(id) async {
-    String url = 'http://192.168.43.56:8000/api/deleteLelang/' +
+    String url = 'http://192.168.27.135:8080/api/deleteLelang/' +
         id; //api menghapus data produk
     var response = await http.delete(Uri.parse(url));
     setState(() {
@@ -309,14 +309,13 @@ class _lelangCardState extends State<lelangCard> {
                                               5,
                                             ),
                                             child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              // child: Image.network(
-                                              //   'http://192.168.43.56:8000/imglelang/lelang/' +
-                                              //       snapshot.data[index][
-                                              //           'gambar'], // alamat untuk mengambil gambar
-                                              // )
-                                            ),
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                child: Image.network(
+                                                  'http://192.168.27.135:8080/imglelang/lelang/' +
+                                                      snapshot.data[index][
+                                                          'gambar'], // alamat untuk mengambil gambar
+                                                )),
                                           ),
                                         ),
                                         Row(

@@ -37,7 +37,7 @@ class _registerPelangganPageState extends State<registerPelangganPage> {
   // fungsi untuk mengirim data ke backend untuk menambah data
   save() async {
     final response =
-        await http.post("http://192.168.43.56:8000/api/regpembeli", body: {
+        await http.post("http://192.168.27.135:8080/api/regpembeli", body: {
       'nama': nama,
       'alamat': alamat,
       'email': email,
